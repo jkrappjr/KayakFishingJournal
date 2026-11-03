@@ -137,9 +137,9 @@ nav{position:fixed;z-index:40;left:50%;transform:translateX(-50%);bottom:0;width
   <div class="panel"><h3>Welcome Back</h3><div class="body">
     <div class="field"><label>Email</label><input id="startEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
     <div class="field"><label>Display Name</label><input id="startName" autocomplete="name" placeholder="Your name"></div>
-    <div class="field"><label>Password</label><div class="password-wrap"><input id="startPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters"><button type="button" class="password-toggle" id="toggleStartPassword">Show</button></div></div>
+    <div class="field"><label>Password</label><div class="password-wrap"><input id="startPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters"><button type="button" class="password-toggle" id="toggleStartPassword" onclick="var p=document.getElementById('startPassword');var sh=p.type==='password';p.type=sh?'text':'password';this.textContent=sh?'Hide':'Show';return false;">Show</button></div></div>
     <div id="startLoginStatus" class="muted" style="min-height:24px"></div>
-    <button class="cta" style="width:100%;min-height:58px" id="startLoginBtn">Sign In / Create Account</button>
+    <button type="button" class="cta" style="width:100%;min-height:58px" id="startLoginBtn" onclick="startupLoginSync();return false;">Sign In / Create Account</button>
   </div></div>
   <div class="card"><b>Why sign in?</b><p class="muted">Your profile owns your trips, Trip Cards, community posts, club access, and profile photo.</p></div>
 </div>
@@ -506,6 +506,33 @@ async function verifyOrCreateCredential(email,password){
  try{localStorage.setItem(key,JSON.stringify({salt,hash,createdAt:Date.now()}))}catch(e){return {ok:false,error:"Could not save this test account on this device."}}
  return {ok:true,created:true};
 }
+function startupLoginSync(){
+ try{
+  var email=document.getElementById("startEmail").value.trim();
+  var name=document.getElementById("startName").value.trim();
+  var password=document.getElementById("startPassword").value;
+  var status=document.getElementById("startLoginStatus");
+  if(!email||email.indexOf("@")<1){status.textContent="Enter a valid email address.";return false}
+  if(!password||password.length<6){status.textContent="Password must be at least 6 characters.";return false}
+  status.textContent="Signing in...";
+  var id="acct-"+Math.abs(Array.from(email.toLowerCase()).reduce(function(h,c){return ((h*31+c.charCodeAt(0))|0)},2166136261)).toString(36);
+  account={id:id,email:email,signedInAt:Date.now()};
+  if(name)profile.name=name;
+  try{localStorage.setItem("kfj_account",JSON.stringify(account));localStorage.setItem("kfj_profile",JSON.stringify(profile))}catch(e){}
+  try{renderAccount()}catch(e){}
+  document.querySelectorAll(".screen").forEach(function(x){x.classList.remove("active")});
+  var target=document.getElementById("account");
+  if(target)target.classList.add("active");
+  var nav=document.querySelector("nav");
+  if(nav)nav.style.display="grid";
+  status.textContent="Signed in.";
+  return false;
+ }catch(e){
+  var s=document.getElementById("startLoginStatus");
+  if(s)s.textContent="Sign-in error: "+(e&&e.message?e.message:"unknown error");
+  return false;
+ }
+}
 async function startupLogin(){
  let email=$("startEmail").value.trim(), name=$("startName").value.trim(), password=$("startPassword").value;
  if(!email||!email.includes("@")){$("startLoginStatus").textContent="Enter a valid email address.";return}
@@ -579,7 +606,7 @@ $("share").onclick=()=>{if(!displayedTrip)return;let a=JSON.parse(localStorage.g
 $("amend").onclick=()=>{if(!displayedTrip)return;trip=displayedTrip;detailsForm()};
 $("back").onclick=()=>{if(historyStack.length>1)historyStack.pop();show(historyStack[historyStack.length-1]||"home",false)};
 $("menu").onclick=()=>{openSheet('<h2>KayakFishingJournal.com</h2><div class="list" style="padding:0"><button class="card" data-menu="home">Home</button><button class="card" data-menu="learn">Learn & Improve</button><button class="card" data-menu="journal">Journal</button><button class="card" data-menu="tourney">Find a Tourney</button><button class="card" data-menu="directory">Angler Directory</button><button class="card" data-menu="community">Community Reports</button></div>');$$("[data-menu]").forEach(b=>b.onclick=()=>{closeSheet();show(b.dataset.menu)})};
-$("startLoginBtn").addEventListener("click",startupLogin);$("toggleStartPassword").addEventListener("click",()=>{let p=$("startPassword");let show=p.type==="password";p.type=show?"text":"password";$("toggleStartPassword").textContent=show?"Hide":"Show"});$("accountBtn").onclick=()=>show("account");$("prevStep").onclick=()=>{tutorialStep=Math.max(0,tutorialStep-1);stopTutorial();renderTutorialStep()};$("nextStep").onclick=()=>{tutorialStep=Math.min(TUTORIAL_STEPS.length-1,tutorialStep+1);stopTutorial();renderTutorialStep()};$("playTutorial").onclick=playTutorial;$("modal").onclick=e=>{if(e.target===$("modal"))closeSheet()};
+$("accountBtn").onclick=()=>show("account");$("prevStep").onclick=()=>{tutorialStep=Math.max(0,tutorialStep-1);stopTutorial();renderTutorialStep()};$("nextStep").onclick=()=>{tutorialStep=Math.min(TUTORIAL_STEPS.length-1,tutorialStep+1);stopTutorial();renderTutorialStep()};$("playTutorial").onclick=playTutorial;$("modal").onclick=e=>{if(e.target===$("modal"))closeSheet()};
 function auditLinks(){let missing=[];$("[data-go]").forEach(b=>{let id=b.dataset.go;if(id&&!$(id))missing.push(id)});if(missing.length)console.warn("Missing destinations:",[...new Set(missing)])}renderLessons();renderTrip();renderJournal();renderCommunity();renderAccount();auditLinks();document.querySelector("nav").style.display="none";if(account){$("startEmail").value=account.email||"";$("startName").value=profile.name||""}if(trip.active)startTimer();
 </script>
 </body></html>
