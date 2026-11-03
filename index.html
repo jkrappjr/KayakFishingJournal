@@ -137,6 +137,7 @@ nav{position:fixed;z-index:40;left:50%;transform:translateX(-50%);bottom:0;width
   <div class="panel"><h3>Welcome Back</h3><div class="body">
     <div class="field"><label>Email</label><input id="startEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
     <div class="field"><label>Display Name</label><input id="startName" autocomplete="name" placeholder="Your name"></div>
+    <div class="field"><label>Password</label><input id="startPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters"></div>
     <div id="startLoginStatus" class="muted" style="min-height:24px"></div>
     <button class="cta" style="width:100%;min-height:58px" id="startLoginBtn">Sign In / Create Account</button>
   </div></div>
@@ -487,36 +488,68 @@ function saveAccount(){
  return ok1&&ok2&&ok3;
 }
 function updateAccountTag(){$("accountTag").textContent=account?(profile.name+" • Signed In"):"Learn • Fish • Log • Share"}
-function startupLogin(){
- let email=$("startEmail").value.trim(), name=$("startName").value.trim();
+async function hashPassword(password,salt){
+ const enc=new TextEncoder();
+ const key=await crypto.subtle.importKey("raw",enc.encode(password),"PBKDF2",false,["deriveBits"]);
+ const bits=await crypto.subtle.deriveBits({name:"PBKDF2",salt:enc.encode(salt),iterations:120000,hash:"SHA-256"},key,256);
+ return Array.from(new Uint8Array(bits)).map(b=>b.toString(16).padStart(2,"0")).join("");
+}
+function credentialKey(email){return "kfj_cred_"+email.trim().toLowerCase()}
+async function verifyOrCreateCredential(email,password){
+ let key=credentialKey(email), rec=null;
+ try{rec=JSON.parse(localStorage.getItem(key)||"null")}catch(e){}
+ if(rec){
+  let h=await hashPassword(password,rec.salt);
+  return h===rec.hash?{ok:true,created:false}:{ok:false,error:"Incorrect password."};
+ }
+ let salt=crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random();
+ let hash=await hashPassword(password,salt);
+ try{localStorage.setItem(key,JSON.stringify({salt,hash,createdAt:Date.now()}))}catch(e){return {ok:false,error:"Could not save this account on the device."}}
+ return {ok:true,created:true};
+}
+async function startupLogin(){
+ let email=$("startEmail").value.trim(), name=$("startName").value.trim(), password=$("startPassword").value;
  if(!email||!email.includes("@")){$("startLoginStatus").textContent="Enter a valid email address.";return}
+ if(!password||password.length<6){$("startLoginStatus").textContent="Password must be at least 6 characters.";return}
+ $("startLoginStatus").textContent="Checking account...";
+ let auth=await verifyOrCreateCredential(email,password);
+ if(!auth.ok){$("startLoginStatus").textContent=auth.error;return}
  let id="acct-"+Array.from(email.toLowerCase()).reduce((h,c)=>((h*31+c.charCodeAt(0))>>>0),2166136261).toString(36);
  account={id,email,signedInAt:Date.now()};
  if(name)profile.name=name;
  let persisted=saveAccount();
- $("startLoginStatus").textContent=persisted?"Signed in. Opening your profile...":"Signed in for this session. Browser storage is limited.";
+ $("startLoginStatus").textContent=auth.created?"Account created. Opening your profile...":"Signed in. Opening your profile...";
  setTimeout(()=>{renderAccount();show("account")},250);
 }
 function signInForm(){
- openSheet('<h2>Sign In / Create Account</h2><p class="muted">Test build: this signs you into this iPhone. A shared server login will replace this in production.</p><div class="field"><label>Email</label><input id="loginEmail" type="email" autocomplete="email" placeholder="you@example.com"></div><div class="field"><label>Display Name</label><input id="loginName" autocomplete="name" value="'+(profile.name||"")+'"></div><div id="loginStatus" class="muted" style="min-height:22px;margin-top:8px"></div><div class="sheetactions"><button class="cancel" id="cancel">Cancel</button><button class="save" id="go">Sign In</button></div>');
+ openSheet('<h2>Sign In / Create Account</h2><p class="muted">Use your email and password. New emails create a test account on this device.</p><div class="field"><label>Email</label><input id="loginEmail" type="email" autocomplete="email" placeholder="you@example.com"></div><div class="field"><label>Display Name</label><input id="loginName" autocomplete="name" value="'+(profile.name||"")+'"></div><div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters"></div><div id="loginStatus" class="muted" style="min-height:22px;margin-top:8px"></div><div class="sheetactions"><button class="cancel" id="cancel">Cancel</button><button class="save" id="go">Sign In</button></div>');
  $("cancel").onclick=closeSheet;
- $("go").onclick=()=>{
-  let email=$("loginEmail").value.trim(),name=$("loginName").value.trim();
-  if(!email||!email.includes("@")){ $("loginStatus").textContent="Enter a valid email address."; return; }
+ $("go").onclick=async()=>{
+  let email=$("loginEmail").value.trim(),name=$("loginName").value.trim(),password=$("loginPassword").value;
+  if(!email||!email.includes("@")){$("loginStatus").textContent="Enter a valid email address.";return}
+  if(!password||password.length<6){$("loginStatus").textContent="Password must be at least 6 characters.";return}
+  $("loginStatus").textContent="Checking account...";
+  let auth=await verifyOrCreateCredential(email,password);
+  if(!auth.ok){$("loginStatus").textContent=auth.error;return}
   let id="acct-"+Array.from(email.toLowerCase()).reduce((h,c)=>((h*31+c.charCodeAt(0))>>>0),2166136261).toString(36);
   account={id,email,signedInAt:Date.now()};
   if(name)profile.name=name;
-  let ok=saveAccount();
-  $("loginStatus").textContent=ok?"Signed in successfully.":"Signed in for this session. Browser storage is limited.";
-  setTimeout(()=>{closeSheet();renderAccount();show("account")},350);
+  saveAccount();
+  $("loginStatus").textContent=auth.created?"Account created.":"Signed in successfully.";
+  setTimeout(()=>{closeSheet();renderAccount();show("account")},300);
  }
 }
+
 function signOut(){account=null;localStorage.removeItem("kfj_account");updateAccountTag();renderAccount()}
 function editProfile(){
  openSheet('<h2>Edit Profile</h2><div style="display:flex;align-items:center;gap:12px;margin-bottom:10px"><div class="profilepic" id="editPreview">'+(profile.photo?'<img src="'+profile.photo+'" alt="" style="width:100%;height:100%;object-fit:cover">':icon("i-user"))+'</div><div class="muted">Choose a photo below, then tap Save Profile.</div></div><div class="field"><label>Name</label><input id="epName" value="'+(profile.name||"")+'"></div><div class="field"><label>Hometown / State</label><input id="epHome" value="'+(profile.home||"")+'"></div><div class="field"><label>About Me</label><textarea id="epAbout" rows="4">'+(profile.about||"")+'</textarea></div><div class="field"><label>Kayak</label><input id="epKayak" value="'+(profile.kayak||"")+'"></div><div class="field"><label>Electronics</label><input id="epElec" value="'+(profile.electronics||"")+'"></div><div class="field"><label>Teams</label><input id="epTeams" value="'+(profile.teams||"")+'"></div><div class="field"><label>Sponsors</label><input id="epSponsors" value="'+(profile.sponsors||"")+'"></div><div class="field"><label>Profile Photo</label><input id="epPhoto" type="file" accept="image/*" capture="user"></div><div class="sheetactions"><button class="cancel" id="cancel">Cancel</button><button class="save" id="go">Save Profile</button></div>');
  $("cancel").onclick=closeSheet;
  $("epPhoto").onchange=async()=>{let file=$("epPhoto").files&&$("epPhoto").files[0];if(!file)return;try{let preview=await compress(file,700,.72);$("editPreview").innerHTML='<img src="'+preview+'" alt="Selected profile photo" style="width:100%;height:100%;object-fit:cover">';$("editPreview").dataset.preview=preview}catch(e){alert("Could not read that photo. Please choose another image.")}};
  $("go").onclick=async()=>{profile.name=$("epName").value.trim()||profile.name;profile.home=$("epHome").value.trim();profile.about=$("epAbout").value.trim();profile.kayak=$("epKayak").value.trim();profile.electronics=$("epElec").value.trim();profile.teams=$("epTeams").value.trim();profile.sponsors=$("epSponsors").value.trim();if($("editPreview").dataset.preview)profile.photo=$("editPreview").dataset.preview;saveAccount();closeSheet();renderAccount();renderDirectory()}
+}
+function resetTestPassword(){
+ openSheet('<h2>Reset Test Password</h2><p class="muted">This only resets the password stored on this device.</p><div class="field"><label>Email</label><input id="resetEmail" type="email" placeholder="you@example.com"></div><div class="sheetactions"><button class="cancel" id="cancel">Cancel</button><button class="save" id="go">Reset</button></div>');
+ $("cancel").onclick=closeSheet;$("go").onclick=()=>{let e=$("resetEmail").value.trim().toLowerCase();if(!e)return;localStorage.removeItem(credentialKey(e));closeSheet();alert("Test password cleared. Sign in again with that email to create a new password.")}
 }
 function cleanupTestStorage(){
  if(!confirm("Clear saved test trips, shared test cards, and active trip data from this iPhone? Your profile/account will be kept."))return;
@@ -526,7 +559,7 @@ function cleanupTestStorage(){
  trip={active:false,start:null,end:null,location:"",angler:profile.name||"Angler",waterType:"River",catches:[],notes:"",science:{},patterns:[],photos:[]};
  alert("Old test trip/photo storage cleared. Try signing in again.");
 }
-function renderAccount(){updateAccountTag();$("myName").textContent=profile.name||"Guest Angler";$("myHome").textContent=account?(profile.home||account.email):"Not signed in";$("myProfilePic").innerHTML=profile.photo?'<img src="'+profile.photo+'" alt="" style="width:100%;height:100%;object-fit:cover">':icon("i-user");$("accountActions").innerHTML=account?'<div class="account-badge">Signed in as '+account.email+'</div><div class="owner-tools"><button class="cta secondary" id="editProf">Edit Profile / Photo</button><button class="cta" id="signOutBtn">Sign Out</button><button class="cta secondary" id="clubsBtn">My Clubs</button><button class="cta secondary" id="settingsBtn">Settings</button></div>':'<p>You are browsing as a guest. Sign in to establish ownership of profiles, trips and cards on this device.</p><button class="cta" style="width:100%" id="signInBtn">Sign In / Create Account</button><button class="cta secondary" style="width:100%;margin-top:8px" id="cleanupBtn">Clear Old Test Photos / Trips</button>';if(account){$("editProf").onclick=editProfile;$("signOutBtn").onclick=signOut;$("clubsBtn").onclick=()=>show("clubs");$("settingsBtn").onclick=()=>show("settings")}else { $("signInBtn").onclick=signInForm; $("cleanupBtn").onclick=cleanupTestStorage; }$("myProfileSummary").innerHTML='<p><b>'+(profile.name||"Angler")+'</b><br>'+(profile.home||"Hometown not set")+'</p><p class="muted">'+(profile.about||"No bio yet.")+'</p><div class="row"><b>Kayak</b><span>'+(profile.kayak||"Not entered")+'</span></div><div class="row"><b>Electronics</b><span>'+(profile.electronics||"Not entered")+'</span></div><div class="row"><b>Teams</b><span>'+(profile.teams||"Not entered")+'</span></div><div class="row"><b>Sponsors</b><span>'+(profile.sponsors||"Not entered")+'</span></div>';$("myClubsSummary").innerHTML='<p>Club memberships and private club journals will appear here.</p><button class="cta secondary" style="width:100%" id="clubsSummaryBtn">Open My Clubs</button>';$("clubsSummaryBtn").onclick=()=>show("clubs");if($("profileEditTop"))$("profileEditTop").onclick=editProfile}
+function renderAccount(){updateAccountTag();$("myName").textContent=profile.name||"Guest Angler";$("myHome").textContent=account?(profile.home||account.email):"Not signed in";$("myProfilePic").innerHTML=profile.photo?'<img src="'+profile.photo+'" alt="" style="width:100%;height:100%;object-fit:cover">':icon("i-user");$("accountActions").innerHTML=account?'<div class="account-badge">Signed in as '+account.email+'</div><div class="owner-tools"><button class="cta secondary" id="editProf">Edit Profile / Photo</button><button class="cta" id="signOutBtn">Sign Out</button><button class="cta secondary" id="clubsBtn">My Clubs</button><button class="cta secondary" id="settingsBtn">Settings</button></div>':'<p>You are browsing as a guest. Sign in to establish ownership of profiles, trips and cards on this device.</p><button class="cta" style="width:100%" id="signInBtn">Sign In / Create Account</button><button class="cta secondary" style="width:100%;margin-top:8px" id="resetPasswordBtn">Reset Test Password</button><button class="cta secondary" style="width:100%;margin-top:8px" id="cleanupBtn">Clear Old Test Photos / Trips</button>';if(account){$("editProf").onclick=editProfile;$("signOutBtn").onclick=signOut;$("clubsBtn").onclick=()=>show("clubs");$("settingsBtn").onclick=()=>show("settings")}else { $("signInBtn").onclick=signInForm; $("cleanupBtn").onclick=cleanupTestStorage; $("resetPasswordBtn").onclick=resetTestPassword; }$("myProfileSummary").innerHTML='<p><b>'+(profile.name||"Angler")+'</b><br>'+(profile.home||"Hometown not set")+'</p><p class="muted">'+(profile.about||"No bio yet.")+'</p><div class="row"><b>Kayak</b><span>'+(profile.kayak||"Not entered")+'</span></div><div class="row"><b>Electronics</b><span>'+(profile.electronics||"Not entered")+'</span></div><div class="row"><b>Teams</b><span>'+(profile.teams||"Not entered")+'</span></div><div class="row"><b>Sponsors</b><span>'+(profile.sponsors||"Not entered")+'</span></div>';$("myClubsSummary").innerHTML='<p>Club memberships and private club journals will appear here.</p><button class="cta secondary" style="width:100%" id="clubsSummaryBtn">Open My Clubs</button>';$("clubsSummaryBtn").onclick=()=>show("clubs");if($("profileEditTop"))$("profileEditTop").onclick=editProfile}
 function renderClubs(){$("clubsList").innerHTML='<div class="clubcard"><h3>My Clubs</h3><p class="muted">Private club access will support 4-digit club codes, tournaments, AOY tracking and sponsor cards.</p><button class="cta" style="width:100%" id="joinClub">Join a Club</button></div><div class="clubcard"><h3>WV Kayak Anglers</h3><p>Community workspace preview.</p><div class="owner-tools"><button class="cta secondary" data-go="tourney">Tournaments</button><button class="cta secondary" data-go="community">Reports</button></div></div>';$("joinClub").onclick=()=>openInfo("Join a Club","Club code entry and server-backed membership will be enabled when account sync goes live.");$$("[data-go]").forEach(b=>b.onclick=()=>show(b.dataset.go))}
 function renderSettings(){$("settingsBody").innerHTML='<div class="panel"><h3>Privacy & Sharing</h3><div class="body"><div class="toggleRow"><div><b>Show me in Angler Directory</b><div class="muted">Public by default, with opt-out.</div></div><button class="toggle '+(prefs.directory?"on":"")+'" data-pref="directory"></button></div><div class="toggleRow"><div><b>Share new Trip Cards by default</b><div class="muted">Off is safest; you can always share manually.</div></div><button class="toggle '+(prefs.defaultShare?"on":"")+'" data-pref="defaultShare"></button></div><div class="toggleRow"><div><b>Show precise location on public card</b><div class="muted">Keep off to protect exact fishing spots.</div></div><button class="toggle '+(prefs.locationOnCard?"on":"")+'" data-pref="locationOnCard"></button></div></div></div>';$$("[data-pref]").forEach(b=>b.onclick=()=>{let k=b.dataset.pref;prefs[k]=!prefs[k];saveAccount();renderSettings()})}
 function renderJournal(){let arr=JSON.parse(localStorage.getItem("kfj_journal")||"[]");$("journalList").innerHTML=arr.length?arr.map((t,i)=>'<button class="card" data-j="'+i+'"><div class="cardrow"><div class="avatar">'+icon("i-note")+'</div><div><h3>'+(t.location||"Saved Trip")+'</h3><div class="muted">'+new Date(t.start).toLocaleDateString()+' • '+t.catches.length+' catches • '+(t.event||"Regular Trip")+'</div></div><div class="chev">›</div></div></button>').join(""):'<div class="card"><h3>No saved trips yet.</h3><p>Start a trip and your Journal will build here.</p></div>';$$("[data-j]").forEach(b=>b.onclick=()=>{displayedTrip=arr[+b.dataset.j];show("tripcard")})}
