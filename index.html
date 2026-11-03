@@ -137,7 +137,7 @@ nav{position:fixed;z-index:40;left:50%;transform:translateX(-50%);bottom:0;width
   <div class="panel"><h3>Welcome Back</h3><div class="body">
     <div class="field"><label>Email</label><input id="startEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
     <div class="field"><label>Display Name</label><input id="startName" autocomplete="name" placeholder="Your name"></div>
-    <div class="field"><label>Password</label><input id="startPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters"></div>
+    <div class="field"><label>Password</label><div class="password-wrap"><input id="startPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters"><button type="button" class="password-toggle" id="toggleStartPassword">Show</button></div></div>
     <div id="startLoginStatus" class="muted" style="min-height:24px"></div>
     <button class="cta" style="width:100%;min-height:58px" id="startLoginBtn">Sign In / Create Account</button>
   </div></div>
@@ -488,23 +488,22 @@ function saveAccount(){
  return ok1&&ok2&&ok3;
 }
 function updateAccountTag(){$("accountTag").textContent=account?(profile.name+" • Signed In"):"Learn • Fish • Log • Share"}
-async function hashPassword(password,salt){
- const enc=new TextEncoder();
- const key=await crypto.subtle.importKey("raw",enc.encode(password),"PBKDF2",false,["deriveBits"]);
- const bits=await crypto.subtle.deriveBits({name:"PBKDF2",salt:enc.encode(salt),iterations:120000,hash:"SHA-256"},key,256);
- return Array.from(new Uint8Array(bits)).map(b=>b.toString(16).padStart(2,"0")).join("");
+function localPasswordHash(text){
+ let h1=0x811c9dc5,h2=0x9e3779b9;
+ for(let i=0;i<text.length;i++){let c=text.charCodeAt(i);h1=Math.imul(h1^c,16777619);h2=Math.imul(h2^(c+i),2246822519)}
+ return ((h1>>>0).toString(16).padStart(8,"0")+(h2>>>0).toString(16).padStart(8,"0"));
 }
 function credentialKey(email){return "kfj_cred_"+email.trim().toLowerCase()}
 async function verifyOrCreateCredential(email,password){
  let key=credentialKey(email), rec=null;
  try{rec=JSON.parse(localStorage.getItem(key)||"null")}catch(e){}
  if(rec){
-  let h=await hashPassword(password,rec.salt);
+  let h=localPasswordHash((rec.salt||"")+password);
   return h===rec.hash?{ok:true,created:false}:{ok:false,error:"Incorrect password."};
  }
- let salt=crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random();
- let hash=await hashPassword(password,salt);
- try{localStorage.setItem(key,JSON.stringify({salt,hash,createdAt:Date.now()}))}catch(e){return {ok:false,error:"Could not save this account on the device."}}
+ let salt=String(Date.now())+"-"+Math.random().toString(36).slice(2);
+ let hash=localPasswordHash(salt+password);
+ try{localStorage.setItem(key,JSON.stringify({salt,hash,createdAt:Date.now()}))}catch(e){return {ok:false,error:"Could not save this test account on this device."}}
  return {ok:true,created:true};
 }
 async function startupLogin(){
@@ -522,8 +521,9 @@ async function startupLogin(){
  setTimeout(()=>{renderAccount();show("account")},250);
 }
 function signInForm(){
- openSheet('<h2>Sign In / Create Account</h2><p class="muted">Use your email and password. New emails create a test account on this device.</p><div class="field"><label>Email</label><input id="loginEmail" type="email" autocomplete="email" placeholder="you@example.com"></div><div class="field"><label>Display Name</label><input id="loginName" autocomplete="name" value="'+(profile.name||"")+'"></div><div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters"></div><div id="loginStatus" class="muted" style="min-height:22px;margin-top:8px"></div><div class="sheetactions"><button class="cancel" id="cancel">Cancel</button><button class="save" id="go">Sign In</button></div>');
+ openSheet('<h2>Sign In / Create Account</h2><p class="muted">Use your email and password. New emails create a test account on this device.</p><div class="field"><label>Email</label><input id="loginEmail" type="email" autocomplete="email" placeholder="you@example.com"></div><div class="field"><label>Display Name</label><input id="loginName" autocomplete="name" value="'+(profile.name||"")+'"></div><div class="field"><label>Password</label><div class="password-wrap"><input id="loginPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters"><button type="button" class="password-toggle" id="toggleLoginPassword">Show</button></div></div><div id="loginStatus" class="muted" style="min-height:22px;margin-top:8px"></div><div class="sheetactions"><button class="cancel" id="cancel">Cancel</button><button class="save" id="go">Sign In</button></div>');
  $("cancel").onclick=closeSheet;
+ if($("toggleLoginPassword"))$("toggleLoginPassword").onclick=()=>{let p=$("loginPassword");let show=p.type==="password";p.type=show?"text":"password";$("toggleLoginPassword").textContent=show?"Hide":"Show"};
  $("go").onclick=async()=>{
   let email=$("loginEmail").value.trim(),name=$("loginName").value.trim(),password=$("loginPassword").value;
   if(!email||!email.includes("@")){$("loginStatus").textContent="Enter a valid email address.";return}
@@ -579,7 +579,7 @@ $("share").onclick=()=>{if(!displayedTrip)return;let a=JSON.parse(localStorage.g
 $("amend").onclick=()=>{if(!displayedTrip)return;trip=displayedTrip;detailsForm()};
 $("back").onclick=()=>{if(historyStack.length>1)historyStack.pop();show(historyStack[historyStack.length-1]||"home",false)};
 $("menu").onclick=()=>{openSheet('<h2>KayakFishingJournal.com</h2><div class="list" style="padding:0"><button class="card" data-menu="home">Home</button><button class="card" data-menu="learn">Learn & Improve</button><button class="card" data-menu="journal">Journal</button><button class="card" data-menu="tourney">Find a Tourney</button><button class="card" data-menu="directory">Angler Directory</button><button class="card" data-menu="community">Community Reports</button></div>');$$("[data-menu]").forEach(b=>b.onclick=()=>{closeSheet();show(b.dataset.menu)})};
-$("startLoginBtn").onclick=startupLogin;$("accountBtn").onclick=()=>show("account");$("prevStep").onclick=()=>{tutorialStep=Math.max(0,tutorialStep-1);stopTutorial();renderTutorialStep()};$("nextStep").onclick=()=>{tutorialStep=Math.min(TUTORIAL_STEPS.length-1,tutorialStep+1);stopTutorial();renderTutorialStep()};$("playTutorial").onclick=playTutorial;$("modal").onclick=e=>{if(e.target===$("modal"))closeSheet()};
+$("startLoginBtn").addEventListener("click",startupLogin);$("toggleStartPassword").addEventListener("click",()=>{let p=$("startPassword");let show=p.type==="password";p.type=show?"text":"password";$("toggleStartPassword").textContent=show?"Hide":"Show"});$("accountBtn").onclick=()=>show("account");$("prevStep").onclick=()=>{tutorialStep=Math.max(0,tutorialStep-1);stopTutorial();renderTutorialStep()};$("nextStep").onclick=()=>{tutorialStep=Math.min(TUTORIAL_STEPS.length-1,tutorialStep+1);stopTutorial();renderTutorialStep()};$("playTutorial").onclick=playTutorial;$("modal").onclick=e=>{if(e.target===$("modal"))closeSheet()};
 function auditLinks(){let missing=[];$("[data-go]").forEach(b=>{let id=b.dataset.go;if(id&&!$(id))missing.push(id)});if(missing.length)console.warn("Missing destinations:",[...new Set(missing)])}renderLessons();renderTrip();renderJournal();renderCommunity();renderAccount();auditLinks();document.querySelector("nav").style.display="none";if(account){$("startEmail").value=account.email||"";$("startName").value=profile.name||""}if(trip.active)startTimer();
 </script>
 </body></html>
