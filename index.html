@@ -2,646 +2,127 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#052f22">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<title>KayakFishingJournal.com</title>
-<style>
-:root{--g:#052f22;--g2:#0b5138;--g3:#143e31;--gold:#d9ae48;--gold2:#f3db97;--iv:#f5f2e6;--cream:#fffdf5;--ink:#14231d;--red:#c62026;--blue:#4f9aac;--shadow:0 10px 26px rgba(0,0,0,.22)}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:#0b2019;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink)}
-button,input,select,textarea{font:inherit}button{touch-action:manipulation;cursor:pointer}
-#app{max-width:520px;margin:auto;min-height:100vh;background:linear-gradient(#f8f3e5,#efe5cc);padding-bottom:88px;box-shadow:0 0 45px #0008}
-header{position:sticky;top:0;z-index:30;background:linear-gradient(180deg,#0b5037,#032d20);border-bottom:3px solid var(--gold);color:white;padding:calc(8px + env(safe-area-inset-top)) 10px 8px;display:grid;grid-template-columns:48px 1fr 48px;align-items:center}
-header h1{font-size:20px;text-align:center;margin:0;line-height:1.05}header small{display:block;text-align:center;color:var(--gold2);font-weight:700}.icon{border:0;background:transparent;color:white;font-size:24px;min-height:44px}
-.screen{display:none}.screen.active{display:block}
-svg.ico{width:34px;height:34px;display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.hero{height:370px;position:relative;overflow:hidden;background:linear-gradient(rgba(5,47,34,.02),rgba(5,47,34,.64)),linear-gradient(145deg,#9cd3df 0 26%,#6d8660 27% 45%,#2c7a8d 46% 66%,#183c2e 67%)}
-.hero:after{content:"";position:absolute;left:-8%;right:-8%;bottom:-4px;height:155px;background:linear-gradient(#72bfd0,#2b7584);clip-path:polygon(0 45%,12% 31%,26% 40%,39% 23%,55% 42%,70% 22%,86% 37%,100% 29%,100% 100%,0 100%)}
-.logo{position:relative;z-index:3;text-align:center;color:white;padding-top:38px;text-shadow:0 2px 6px #000}.logo b{display:block;color:#ffe88b;font:italic 900 37px Georgia}.logo span{display:inline-block;background:linear-gradient(#ffeaa2,#dba92c);color:#153126;padding:8px 16px;border-radius:999px;font-weight:950;margin-top:10px;border:1px solid #fff8}.logo em{display:block;font:italic 21px Georgia;margin-top:10px}
-.kayakmark{position:absolute;z-index:4;bottom:56px;left:17%;width:66%;height:92px;color:#172f27}
-.homegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px;margin-top:-58px;position:relative;z-index:5}.homebtn{min-height:118px;border:3px solid var(--gold);border-radius:22px;background:linear-gradient(#0e6242,#043b29);color:white;text-align:left;padding:12px;box-shadow:var(--shadow);font-weight:900;position:relative;overflow:hidden}.homebtn:after{content:"";position:absolute;right:-25px;bottom:-35px;width:90px;height:90px;border-radius:50%;background:#fff1}.homebtn strong{display:block;font-size:18px}.homebtn small{display:block;color:#e4eee8;margin-top:4px;line-height:1.25}.homebtn .ico{color:var(--gold2);margin-bottom:7px}
-.section{padding:14px}.sectionhead{display:flex;justify-content:space-between;align-items:end;margin:4px 0 12px}.sectionhead h2{margin:0;color:var(--g);font-size:25px}.sectionhead small{color:#68736d}
-.learn-hero-banner{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#0a4c36,#062f22);border:2px solid var(--gold);border-radius:18px;padding:13px;margin-bottom:12px;color:white;box-shadow:var(--shadow)}.learn-hero-banner h2{margin:0;color:#fff3bf;font-size:27px;letter-spacing:.6px}.learn-hero-banner small{color:#f3db97;font-weight:700}.learn-book{font-size:43px;filter:drop-shadow(0 3px 4px #0005)}
-.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}.tab{min-height:50px;border-radius:14px;border:1px solid #bfa35c;background:#183b2f;color:white;font-weight:850;font-size:12px;padding:4px}.tab.active{background:linear-gradient(#ffe7a0,#d9ae48);color:#15251d}
-.lesson{width:100%;display:grid;grid-template-columns:92px 1fr 28px;align-items:center;margin-bottom:10px;border:2px solid var(--gold);border-radius:18px;background:var(--cream);overflow:hidden;text-align:left;box-shadow:0 5px 14px #0002}.thumb{height:86px;display:grid;place-items:center;background:linear-gradient(145deg,#a4d5de,#327d83 54%,#1c4935)}.thumb .ico{width:48px;height:48px;color:white;filter:drop-shadow(0 2px 2px #0006)}.lesson b{font-size:18px}.lesson span{display:block;font-size:13px;margin-top:4px;color:#617068}.chev{font-size:29px;color:#8f6b1e}
-.learnart{height:260px;position:relative;background:linear-gradient(145deg,#9ed6e1,#357f90 56%,#214c43);overflow:hidden;border-bottom:3px solid var(--gold)}
-.learnart svg,.tutorial-stage svg{width:100%;height:100%;display:block}
-.learnart .water-bg,.tutorial-stage .water-bg{fill:url(#waterGrad)}
-.learnart .bank,.tutorial-stage .bank{fill:#38563f}
-.learnart .rock,.tutorial-stage .rock{fill:#665f4f;stroke:#3c392f;stroke-width:2}
-.learnart .current,.tutorial-stage .current{fill:none;stroke:#eefcff;stroke-width:7;stroke-linecap:round;stroke-dasharray:14 10;filter:drop-shadow(0 2px 2px #0006)}
-.learnart .slow,.tutorial-stage .slow{fill:none;stroke:#92d2e7;stroke-width:5;stroke-linecap:round;stroke-dasharray:8 10}
-.learnart .cast,.tutorial-stage .cast{fill:none;stroke:#ffd85c;stroke-width:4;stroke-linecap:round;stroke-dasharray:7 7}
-.learnart .fishmark,.tutorial-stage .fishmark{fill:#ffe077;stroke:#6e5311;stroke-width:1.5}
-.learnart .kayakshape,.tutorial-stage .kayakshape{fill:#d88a28;stroke:#26362e;stroke-width:2}
-.learnart .labelbox,.tutorial-stage .labelbox{fill:#f3c84f;stroke:#8b6718;stroke-width:2;rx:8}
-.learnart .labeltxt,.tutorial-stage .labeltxt{font:700 13px Arial;fill:#12251c}
-.learnart .smalltxt,.tutorial-stage .smalltxt{font:700 11px Arial;fill:white;paint-order:stroke;stroke:#0007;stroke-width:3px}.title{text-align:center;background:var(--cream);padding:14px}.title h2{margin:0;font-size:27px}.modebar{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--cream);padding:0 12px 10px}.mode{border:1px solid #c8b06b;border-radius:999px;background:#f3ead3;min-height:38px;font-weight:850}.mode.active{background:var(--g);color:white}
-.steps{padding:0 12px 12px;display:grid;gap:8px;background:var(--cream)}.step{min-height:70px;border:1px solid #d5c69b;border-radius:15px;background:linear-gradient(#fffdf8,#f3e8ca);text-align:left;padding:10px;display:grid;grid-template-columns:42px 1fr;gap:9px}.step .ico{color:var(--g2)}.step b{font-size:17px}.step small{display:block;margin-top:3px}
-.learnActions{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px 12px;background:var(--cream)}.cta{min-height:56px;border:2px solid #a77a18;border-radius:15px;background:linear-gradient(#f6d86f,#d5a32b);font-weight:900;color:#173025}.cta.secondary{background:linear-gradient(#0f5c40,#063a2a);color:white;border-color:#d9ae48}
-.triphero{margin:14px;border:3px solid var(--gold);border-radius:21px;background:linear-gradient(rgba(2,39,25,.14),rgba(2,39,25,.74)),linear-gradient(150deg,#90cddd,#2c7c8e 55%,#163d2b);color:white;padding:18px;box-shadow:var(--shadow)}.live{text-align:center;font-weight:950;font-size:21px}.timer{text-align:center;font-size:52px;font-weight:950}.where{font-size:19px;font-weight:800}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px}.big{min-height:110px;border:0;border-radius:20px;background:linear-gradient(#0d6743,#043f2a);color:white;font-size:18px;font-weight:900}.big .ico{margin:0 auto 7px;width:42px;height:42px;color:var(--gold2)}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);margin:12px 14px;background:var(--cream);border:2px solid #e0c97e;border-radius:16px;overflow:hidden}.stat{text-align:center;padding:9px;border-right:1px solid #d7bf75}.stat:last-child{border:0}.stat strong{display:block;font-size:27px}
-.tools{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 14px}.tool{min-height:86px;border-radius:14px;border:1px solid #d6c28a;background:#fffaf0;font-weight:850}.tool .ico{margin:0 auto 5px;color:var(--g2)}
-.end{margin:14px;width:calc(100% - 28px);min-height:64px;border:0;border-radius:32px;background:linear-gradient(#e13b40,#a90d13);color:white;font-size:20px;font-weight:950}
-.panel{margin:12px;border:2px solid #d7bd69;border-radius:18px;background:var(--cream);overflow:hidden;box-shadow:0 5px 14px #0001}.panel h3{margin:0;background:linear-gradient(#0b5138,#063625);color:white;padding:10px 12px;border-bottom:2px solid var(--gold)}.panel .body{padding:12px}.row{display:grid;grid-template-columns:1fr auto;gap:10px;padding:8px 0;border-bottom:1px solid #e3d6b4}.row:last-child{border:0}
-.baitgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.bait{text-align:center;padding:8px;border:1px solid #dcc77f;border-radius:12px;background:white}.bait .ico{margin:auto;color:#765a18;width:48px;height:48px}.bait small{display:block}.fishgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.fish{aspect-ratio:.82;border:2px solid var(--gold);border-radius:10px;background:linear-gradient(#7bbca1,#315e46);display:grid;place-items:center;overflow:hidden}.fish img{width:100%;height:100%;object-fit:cover}
-.list{padding:12px;display:grid;gap:10px}.card{border:2px solid #dac16f;background:var(--cream);border-radius:17px;padding:12px;text-align:left;box-shadow:0 5px 14px #0001}.card h3{margin:0 0 5px}.muted{color:#667069;font-size:13px}.cardrow{display:grid;grid-template-columns:52px 1fr 24px;gap:10px;align-items:center}.avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(#1b6749,#052f22);border:2px solid var(--gold);display:grid;place-items:center;color:white}.avatar .ico{color:var(--gold2)}
-nav{position:fixed;z-index:40;left:50%;transform:translateX(-50%);bottom:0;width:min(520px,100%);background:linear-gradient(#063725,#03291b);border-top:3px solid var(--gold);padding:6px 5px calc(6px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(5,1fr);gap:3px}.navbtn{border:0;background:transparent;color:white;min-height:58px;font-size:11px;font-weight:800;border-radius:10px}.navbtn .ico{margin:0 auto 2px;width:25px;height:25px}.navbtn.active{background:#ffffff19;color:#ffe39a}
-.modal{position:fixed;inset:0;z-index:70;background:#0009;display:none;align-items:end}.modal.open{display:grid}.sheet{background:var(--iv);border-radius:22px 22px 0 0;padding:16px;max-height:86vh;overflow:auto;border-top:3px solid var(--gold)}.sheet h2{margin:0 0 10px}.field{margin:10px 0}.field label{font-weight:800;display:block;margin-bottom:5px}.field input,.field select,.field textarea{width:100%;padding:12px;border:1px solid #bcae83;border-radius:12px;background:white}.sheetactions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sheetactions button{min-height:52px;border-radius:14px;font-weight:900}.cancel{background:#eee;border:1px solid #bbb}.save{background:linear-gradient(#f2d268,#d2a02b);border:1px solid #a86c00}.profilehero{padding:22px 14px;background:linear-gradient(#0b543b,#052f22);color:white;text-align:center;border-bottom:3px solid var(--gold)}.profilepic{position:relative;overflow:hidden;width:108px;height:108px;border-radius:50%;margin:auto;border:4px solid var(--gold);background:linear-gradient(#679d84,#173e30);display:grid;place-items:center;box-shadow:0 0 0 4px #f3db97,0 6px 18px #0005}.profilepic img{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;object-position:center}.profilepic:after{content:"";position:absolute;inset:0;z-index:2;border-radius:inherit;box-shadow:inset 0 0 0 2px #fff4b8aa;pointer-events:none}.profilepic .ico{width:60px;height:60px;color:white}.profilehero h2{margin:10px 0 2px}.profilehero small{color:var(--gold2)}
-.tripcard-new{margin:12px;border:3px solid var(--gold);border-radius:22px;overflow:hidden;background:linear-gradient(#faf5e7,#efe2c3);box-shadow:var(--shadow)}
-.tc-hero{min-height:190px;position:relative;display:flex;align-items:flex-end;gap:12px;padding:18px;background:linear-gradient(rgba(3,42,29,.2),rgba(3,42,29,.86)),linear-gradient(140deg,#95d0de,#2d7f91 52%,#294f39);background-size:cover;background-position:center}
-.tc-profile{width:84px;height:84px;flex:0 0 84px;border-radius:16px;border:3px solid var(--gold);background:linear-gradient(#edf0e8,#bccfbe);display:grid;place-items:center;overflow:hidden;color:var(--g)}
-.tc-profile .ico{width:48px;height:48px}.tc-profile img{width:100%;height:100%;object-fit:cover}
-.tc-headcopy{color:white;text-shadow:0 2px 4px #000}.tc-headcopy h2{margin:0 0 7px;font-size:25px}.tc-location{font-size:16px;font-weight:850;line-height:1.25}.tc-date{margin-top:5px;color:#f7df9d;font-weight:800}
-.tc-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px;background:#f4ead0;border-top:3px solid var(--gold);border-bottom:1px solid #d4b866}
-.tc-stat{background:linear-gradient(#ffe47c,#e6ad28);border:1px solid #b98513;border-radius:11px 11px 18px 18px;text-align:center;padding:8px 4px;color:#15231b;box-shadow:inset 0 1px 0 #fff8}
-.tc-stat small{display:block;font-size:10px;font-weight:900;line-height:1.05}.tc-stat strong{display:block;font-size:20px;margin-top:3px}
-.tc-section{margin:10px;border:1px solid #d5bd71;border-radius:14px;overflow:hidden;background:#fffdf5}
-.tc-ribbon{background:linear-gradient(#0b5138,#052f22);color:white;font-weight:950;padding:9px 11px;border-bottom:2px solid var(--gold);font-size:18px}.tc-ribbon span{font-size:11px;color:#f3db97}
-.tc-science{padding:8px 12px}.tc-science .row{padding:7px 0;font-size:14px}.tc-science .row b{display:flex;align-items:center;gap:6px}
-.tc-baits{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px}.tc-bait{min-height:112px;border:1px solid #d8bf72;border-radius:12px;background:linear-gradient(#fff,#f7eed7);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px}.tc-bait .ico{width:52px;height:52px;color:#7b5e17;filter:drop-shadow(0 3px 2px #0002)}.tc-bait b{font-size:13px;margin-top:4px}.tc-bait small{font-size:11px;color:#6b716d;margin-top:2px}
-.tc-bestfive{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;padding:10px}.tc-fish{aspect-ratio:.78;border:2px solid var(--gold);border-radius:10px;overflow:hidden;background:linear-gradient(#7ec1a3,#335e47);display:grid;place-items:center}.tc-fish img{width:100%;height:100%;object-fit:cover}.tc-fish .ico{width:30px;height:30px;color:#12382a}
-.tc-footer{text-align:center;padding:10px 12px 14px;font-weight:950;color:var(--g);letter-spacing:.2px}
-.account-badge{display:inline-flex;align-items:center;gap:6px;border:1px solid #d7bd69;border-radius:999px;padding:6px 9px;background:#fff8dc;font-size:12px;font-weight:850;color:var(--g)}
-.owner-tools{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
-.owner-tools button{min-height:48px;border-radius:12px;font-weight:850;border:1px solid #b79539}
-.toggleRow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #e3d6b4}.toggleRow:last-child{border:0}
-.toggle{width:52px;height:30px;border-radius:999px;background:#bbb;position:relative;border:0}.toggle:after{content:"";position:absolute;width:24px;height:24px;border-radius:50%;background:white;top:3px;left:3px;transition:.15s}.toggle.on{background:#0b6242}.toggle.on:after{left:25px}
-.clubcard{border:2px solid #d9ae48;border-radius:16px;background:linear-gradient(#fffdf8,#f2e8cf);padding:12px;margin-bottom:10px}
-.tutorial-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.tutorial-tile{border:2px solid var(--gold);border-radius:16px;overflow:hidden;background:#073725;color:white;text-align:left;padding:0;box-shadow:0 7px 18px #0004;position:relative}.tutorial-tile .tileart{height:124px;display:grid;place-items:center;background:linear-gradient(145deg,#9ad5df,#317d89 55%,#183f30);position:relative;overflow:hidden}.tutorial-tile .tileart svg{width:100%;height:100%}.tutorial-tile .tilecopy{padding:8px;background:linear-gradient(180deg,#0a4934,#052f22)}.tutorial-tile b{font-size:14px;text-transform:uppercase;letter-spacing:.2px;text-shadow:0 1px 2px #000}.tutorial-tile small{display:block;color:#e7e0c5;margin-top:3px}.tutorial-tile.active{box-shadow:0 0 0 3px #ffe476,0 0 22px #ffe47688,0 9px 24px #0005}
-.tutorial-shell{background:linear-gradient(#063a29,#03281d);color:white;border-top:3px solid var(--gold);border-bottom:3px solid var(--gold)}.tutorial-head{padding:12px 14px}.tutorial-head h2{margin:0;color:#ffe394;font-size:29px;text-shadow:0 2px 3px #000}.tutorial-head small{color:#fff0c4}.tutorial-video{margin:0 12px;border:3px solid var(--gold);border-radius:16px;overflow:hidden;background:#0a231b;box-shadow:0 8px 20px #0006}.tutorial-stage{height:250px;position:relative;overflow:hidden;background:linear-gradient(#87cad8,#2c7586 58%,#183c2e)}.tutorial-stage svg{width:100%;height:100%;display:block}.tutorial-progress{height:8px;background:#222;margin:0}.tutorial-progress i{display:block;height:100%;background:linear-gradient(90deg,#f5d663,#c89218);width:20%;transition:width .35s}.stepdots{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:10px 12px;background:#082f23}.stepdot{border:1px solid #d7bd69;border-radius:999px;min-height:44px;background:#0e4733;color:white;font-size:11px;font-weight:850}.stepdot.active{background:linear-gradient(#ffe477,#dca529);color:#17271f}.tutorial-body{padding:12px}.tutorial-step-card{background:var(--cream);color:var(--ink);border:2px solid #d7bd69;border-radius:15px;padding:12px}.tutorial-step-card h3{margin:0 0 8px;color:var(--g)}.tutorial-step-card ul{padding-left:20px;margin:7px 0}.takeaway{margin-top:10px;background:linear-gradient(#f6df91,#d5aa3f);color:#173026;border-radius:12px;padding:10px;font-weight:800}.tutorial-controls{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:8px;padding:10px 12px 14px}.tutorial-controls button{min-height:52px;border-radius:13px;border:2px solid #d1aa44;font-weight:900}.playbtn{background:linear-gradient(#ffe36f,#d7a328)}.prevnext{background:#123f31;color:white}
-.photo-tutorial{position:absolute;inset:0;background-size:cover;background-position:center;overflow:hidden}
-.photo-tutorial:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,20,15,.04),rgba(0,20,15,.28))}
-.eddy-photo{background-image:url("https://npgallery.nps.gov/GetAsset/E1354DBB-155D-451F-67B7D2564D66FBDA/proxyhires.jpg")}
-.motion-label{position:absolute;z-index:5;background:linear-gradient(#ffe780,#d9ae48);color:#173025;border:2px solid #7d5c13;border-radius:10px;padding:5px 8px;font-weight:950;font-size:12px;box-shadow:0 3px 8px #0005}
-.current-label{right:14px;top:18px}.eddy-label{left:46%;top:42%}.target-label{right:12%;bottom:22%}
-.flow-arrow{position:absolute;z-index:4;color:#73e5ff;font-size:34px;font-weight:950;text-shadow:0 2px 5px #000;opacity:.9}
-.fa1{right:6%;top:26%}.fa2{right:18%;top:32%}.fa3{right:30%;top:38%}
-.eddy-ring{position:absolute;z-index:4;left:35%;top:36%;width:120px;height:78px;border:7px dashed #ffd83d;border-radius:50%;filter:drop-shadow(0 2px 3px #0008)}
-.eddy-ring:after{content:"➜";position:absolute;right:-12px;top:20px;color:#ffd83d;font-size:30px}
-.kayak-marker{position:absolute;z-index:5;left:48%;bottom:5%;width:58px;height:24px;border-radius:70% 70% 55% 55%;background:#da8529;border:3px solid #252c29;transform:rotate(-8deg);box-shadow:0 3px 7px #0007}
-.kayak-marker:after{content:"";position:absolute;left:25px;top:-22px;width:9px;height:24px;border-radius:8px;background:#22332d}
-.attack-point{position:absolute;z-index:5;right:18%;bottom:27%;width:42px;height:42px;border:5px solid #ffe03e;border-radius:50%;box-shadow:0 0 0 6px #ffe03e33}
-.cast-line{position:absolute;z-index:4;left:54%;bottom:11%;width:38%;height:36%;pointer-events:none}.cast-line path{fill:none;stroke:#ffe03e;stroke-width:4;stroke-dasharray:10 8;stroke-linecap:round}
-.step-caption{position:absolute;z-index:6;left:10px;bottom:8px;background:#062f22dd;color:white;border:1px solid #d9ae48;border-radius:9px;padding:5px 8px;font-size:11px;font-weight:800}
-.photo-tutorial:not(.playing) .flow-arrow,.photo-tutorial:not(.playing) .eddy-ring,.photo-tutorial:not(.playing) .cast-line path,.photo-tutorial:not(.playing) .attack-point{animation-play-state:paused}
-.photo-tutorial.playing .flow-arrow{animation:flowmove 1.8s linear infinite}
-.photo-tutorial.playing .fa2{animation-delay:.35s}.photo-tutorial.playing .fa3{animation-delay:.7s}
-.photo-tutorial.playing .eddy-ring{animation:eddyspin 3.2s linear infinite}
-.photo-tutorial.playing .cast-line path{animation:dashmove 1.4s linear infinite}
-.photo-tutorial.playing .attack-point{animation:targetpulse 1.25s ease-in-out infinite}
-@keyframes flowmove{0%{transform:translateX(0);opacity:.25}50%{opacity:1}100%{transform:translateX(-34px);opacity:.25}}
-@keyframes eddyspin{to{transform:rotate(360deg)}}
-@keyframes dashmove{to{stroke-dashoffset:-36}}
-@keyframes targetpulse{0%,100%{transform:scale(.88);box-shadow:0 0 0 3px #ffe03e33}50%{transform:scale(1.12);box-shadow:0 0 0 12px #ffe03e22}}
-.photo-tutorial.step-0 .cast-line,.photo-tutorial.step-0 .attack-point{opacity:.25}
-.photo-tutorial.step-1 .cast-line,.photo-tutorial.step-1 .attack-point{opacity:.18}
-.photo-tutorial.step-2 .cast-line,.photo-tutorial.step-2 .attack-point{opacity:1}
-.photo-tutorial.step-3 .cast-line,.photo-tutorial.step-3 .attack-point{opacity:1}
-@media(max-width:380px){.tutorial-grid{grid-template-columns:repeat(2,1fr)}.homegrid{padding:10px}.homebtn{min-height:108px}.lesson{grid-template-columns:82px 1fr 24px}.tabs{grid-template-columns:repeat(2,1fr)}.tc-headcopy h2{font-size:22px}.tc-profile{width:74px;height:74px;flex-basis:74px}.tc-stat strong{font-size:17px}.tc-ribbon{font-size:16px}}
-</style>
-<script src="https://cdn.jsdelivr.net/npm/exifr/dist/full.umd.js"></script>\n</head>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#062f22">
+<title>Kayak Fishing Journal</title>
+<link rel="stylesheet" href="styles.css?v=2">
+</head>
 <body>
-<svg aria-hidden="true" style="display:none">
-<symbol id="i-water" viewBox="0 0 24 24"><path d="M3 7c3-2 5 2 8 0s5 2 10 0M3 12c3-2 5 2 8 0s5 2 10 0M3 17c3-2 5 2 8 0s5 2 10 0"/></symbol>
-<symbol id="i-fish" viewBox="0 0 24 24"><path d="M4 12c4-5 10-5 14 0-4 5-10 5-14 0Z"/><path d="m18 12 3-3v6l-3-3ZM8 11h.01"/></symbol>
-<symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5c3-1 6 0 8 2v12c-2-2-5-3-8-2V5Zm16 0c-3-1-6 0-8 2v12c2-2 5-3 8-2V5Z"/></symbol>
-<symbol id="i-note" viewBox="0 0 24 24"><path d="M6 3h12v18H6zM9 7h6M9 11h6M9 15h4"/></symbol>
-<symbol id="i-trophy" viewBox="0 0 24 24"><path d="M8 4h8v4c0 4-2 6-4 6s-4-2-4-6V4Zm0 2H4c0 4 2 6 5 6m7-6h4c0 4-2 6-5 6M12 14v4m-4 2h8"/></symbol>
-<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 4-7 8-7s7 2 8 7"/></symbol>
-<symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c1-5 3-7 6-7s6 2 7 7m0-6c3 0 5 2 6 6"/></symbol>
-<symbol id="i-home" viewBox="0 0 24 24"><path d="m3 11 9-8 9 8v10H6V11"/><path d="M10 21v-6h4v6"/></symbol>
-<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l4 2"/></symbol>
-<symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 7h4l2-2h4l2 2h4v12H4z"/><circle cx="12" cy="13" r="4"/></symbol>
-<symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18h11a4 4 0 0 0 0-8 6 6 0 0 0-11-2A5 5 0 0 0 7 18Z"/></symbol>
-<symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-7 7-12a7 7 0 1 0-14 0c0 5 7 12 7 12Z"/><circle cx="12" cy="9" r="2"/></symbol>
-<symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
-<symbol id="i-brain" viewBox="0 0 24 24"><path d="M9 4a4 4 0 0 0-4 4v1a4 4 0 0 0 0 7 4 4 0 0 0 4 4m6-16a4 4 0 0 1 4 4v1a4 4 0 0 1 0 7 4 4 0 0 1-4 4M9 4v16m6-16v16M9 9h3m0 6h3"/></symbol>
-<symbol id="i-check" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6"/></symbol>
-<symbol id="i-line" viewBox="0 0 24 24"><path d="M4 18c4-12 12-12 16 0M6 14l-3-1m15 1 3-1"/></symbol>
-<symbol id="i-knot" viewBox="0 0 24 24"><path d="M4 7c4 0 5 10 9 10s4-6 7-6c-4 0-5 6-9 6S7 7 4 7Zm0 10c4 0 5-10 9-10s4 6 7 6"/></symbol>
-<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-5-5 5 5-5 5"/></symbol>
-</svg>
+<header class="topbar">
+  <a class="brand" href="#/home" aria-label="Kayak Fishing Journal Home">
+    <strong>Kayak Fishing Journal</strong><span>Kayak Fishing Hits Different</span>
+  </a>
+  <a class="profile-link" href="#/profile" aria-label="My Profile">👤</a>
+</header>
 
-<div id="app">
-<header><button class="icon" id="back">‹</button><div><h1>KayakFishingJournal.com</h1><small id="accountTag">Learn • Fish • Log • Share</small></div><button class="icon" id="accountBtn" aria-label="Account"><svg class="ico"><use href="#i-user"/></svg></button></header>
-
-<section id="signin" class="screen active">
-<div class="profilehero" style="min-height:260px;display:flex;flex-direction:column;justify-content:center">
-  <div class="profilepic" style="width:118px;height:118px"><svg class="ico"><use href="#i-user"/></svg></div>
-  <h2 style="font-size:28px;margin-top:12px">KayakFishingJournal.com</h2>
-  <small>Sign in to your angler profile</small>
-</div>
-<div class="section">
-  <div class="panel"><h3>Welcome Back</h3><div class="body">
-    <div class="field"><label>Email</label><input id="startEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
-    <div class="field"><label>Display Name</label><input id="startName" autocomplete="name" placeholder="Your name"></div>
-    <div class="field"><label>Password</label><div class="password-wrap"><input id="startPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters"><button type="button" class="password-toggle" id="toggleStartPassword" onclick="var p=document.getElementById('startPassword');var sh=p.type==='password';p.type=sh?'text':'password';this.textContent=sh?'Hide':'Show';return false;">Show</button></div></div>
-    <div id="startLoginStatus" class="muted" style="min-height:24px"></div>
-    <button type="button" class="cta" style="width:100%;min-height:58px" id="startLoginBtn" onclick="startupLoginSync();return false;">Sign In / Create Account</button>
-  </div></div>
-  <div class="card"><b>Why sign in?</b><p class="muted">Your profile owns your trips, Trip Cards, community posts, club access, and profile photo.</p></div>
-</div>
-</section>
-
-<section id="home" class="screen">
-<div class="hero"><div class="logo"><b>Kayak Fishing Journal</b><span>Interactive River Guide & Journal</span><em>Kayak Fishing Hits Different</em></div>
-<svg class="kayakmark" viewBox="0 0 300 90"><path fill="#c87822" stroke="#1e2d26" stroke-width="5" d="M25 55c52 25 198 25 250 0-34 36-216 36-250 0Z"/><circle fill="#172b24" cx="150" cy="35" r="18"/><path stroke="#172b24" stroke-width="8" d="M150 50v20m-50-42 98 30"/><path stroke="#e9c75f" stroke-width="7" d="M84 24 215 61"/></svg></div>
-<div class="homegrid">
-<button class="homebtn" data-go="learn" data-cat="water"><svg class="ico"><use href="#i-water"/></svg><strong>See the River</strong><small>Current, seams, ledges, eddies & structure.</small></button>
-<button class="homebtn" data-go="learn" data-cat="tech"><svg class="ico"><use href="#i-book"/></svg><strong>Learn & Improve</strong><small>Techniques, science, knots & practical lessons.</small></button>
-<button class="homebtn" id="start"><svg class="ico"><use href="#i-note"/></svg><strong>Log a Trip</strong><small>Start an offline-first fishing session.</small></button>
-<button class="homebtn" data-go="tourney"><svg class="ico"><use href="#i-trophy"/></svg><strong>Find a Tourney</strong><small>Regional in-person tournament finder.</small></button>
-<button class="homebtn" data-go="directory"><svg class="ico"><use href="#i-user"/></svg><strong>Angler Directory</strong><small>Profiles, stats, teams & shared trips.</small></button>
-<button class="homebtn" data-go="community"><svg class="ico"><use href="#i-users"/></svg><strong>Community Reports</strong><small>Shared Trip Cards and full reports.</small></button>
-</div></section>
-
-<section id="learn" class="screen"><div class="section">
-<div class="learn-hero-banner"><div class="learn-book">📖</div><div><h2>SEE THE WATER</h2><small>River Structure & Location Tutorials</small></div></div>
-<div class="tabs"><button class="tab active" data-cat="water">See Water</button><button class="tab" data-cat="tech">Techniques</button><button class="tab" data-cat="science">Science</button><button class="tab" data-cat="knots">Knots</button></div>
-<div id="lessons"></div></div></section>
-
-<section id="learncard" class="screen">
-<div class="tutorial-shell" id="tutorialShell">
-  <div class="tutorial-head"><h2 id="tutorialTitle">Eddies & Backwater</h2><small id="tutorialSub">How to Identify • Understand • Fish • Apply</small></div>
-  <div class="tutorial-video">
-    <div class="tutorial-stage" id="tutorialStage"></div>
-    <div class="tutorial-progress"><i id="tutorialProgress"></i></div>
-  </div>
-  <div class="stepdots" id="stepDots"></div>
-  <div class="tutorial-body"><div class="tutorial-step-card" id="tutorialStepCard"></div><div class="muted" id="tutorialCredit" style="color:#eadfbf;padding:6px 4px 0;font-size:10px"></div></div>
-  <div class="tutorial-controls"><button class="prevnext" id="prevStep">Previous</button><button class="playbtn" id="playTutorial">▶ Play Tutorial</button><button class="prevnext" id="nextStep">Next</button></div>
-</div>
-<div class="learnart" id="learnArt" style="display:none"></div>
-<div class="title"><h2 id="lessonTitle">Current Seam</h2><div id="lessonSub">Find the edge between fast and slow water.</div></div>
-<div class="modebar"><button class="mode active" data-mode="quick">Quick</button><button class="mode" data-mode="learn">Learn</button><button class="mode" data-mode="deep">Deep Dive</button></div>
-<div class="steps" id="steps"></div>
-<div class="learnActions"><button class="cta secondary" id="castAngle">Show Cast Angle</button><button class="cta secondary" id="baitRec">Recommended Baits</button></div>
-
-</section>
-
-<section id="ontrip" class="screen">
-<div class="triphero"><div class="live">● ON TRIP</div><div class="timer" id="timer">00:00:00</div><div class="where" id="where">No active trip</div></div>
-<div class="actions"><button class="big" id="catch"><svg class="ico"><use href="#i-fish"/></svg>LOG CATCH</button><button class="big" id="photo"><svg class="ico"><use href="#i-camera"/></svg>ADD PHOTO</button></div>
-<div class="stats"><div class="stat">Catches<strong id="count">0</strong></div><div class="stat">Largest<strong id="largest">—</strong></div><div class="stat">Min/Catch<strong id="rate">—</strong></div></div>
-<div class="tools"><button class="tool" id="science"><svg class="ico"><use href="#i-cloud"/></svg>Science</button><button class="tool" id="details"><svg class="ico"><use href="#i-pin"/></svg>Trip Details</button><button class="tool" id="notes"><svg class="ico"><use href="#i-note"/></svg>Notes</button></div>
-<button class="end" id="end">END TRIP & SAVE</button></section>
-
-<section id="tripcard" class="screen">
-<div class="tripcard-new">
-  <div class="tc-hero" id="tcHero">
-    <div class="tc-profile" id="tcProfile"><svg class="ico"><use href="#i-user"/></svg></div>
-    <div class="tc-headcopy">
-      <h2 id="tcTitle">Trip Card</h2>
-      <div class="tc-location">📍 <span id="tcLoc">—</span></div>
-      <div class="tc-date" id="tcDate">—</div>
+<main id="app">
+  <section class="page" data-route="home">
+    <div class="hero"><div class="hero-copy"><small>KayakFishingJournal.com</small><h1>Learn the water. Fish smarter. Remember every trip.</h1><p>A mobile-first kayak fishing journal, learning center and community.</p></div></div>
+    <div class="tile-grid">
+      <a class="tile" href="#/learn"><b>See the River</b><span>Current, seams, ledges, eddies & structure.</span></a>
+      <a class="tile" href="#/learn"><b>Learn & Improve</b><span>Techniques, science, knots & tutorials.</span></a>
+      <a class="tile accent" href="#/on-trip"><b>Log a Trip</b><span>Start an offline-first trip session.</span></a>
+      <a class="tile" href="#/tournaments"><b>Find a Tourney</b><span>Regional in-person events.</span></a>
+      <a class="tile" href="#/directory"><b>Angler Directory</b><span>Profiles, stats, teams & shared trips.</span></a>
+      <a class="tile" href="#/community"><b>Community Reports</b><span>Shared Trip Cards and full reports.</span></a>
     </div>
-  </div>
-  <div class="tc-stats">
-    <div class="tc-stat"><small>Time on Water</small><strong id="tcTime">—</strong></div>
-    <div class="tc-stat"><small>Catches</small><strong id="tcCatch">0</strong></div>
-    <div class="tc-stat"><small>Largest</small><strong id="tcLargest">—</strong></div>
-    <div class="tc-stat"><small>Min / Catch</small><strong id="tcRate">—</strong></div>
-  </div>
-  <div class="tc-section"><div class="tc-ribbon">Science & Conditions</div><div class="tc-science" id="tcScience"></div></div>
-  <div class="tc-section"><div class="tc-ribbon">What Worked <span>(Baits & Techniques)</span></div><div class="tc-baits" id="tcBaits"></div></div>
-  <div class="tc-section"><div class="tc-ribbon">Best Five</div><div class="tc-bestfive" id="bestFive"></div></div>
-  <div class="tc-footer">KayakFishingJournal.com</div>
-</div>
-<div class="learnActions" style="padding:12px"><button class="cta secondary" id="amend">Amend Trip</button><button class="cta" id="share">Share Trip Card</button></div>
-</section>
+  </section>
 
-<section id="journal" class="screen"><div class="list"><div class="sectionhead"><div><h2>My Journal</h2><small>Saved on this device first.</small></div><button class="cta" id="journalNew">+ Trip</button></div><div id="journalList"></div></div></section>
-<section id="community" class="screen"><div class="list"><div class="sectionhead"><div><h2>Community Reports</h2><small>Only reports anglers choose to share.</small></div></div><div id="communityList"></div></div></section>
-<section id="tourney" class="screen"><div class="list"><div class="sectionhead"><div><h2>Find a Tourney</h2><small>In-person events only.</small></div></div><div id="tourneyList"></div></div></section>
-<section id="directory" class="screen"><div class="list"><div class="sectionhead"><div><h2>Angler Directory</h2><small>Profiles, trips, teams, sponsors and stats.</small></div></div><div id="directoryList"></div></div></section>
-<section id="profile" class="screen"><div class="profilehero"><div class="profilepic" id="publicProfilePic"><svg class="ico"><use href="#i-user"/></svg></div><h2 id="pName">John Rapp</h2><small id="pHome">West Virginia</small></div><div class="section" id="profileBody"></div></section>
+  <section class="page" data-route="learn">
+    <div class="section-head"><div><small>LEARN & IMPROVE</small><h2>See the Water</h2></div></div>
+    <div class="lesson-grid">
+      <a class="lesson-card" href="#/lesson/eddy"><div class="lesson-img"></div><b>Eddies & Backwater</b><span>See It • Understand It • Fish It • Try It</span></a>
+      <a class="lesson-card" href="#/lesson/seam"><div class="lesson-img"></div><b>Current Seam</b><span>Fast water meets soft water.</span></a>
+      <a class="lesson-card" href="#/lesson/boulder"><div class="lesson-img"></div><b>Boulder Break</b><span>Protected water around rock.</span></a>
+      <a class="lesson-card" href="#/lesson/ledge"><div class="lesson-img"></div><b>Ledge / Drop</b><span>Shallow-to-deep transition.</span></a>
+      <a class="lesson-card" href="#/lesson/riffle"><div class="lesson-img"></div><b>Shoal / Riffle</b><span>Broken water and first drop.</span></a>
+      <a class="lesson-card" href="#/lesson/tailout"><div class="lesson-img"></div><b>Pool Tailout</b><span>Exit current and feeding lanes.</span></a>
+    </div>
+    <div class="link-list">
+      <a href="#/techniques">Techniques <span>›</span></a>
+      <a href="#/science">Science of Fishing <span>›</span></a>
+      <a href="#/knots">Knot Tying <span>›</span></a>
+    </div>
+  </section>
 
-<section id="account" class="screen">
-  <div class="profilehero">
-    <div class="profilepic" id="myProfilePic"><svg class="ico"><use href="#i-user"/></svg></div>
-    <h2 id="myName">Guest Angler</h2><small id="myHome">Not signed in</small>
-  </div>
-  <div class="section">
-    <div class="panel"><h3>My Account</h3><div class="body" id="accountActions"></div><div class="body" style="padding-top:0"><button class="cta secondary" style="width:100%" id="accountHomeBtn">Go to App Home</button></div></div>
-    <div class="panel"><h3>My Profile</h3><div class="body"><button class="cta" style="width:100%;margin-bottom:10px" id="profileEditTop">Edit Profile / Add Photo</button><div id="myProfileSummary"></div></div></div>
-    <div class="panel"><h3>My Clubs</h3><div class="body" id="myClubsSummary"></div></div>
-  </div>
-</section>
+  <section class="page" data-route="lesson">
+    <div class="lesson-hero"><div class="lesson-photo"></div><div class="motion-overlay" id="motionOverlay"><div class="flow a">➜</div><div class="flow b">➜</div><div class="eddy-ring"></div><div class="target"></div><div class="kayak"></div></div></div>
+    <div class="section-head"><div><small>TUTORIAL</small><h2 id="lessonTitle">Eddies & Backwater</h2></div></div>
+    <div class="steps" id="lessonSteps"></div>
+    <div class="control-row"><button id="prevLesson">Previous</button><button id="playLesson" class="primary">▶ Play</button><button id="nextLesson">Next</button></div>
+    <article class="lesson-copy" id="lessonCopy"></article>
+  </section>
 
-<section id="clubs" class="screen"><div class="section"><div class="sectionhead"><div><h2>My Clubs</h2><small>Club access, activity and tournament tools.</small></div></div><div id="clubsList"></div></div></section>
+  <section class="page" data-route="on-trip">
+    <div class="section-head"><div><small>ON TRIP</small><h2>Live Trip</h2></div></div>
+    <div class="trip-hud"><b id="tripTimer">00:00:00</b><span>Current Session</span></div>
+    <div class="stats"><div><small>Catches</small><b id="catchCount">0</b></div><div><small>Largest</small><b id="largestCatch">—</b></div><div><small>Min/Catch</small><b id="minCatch">—</b></div></div>
+    <div class="action-grid">
+      <button id="startTripBtn" class="primary">Start Trip</button><button id="logCatchBtn">Log Catch</button><button id="tripPhotoBtn">Add Photo</button>
+      <a class="button-link" href="#/science">Science</a><a class="button-link" href="#/journal">Journal</a><button id="endTripBtn">End & Save</button>
+    </div>
+  </section>
 
-<section id="settings" class="screen"><div class="section"><div class="sectionhead"><div><h2>Settings</h2><small>Privacy, directory visibility and sharing defaults.</small></div></div><div id="settingsBody"></div></div></section>
+  <section class="page" data-route="journal">
+    <div class="section-head"><div><small>MY JOURNAL</small><h2>Saved Trips</h2></div><a class="small-btn" href="#/on-trip">+ Trip</a></div>
+    <div id="journalList" class="stack"></div>
+  </section>
 
-<nav>
-<button class="navbtn active" data-go="home"><svg class="ico"><use href="#i-home"/></svg>Home</button>
-<button class="navbtn" data-go="ontrip"><svg class="ico"><use href="#i-clock"/></svg>On Trip</button>
-<button class="navbtn" data-go="learn"><svg class="ico"><use href="#i-book"/></svg>Learn</button>
-<button class="navbtn" data-go="journal"><svg class="ico"><use href="#i-note"/></svg>Journal</button>
-<button class="navbtn" data-go="community"><svg class="ico"><use href="#i-users"/></svg>Community</button>
-</nav>
+  <section class="page" data-route="tournaments">
+    <div class="section-head"><div><small>FIND A TOURNEY</small><h2>Upcoming Events</h2></div></div>
+    <div class="stack">
+      <article class="card"><b>WVKA Big Cash Event</b><span>May 22, 2027 • Summersville / Gauley</span></article>
+      <article class="card"><b>WVKA Big Cash Event</b><span>June 26, 2027 • Bluestone / New / Greenbrier</span></article>
+      <article class="card"><b>WVKA Big Cash Event</b><span>July 17, 2027 • Jackson County Shootout</span></article>
+      <article class="card"><b>WVKA Big Cash Event</b><span>August 21, 2027 • Stonewall / Stonecoal / West Fork</span></article>
+      <article class="card"><b>WVKA Big Cash Event</b><span>September 18, 2027 • Cheat Lake / River</span></article>
+    </div>
+  </section>
 
-<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
-</div>
+  <section class="page" data-route="directory">
+    <div class="section-head"><div><small>ANGLER DIRECTORY</small><h2>Community Profiles</h2></div></div>
+    <div class="stack">
+      <a class="card link-card" href="#/profile"><b>My Profile</b><span>Edit photo, bio, kayak, electronics, teams and sponsors.</span></a>
+      <article class="card"><b>Jody Queen</b><span>West Virginia</span></article>
+      <article class="card"><b>Buddy Vance</b><span>West Virginia</span></article>
+    </div>
+  </section>
 
-<script>
-const $=id=>document.getElementById(id), $$=s=>[...document.querySelectorAll(s)];
-const LESSONS={
-water:[
-["Current Seam","The edge where fast and slow water meet.","Look for a visible line in surface speed, texture, foam, bubbles or color. Keep the kayak outside the fast lane and cast across or just beyond the seam so the bait enters naturally.","Bass can hold in softer water while food is carried beside them in faster current. The seam becomes a low-effort feeding lane.","Ned Rig|Fluke / Soft Jerkbait|Jerkbait","seam"],
-["Boulder / Current Break","Soft water created by rock that interrupts current.","Fish three zones in order: upstream edge, protected pocket, then the downstream seam. Keep the kayak off the rock and let the lure sweep through the break.","A boulder blocks current and creates a low-energy pocket immediately behind and beside the rock while still delivering forage past the fish.","Tube|Finesse Jig|Ned Rig","boulder"],
-["Ledge / Drop","A fast transition from shallow to deeper water.","Position outside the drop and cast parallel to it, then cross the edge at an angle. Contact the break without dragging the kayak over the holding zone.","Ledges combine depth change, current deflection and ambush cover. Fish can slide up to feed and drop deeper with little movement.","Crankbait|Jig|Swimbait","ledge"],
-["Eddy","Reverse or circular current beside the main flow.","Start at the seam where the eddy meets current, then work the center and finally the exit. Make casts that let the lure sweep naturally into the soft water.","Eddies collect drifting food and give fish a place to rest while staying close to moving forage.","Fluke / Soft Jerkbait|Ned Rig|Topwater","eddy"],
-["Shoal / Riffle","Shallow broken water with increased oxygen and current.","Fish the head of the riffle, any visible seams, then the first deeper water immediately below. Use the current to carry the bait instead of fighting it.","Riffles concentrate oxygen, aquatic insects and baitfish. Active bass often use them during feeding periods and warmer water.","Spinnerbait|Crankbait|Topwater","riffle"],
-["Pool Tailout","Where a pool narrows and current accelerates.","Cast above the tailout, work both edges, then let the bait sweep into the faster exit water.","Tailouts concentrate forage and create a natural travel lane between deep pool water and faster current.","Tube|Jerkbait|Ned Rig","tailout"],
-["Deep Pool / Pocket","Protected depth near current or structure.","Start with the deepest edge, then fish the current-facing side and exit route. Slow the presentation before leaving.","Deep water offers refuge, stable temperature and recovery water close to feeding lanes.","Jig|Tube|Swimbait","pool"],
-["Laydown / Wood Cover","Downed trees, root wads and branches creating shade and current breaks.","Approach quietly from downstream or outside the cover. Fish the outside limbs first, then work deeper into the highest-percentage pockets.","Wood creates shade, ambush cover and current protection while attracting bait and aquatic life.","Jig|Creature / Craw|Spinnerbait","wood"],
-["Undercut Bank","Current-eroded bank with overhead cover and hidden cavities.","Keep the kayak off the bank and make low-angle casts that enter parallel to the edge. Let current carry the bait under the overhang.","Undercuts provide shade, current relief and security, especially during bright conditions or higher flow.","Fluke / Soft Jerkbait|Jig|Senko / Stickbait","undercut"],
-["Grass / Vegetation Edge","Emergent or submerged vegetation that creates shade, current edges and ambush cover.","Work the outside edge first, then pockets and points. Use weedless presentations when penetrating thicker cover.","Grass creates oxygen, forage habitat and visual cover while also forming clean travel lanes.","Swimbait|Spinnerbait|Topwater","grass"],
-["Bridge Pilings / Man-Made Structure","Hard vertical cover that deflects current and creates predictable seams.","Fish the upstream face, side seam, downstream pocket and any scour hole around the base.","Pilings create current breaks, shade and depth change in a compact target area.","Crankbait|Jig|Ned Rig","piling"]],
-tech:[
-["Ned Rig","Compact finesse presentation for rock and current.","Keep bottom contact without overworking it.","Small profile, subtle movement and easy current control.","Green Pumpkin|TRD-style bait|Craw profile","ned"],
-["Fluke / Soft Jerkbait","Natural baitfish imitation.","Cast across or upstream and let current help the bait glide.","Erratic movement imitates injured forage.","White Fluke|Pearl baitfish|Bone","fluke"],
-["Topwater","Surface presentation for active fish.","Work seams, shade, eddies and current edges.","Visual commotion triggers feeding and territorial strikes.","Walking bait|Popper|Plopper","topwater"],
-["ChatterBait","Flash and vibration search bait.","Slow-roll through stained water and current edges.","Vibration helps fish locate the bait with limited visibility.","Green Pumpkin|White/Shad|Black/Blue"],
-["Jig","Bottom-contact cover presentation.","Crawl, hop or swim around rock and wood.","A jig imitates crawfish and bottom forage.","Finesse Jig|Football Jig|Craw trailer"],
-["Crankbait","Deflection and depth coverage.","Contact rock and change speed after deflection.","Reaction strikes often follow contact with cover.","Craw pattern|Shad pattern|Flat-sided crank","crank"],
-["Spinnerbait","Flash and vibration around current.","Slow-roll through stained water or burn through shallow riffles.","Flash and vibration imitate forage and aid detection.","White/Chartreuse|Double Willow|Colorado"],
-["Swimbait","Controlled baitfish profile.","Match depth and current speed with head weight.","Natural swimming action covers water efficiently.","Paddle Tail|Shad color|Natural forage"],
-["Jerkbait","Suspending reaction presentation.","Use short snaps and longer pauses in cold or clear water.","Pause duration controls depth and strike opportunity.","Shad|Ghost Minnow|Suspending bait"],
-["Tube","Classic smallmouth bottom bait.","Drag, hop or spiral through rock and current.","Compact craw/goby profile excels around rock.","Green Pumpkin|Smoke|Natural Craw","tube"],
-["Senko / Stickbait","Simple natural fall.","Fish weightless, wacky or Texas-rigged around slack water.","Subtle fall gets bites without heavy action.","Green Pumpkin|Black/Blue|Natural"],
-["Buzzbait","Fast surface search bait.","Cover shallow water and current edges quickly.","Surface disturbance creates reaction strikes.","Black|White|Compact buzzbait"],
-["Creature / Craw","Bottom forage imitation.","Pitch or drag around wood, rock and seams.","Matches crawfish and larger bottom forage.","Green Pumpkin|Black/Blue|Orange accent"]],
-science:[
-["River Flow & Trend","Read discharge and 24-hour direction.","Compare current flow with the recent trend before judging the bite.","Rising, falling and stable water change access to structure and forage.","Gauge|Trend|CFS"],
-["Wind","Use direction and speed in kayak positioning.","Approach targets so wind helps boat control instead of fighting you.","Wind changes drift, surface activity and presentation speed.","Direction|Speed|Gusts"],
-["Barometric Trend","Track pressure direction, not just the number.","Compare current pressure with the previous 12–24 hours.","Rapid changes can affect activity and positioning.","Rising|Falling|Stable"],
-["Rainfall","Understand recent runoff.","Look at rain amount plus how quickly water responds.","Rain changes flow, clarity, temperature and access.","24h Rain|Runoff|Clarity"],
-["Water Temperature","Match seasonal activity.","Use temperature with season and flow, not alone.","Temperature affects metabolism and presentation speed.","Surface Temp|Trend|Season"],
-["Water Clarity","Adjust distance, color and vibration.","Clear water favors natural looks; stain may favor contrast or vibration.","Visibility changes how far fish can detect the bait.","Clear|Stained|Muddy"],
-["Moon / Sun Windows","Use activity windows as context.","Treat major/minor windows as one factor among many.","Light and lunar position may overlap with feeding opportunities.","Major|Minor|Sunrise/Sunset"]],
-knots:[
-["Palomar Knot","Fast strong terminal knot.","Double line through the eye, overhand loop, pass lure through, cinch wet.","Simple and dependable for many terminal connections.","Braid|Fluoro|Mono"],
-["Alberto Knot","Compact leader connection.","Wrap the braid around doubled leader and exit through the same side.","Good balance of slim profile and easy tying.","Braid to Leader|Compact|Fast"],
-["Double Uni","Versatile line-to-line knot.","Build opposing uni knots and slide them together.","Easy to learn and works across line types.","Leader|Backup|Versatile"],
-["FG Knot","Slim high-strength leader knot.","Braid wraps around tensioned leader then locks with finishing hitches.","Very slim through guides when tied correctly.","Long Leader|Guides|High Strength"]]
-};
-let category="water", current=0, mode="quick", historyStack=["home"], displayedTrip=null;
-let tutorialStep=0, tutorialPlaying=false, tutorialTimer=null;
-const TUTORIAL_STEPS=[
- {name:"See It",title:"STEP 1 — SEE IT",bullets:["Find slow or rotating water behind rocks, bends, wood, or other current breaks.","Locate the seam where fast current meets the softer water.","Watch foam, bubbles, leaves or surface texture to reveal the circular flow."],takeaway:"First identify the seam. The seam is usually more important than the center of the eddy."},
- {name:"Understand It",title:"STEP 2 — UNDERSTAND IT",bullets:["The eddy lets bass hold with less effort while staying close to food moving in the main current.","Forage can collect or stall inside the soft-water pocket.","Fish often reposition between the seam, center, and downstream exit."],takeaway:"An eddy is both a resting place and a feeding station."},
- {name:"Fish It",title:"STEP 3 — FISH IT",bullets:["Keep the kayak outside the prime holding water.","Make your first cast to the seam, then the center, then the downstream exit.","Let the bait enter naturally instead of landing directly on the fish."],takeaway:"Fish the seam first. It is the highest-percentage edge."},
- {name:"Try It",title:"STEP 4 — TRY IT",bullets:["Make three casts with the same bait: seam, center, exit.","If you get a follow or bite, repeat the same angle before changing baits.","Change one variable at a time—angle, depth, or speed."],takeaway:"Controlled comparison teaches you more than random casting."}
-];
-let trip=readJSON("kfj_active_trip",null)||{active:false,start:null,end:null,location:"",angler:"John Rapp",waterType:"River",catches:[],notes:"",science:{},patterns:[],photos:[]};
-let account=JSON.parse(localStorage.getItem("kfj_account")||"null");
-let profile=JSON.parse(localStorage.getItem("kfj_profile")||"null")||{name:"John Rapp",home:"West Virginia",about:"Kayak angler and community member.",kayak:"",electronics:"",teams:"",sponsors:"",photo:"",directory:true,sharePhoto:true};
-let prefs=JSON.parse(localStorage.getItem("kfj_prefs")||"null")||{directory:true,defaultShare:false,locationOnCard:false};
-let timerHandle=null;
+  <section class="page" data-route="community">
+    <div class="section-head"><div><small>COMMUNITY</small><h2>Shared Trip Cards</h2></div></div>
+    <div id="communityList" class="stack"><article class="card"><b>No shared cards yet.</b><span>Trips remain private until shared.</span></article></div>
+  </section>
 
-function show(id,push=true){const target=$(id);if(!target){console.error("Missing screen:",id);return false}$(".screen").forEach(x=>x.classList.remove("active"));target.classList.add("active");const nav=document.querySelector("nav");if(nav)nav.style.display=(id==="signin"?"none":"grid");$(".navbtn").forEach(b=>b.classList.toggle("active",b.dataset.go===id));if(push&&historyStack[historyStack.length-1]!==id)historyStack.push(id);if(id==="learn")renderLessons();if(id==="ontrip")renderTrip();if(id==="journal")renderJournal();if(id==="community")renderCommunity();if(id==="tourney")renderTourneys();if(id==="directory")renderDirectory();if(id==="tripcard")renderCard(displayedTrip||trip);if(id==="account")renderAccount();if(id==="clubs")renderClubs();if(id==="settings")renderSettings();window.scrollTo(0,0)}
-function icon(id){return '<svg class="ico"><use href="#'+id+'"/></svg>'}
-function renderLessons(){
- $$(".tab").forEach(b=>b.classList.toggle("active",b.dataset.cat===category));
- if(category==="water"){
-  const riverPhotos=[
-   "https://npgallery.nps.gov/GetAsset/E1354DBB-155D-451F-67B7D2564D66FBDA/proxyhires.jpg",
-   "https://npgallery.nps.gov/GetAsset/E1354DBB-155D-451F-67B7D2564D66FBDA/proxyhires.jpg",
-   "https://npgallery.nps.gov/GetAsset/E1354DBB-155D-451F-67B7D2564D66FBDA/proxyhires.jpg",
-   "https://npgallery.nps.gov/GetAsset/E1354DBB-155D-451F-67B7D2564D66FBDA/proxyhires.jpg",
-   "https://npgallery.nps.gov/GetAsset/E1354DBB-155D-451F-67B7D2564D66FBDA/proxyhires.jpg",
-   "https://npgallery.nps.gov/GetAsset/E1354DBB-155D-451F-67B7D2564D66FBDA/proxyhires.jpg",
-   "https://npgallery.nps.gov/GetAsset/E1354DBB-155D-451F-67B7D2564D66FBDA/proxyhires.jpg",
-   "https://npgallery.nps.gov/GetAsset/E1354DBB-155D-451F-67B7D2564D66FBDA/proxyhires.jpg",
-   "https://npgallery.nps.gov/GetAsset/E1354DBB-155D-451F-67B7D2564D66FBDA/proxyhires.jpg",
-   "https://npgallery.nps.gov/GetAsset/E1354DBB-155D-451F-67B7D2564D66FBDA/proxyhires.jpg",
-   "https://npgallery.nps.gov/GetAsset/E1354DBB-155D-451F-67B7D2564D66FBDA/proxyhires.jpg"
-  ];
-  $("lessons").innerHTML='<div class="tutorial-grid">'+LESSONS.water.map((x,i)=>'<button class="tutorial-tile '+(i===current?"active":"")+'" data-i="'+i+'"><div class="tileart" style="background-image:linear-gradient(rgba(3,33,24,.05),rgba(3,33,24,.5)),url('+riverPhotos[i%riverPhotos.length]+');background-size:cover;background-position:center"><div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.48));"></div><div style="position:absolute;bottom:7px;left:7px;color:#ffe17a;font-size:24px">'+(i===3?"▶":"")+'</div></div><div class="tilecopy"><b>'+x[0]+'</b></div></button>').join("")+'</div>';
- }else{
-  $("lessons").innerHTML=LESSONS[category].map((x,i)=>'<button class="lesson" data-i="'+i+'"><div class="thumb">'+icon(category==="tech"?"i-fish":category==="science"?"i-cloud":"i-knot")+'</div><div><b>'+x[0]+'</b><span>'+x[1]+'</span></div><div class="chev">›</div></button>').join("");
- }
- $$("[data-i]").forEach(b=>b.onclick=()=>{current=+b.dataset.i;tutorialStep=0;renderLearnCard();show("learncard")})
-}
-function tutorialGraphic(kind){
- const defs='<defs><linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#82c8dc"/><stop offset="1" stop-color="#2e7181"/></linearGradient></defs>';
- const kayak='<path class="kayakshape" d="M38 218c18 7 43 7 61 0-12 18-49 18-61 0Z"/><circle cx="68" cy="203" r="8" fill="#1d3029"/><path d="M68 210v18" stroke="#1d3029" stroke-width="4"/><text x="35" y="244" class="smalltxt">Kayak</text>';
- const fish=(x,y,flip=1)=>'<g transform="translate('+x+' '+y+') scale('+flip+' 1)"><path class="fishmark" d="M0 0c10-8 22-8 31 0-9 8-21 8-31 0Z"/><path class="fishmark" d="m30 0 11-8v16Z"/><circle cx="9" cy="-1" r="1.5" fill="#2c311d"/></g>';
- const label=(x,y,w,t)=>'<rect class="labelbox" x="'+x+'" y="'+y+'" width="'+w+'" height="27"/><text class="labeltxt" x="'+(x+8)+'" y="'+(y+18)+'">'+t+'</text>';
- if(kind==="boulder")return '<svg viewBox="0 0 360 260">'+defs+'<rect width="360" height="260" class="water-bg"/><path class="bank" d="M0 210h360v50H0z"/><ellipse class="rock" cx="185" cy="126" rx="54" ry="39"/><path class="current" d="M10 62C96 56 120 68 140 84M10 102c82-8 112 3 129 18M230 86c45-3 84-10 120-24M230 130c50 2 82 12 119 24"/><path class="slow" d="M153 165c18 20 55 20 75 0"/><path class="cast" d="M88 210Q120 155 155 126"/>'+kayak+fish(240,164,-1)+label(14,20,112,"Current Break")+label(220,188,92,"Fish Zone")+'<text x="105" y="196" class="smalltxt">Cast into pocket</text></svg>';
- if(kind==="ledge")return '<svg viewBox="0 0 360 260">'+defs+'<rect width="360" height="260" class="water-bg"/><path fill="#7e795c" d="M0 160h180v100H0z"/><path fill="#334b43" d="M180 100h180v160H180z"/><path class="current" d="M10 52H340M10 88H340"/><path class="cast" d="M70 220Q145 130 220 125"/>'+kayak+fish(217,144,-1)+label(15,112,92,"Shallow")+label(205,65,83,"Drop / Ledge")+'<text x="226" y="185" class="smalltxt">Holding edge</text></svg>';
- if(kind==="eddy")return '<svg viewBox="0 0 360 260">'+defs+'<rect width="360" height="260" class="water-bg"/><path class="bank" d="M0 200Q70 150 126 175V260H0z"/><path class="current" d="M20 56H340M20 92H340"/><path class="slow" d="M104 141c40-34 94-4 70 34-18 28-72 21-78-8"/><path class="cast" d="M70 219Q112 176 137 151"/>'+kayak+fish(154,166,-1)+label(204,121,63,"Eddy")+label(177,35,95,"Main Flow")+'<text x="103" y="132" class="smalltxt">Eddy seam</text></svg>';
- if(kind==="riffle")return '<svg viewBox="0 0 360 260">'+defs+'<rect width="360" height="260" class="water-bg"/><g fill="#77705e"><circle cx="92" cy="110" r="14"/><circle cx="138" cy="92" r="12"/><circle cx="191" cy="119" r="15"/><circle cx="243" cy="91" r="12"/><circle cx="287" cy="122" r="14"/></g><path class="current" d="M10 47C90 61 145 39 220 54s93 12 130 0M10 151c90 19 180-15 340 6"/><path class="cast" d="M72 219Q162 143 230 115"/>'+kayak+fish(265,168,-1)+label(14,20,106,"Shoal / Riffle")+label(222,188,93,"First Drop")+'</svg>';
+  <section class="page" data-route="profile">
+    <div class="profile-hero"><div class="profile-frame"><img id="profileImage" alt="" hidden><span id="profileFallback">👤</span></div><h2 id="profileName">Guest Angler</h2><span id="profileHome">Not signed in</span></div>
+    <div class="stack">
+      <article class="card" id="signinCard">
+        <b>Sign In / Create Account</b>
+        <label>Email<input id="emailInput" type="email" autocomplete="email"></label>
+        <label>Display Name<input id="nameInput" autocomplete="name"></label>
+        <label>Password<div class="password-row"><input id="passwordInput" type="password" autocomplete="current-password"><button id="showPasswordBtn" type="button">Show</button></div></label>
+        <button id="signinBtn" class="primary">Sign In / Create Account</button><small id="signinStatus"></small>
+      </article>
+      <article class="card" id="profileCard" hidden>
+        <b>My Profile</b>
+        <label>Profile Photo<input id="profilePhotoInput" type="file" accept="image/*"></label>
+        <label>Hometown / State<input id="homeInput"></label>
+        <label>About Me<textarea id="aboutInput" rows="4"></textarea></label>
+        <label>Kayak<input id="kayakInput"></label><label>Electronics<input id="electronicsInput"></label><label>Teams<input id="teamsInput"></label><label>Sponsors<input id="sponsorsInput"></label>
+        <button id="saveProfileBtn" class="primary">Save Profile</button><a class="button-link" href="#/home">Done — Go to Home</a><button id="signoutBtn">Sign Out</button>
+      </article>
+    </div>
+  </section>
 
- if(kind==="tailout")return '<svg viewBox="0 0 360 260">'+defs+'<rect width="360" height="260" class="water-bg"/><path class="bank" d="M0 0h72v260H0zm288 0h72v260h-72z"/><path class="current" d="M118 20c-8 65-5 115 11 220M176 20c-5 65 0 118 4 220M238 20c8 65 5 115-11 220"/><path class="cast" d="M70 218Q148 160 185 115"/>'+kayak+fish(202,170,-1)+label(103,35,94,"Pool Tailout")+label(198,204,84,"Exit Seam")+'</svg>';
- if(kind==="pool")return '<svg viewBox="0 0 360 260">'+defs+'<rect width="360" height="260" fill="#235d70"/><ellipse cx="190" cy="138" rx="120" ry="78" fill="#163f53"/><path class="current" d="M10 45H350M15 75H345"/><path class="cast" d="M74 219Q143 162 210 143"/>'+kayak+fish(226,153,-1)+label(18,112,87,"Deep Pool")+label(226,189,85,"Holding Zone")+'</svg>';
- if(kind==="wood")return '<svg viewBox="0 0 360 260">'+defs+'<rect width="360" height="260" class="water-bg"/><path class="bank" d="M0 178h360v82H0z"/><path d="M300 50 150 190M260 72l-52 80m20-55-54 16m96-15-44 22" stroke="#4a3522" stroke-width="14" stroke-linecap="round"/><path class="current" d="M10 48H335M15 83H310"/><path class="cast" d="M72 218Q142 157 208 133"/>'+kayak+fish(222,158,-1)+label(205,24,98,"Laydown Wood")+label(195,188,94,"Shade Pocket")+'</svg>';
- if(kind==="undercut")return '<svg viewBox="0 0 360 260">'+defs+'<rect width="360" height="260" class="water-bg"/><path fill="#4c5d3e" d="M205 0h155v260H205V145c-32-6-58-20-74-36 27-5 51-13 74-26Z"/><path class="current" d="M10 58c65 0 112 12 160 30M12 100c72 2 110 15 153 32"/><path class="cast" d="M70 218Q125 150 188 110"/>'+kayak+fish(200,126,-1)+label(211,44,104,"Undercut Bank")+label(211,160,89,"Hidden Pocket")+'</svg>';
- if(kind==="grass")return '<svg viewBox="0 0 360 260">'+defs+'<rect width="360" height="260" class="water-bg"/><g stroke="#2d6b38" stroke-width="7"><path d="M250 250q-8-70 8-120m12 120q-5-90 18-140m5 140q-10-70 4-115m-75 115q-8-65 10-105"/></g><path class="current" d="M10 50H338M12 90H308"/><path class="cast" d="M68 220Q154 150 236 127"/>'+kayak+fish(230,153,-1)+label(218,33,90,"Grass Edge")+label(192,189,105,"Ambush Point")+'</svg>';
- if(kind==="piling")return '<svg viewBox="0 0 360 260">'+defs+'<rect width="360" height="260" class="water-bg"/><rect x="205" y="0" width="54" height="260" fill="#777" stroke="#454545" stroke-width="3"/><path class="current" d="M10 58H190M10 98H190M270 64H350M270 110H350"/><path class="slow" d="M197 162c24 22 52 22 72 0"/><path class="cast" d="M72 220Q148 154 197 130"/>'+kayak+fish(280,160,-1)+label(193,30,78,"Piling")+label(258,191,87,"Scour Hole")+'</svg>';
- if(kind==="ned")return '<svg viewBox="0 0 360 260">'+defs+'<rect width="360" height="260" class="water-bg"/><path class="bank" d="M0 210h360v50H0z"/><path d="M178 57v84" stroke="#e7e4d8" stroke-width="2"/><circle cx="178" cy="144" r="11" fill="#7b6843"/><rect x="171" y="151" width="14" height="54" rx="7" fill="#5a6f34"/><path d="M179 205q8 16 1 35" stroke="#d7cfb0" stroke-width="2"/>'+label(126,18,108,"Ned Rig Presentation")+'<text x="216" y="151" class="smalltxt">Light head</text><text x="216" y="183" class="smalltxt">Subtle bottom contact</text></svg>';
- if(kind==="fluke")return '<svg viewBox="0 0 360 260">'+defs+'<rect width="360" height="260" class="water-bg"/><path d="M90 130c50-30 125-25 175 0-50 31-125 28-175 0Z" fill="#f4f0d4" stroke="#70725d" stroke-width="2"/><path d="m260 130 42-25-12 25 12 25Z" fill="#eee7c9" stroke="#70725d" stroke-width="2"/><path class="cast" d="M50 70Q146 30 278 78"/>'+label(102,182,125,"Soft Jerkbait Glide")+'<text x="102" y="107" class="smalltxt">Snap • Glide • Pause</text></svg>';
- if(kind==="topwater")return '<svg viewBox="0 0 360 260">'+defs+'<rect width="360" height="260" class="water-bg"/><path d="M106 112c55-20 115-20 150 0-35 20-95 20-150 0Z" fill="#d8d6b7" stroke="#45483f" stroke-width="2"/><circle cx="133" cy="108" r="3" fill="#111"/><path d="M255 112 286 98l-9 14 9 14Z" fill="#d8d6b7"/><path class="current" d="M38 145c80 18 160 18 280 0"/>'+label(102,38,126,"Topwater Strike Zone")+'<text x="91" y="185" class="smalltxt">Work seams, shade and current edges</text></svg>';
- if(kind==="crank")return '<svg viewBox="0 0 360 260">'+defs+'<rect width="360" height="260" class="water-bg"/><circle class="rock" cx="246" cy="196" r="34"/><path d="M112 105c48-25 98-18 128 7-31 29-80 34-128 6Z" fill="#c79b3d" stroke="#3a3a2f" stroke-width="2"/><circle cx="137" cy="107" r="3" fill="#111"/><path d="M113 115 86 138" stroke="#e6e2c5" stroke-width="6"/><path class="cast" d="M55 62Q150 79 226 158"/>'+label(83,28,139,"Crankbait Deflection")+'<text x="196" y="151" class="smalltxt">Contact cover</text></svg>';
- if(kind==="tube")return '<svg viewBox="0 0 360 260">'+defs+'<rect width="360" height="260" class="water-bg"/><path class="bank" d="M0 215h360v45H0z"/><rect x="168" y="92" width="25" height="77" rx="10" fill="#667044"/><path d="M170 166q-7 28-2 49m9-49q-2 31 5 48m7-48q5 28 3 49" stroke="#667044" stroke-width="5"/><path class="cast" d="M62 72Q142 108 179 163"/>'+label(113,27,122,"Tube: Drag / Hop")+'<text x="206" y="182" class="smalltxt">Rock / current bottom</text></svg>';
- return '<svg viewBox="0 0 360 260">'+defs+'<rect width="360" height="260" class="water-bg"/><path class="bank" d="M0 205h360v55H0z"/><path class="current" d="M10 58C98 45 142 66 226 52S310 49 350 54M10 99C92 91 133 110 213 96s105-8 137-5"/><path class="slow" d="M8 146C95 132 138 153 218 140"/><path class="cast" d="M76 221Q150 139 228 107"/>'+kayak+fish(241,143,-1)+label(16,18,98,"Current Seam")+label(235,176,87,"Fish Lane")+'<text x="220" y="128" class="smalltxt">Fast / slow edge</text></svg>';
-}
-function renderLearnCard(){
- let l=LESSONS[category][current]||LESSONS[category][0];
- $("lessonTitle").textContent=l[0];$("lessonSub").textContent=l[1];
- $("tutorialTitle").textContent=l[0];$("tutorialSub").textContent="How to Identify • Understand • Fish • Apply";
- renderTutorialStep();
- $("learnArt").innerHTML=tutorialGraphic(l[5]||"seam");
- let desc=mode==="quick"?[
-  l[1],
-  l[3],
-  l[2],
-  "Make three deliberate casts: highest-percentage edge first, then pocket/center, then exit or downstream seam.",
-  "Practice the target sequence and compare the response before changing variables."
- ]:mode==="learn"?[
-  "Identify it visually before you cast. "+l[1],
-  l[3],
-  l[2]+" Keep your kayak out of the prime holding water whenever possible.",
-  "Change one variable at a time: cast angle, depth, or retrieve speed.",
-  "Record what happened so your journal can reveal repeatable patterns."
- ]:[
-  "Study surface texture, depth color, current speed and nearby cover. "+l[1],
-  l[3]+" Pair that with season, forage, recent flow change and water clarity.",
-  l[2]+" Adjust bait weight and presentation speed so the lure moves naturally in the current.",
-  "Test upstream edge, center, downstream edge and one alternate depth before leaving productive-looking water.",
-  "Log structure type, GPS, science conditions, lure, technique and catch result for long-term analysis."
- ];
- let names=[["i-eye","SEE IT"],["i-brain","UNDERSTAND IT"],["i-fish","FISH IT"],["i-check","TRY IT"]];
- $("steps").innerHTML=names.map((n,i)=>'<button class="step" data-step="'+i+'">'+icon(n[0])+'<div><b>'+n[1]+'</b><small>'+desc[i]+'</small></div></button>').join("");
- $$(".step").forEach(b=>b.onclick=()=>openInfo(names[+b.dataset.step][1],desc[+b.dataset.step]));
- $$(".mode").forEach(b=>b.classList.toggle("active",b.dataset.mode===mode));
-}
+  <section class="page" data-route="clubs"><div class="section-head"><div><small>MY CLUBS</small><h2>Club Journal</h2></div></div><article class="card"><b>WV Kayak Anglers</b><span>Club tools, tournaments, AOY and sponsor cards will live here.</span></article></section>
+  <section class="page" data-route="settings"><div class="section-head"><div><small>SETTINGS</small><h2>Privacy & Sharing</h2></div></div><article class="card"><b>Directory Visibility</b><span>Public by default with opt-out.</span></article></section>
+  <section class="page" data-route="techniques"><div class="section-head"><div><small>LEARN</small><h2>Techniques</h2></div></div><article class="card"><b>Technique library</b><span>Ned Rig, Fluke, Topwater, Jig, Crankbait, Spinnerbait, Swimbait, Jerkbait, Tube, Senko, Buzzbait and Creature/Craw.</span></article></section>
+  <section class="page" data-route="science"><div class="section-head"><div><small>SCIENCE OF FISHING</small><h2>Conditions</h2></div></div><article class="card"><b>Science tools</b><span>Wind, pressure, flow, rain, water temperature, clarity and moon/sun windows.</span></article></section>
+  <section class="page" data-route="knots"><div class="section-head"><div><small>LEARN</small><h2>Knot Tying</h2></div></div><article class="card"><b>Knots</b><span>Palomar, Alberto, Double Uni and FG.</span></article></section>
+</main>
 
-function stageGraphic(){
- let l=LESSONS[category][current]||LESSONS[category][0];
- let kind=l[5]||"seam";
- if(kind==="eddy"){
-  let captions=[
-   "SEE IT — find the seam and rotating soft water.",
-   "UNDERSTAND IT — current relief beside food delivery.",
-   "FISH IT — cast seam first, then center, then exit.",
-   "TRY IT — repeat the same angle before changing variables."
-  ];
-  return '<div class="photo-tutorial eddy-photo step-'+tutorialStep+(tutorialPlaying?' playing':'')+'">'+
-    '<div class="motion-label current-label">CURRENT SEAM</div>'+
-    '<div class="motion-label eddy-label">EDDY</div>'+
-    '<div class="motion-label target-label">CAST TARGET</div>'+
-    '<div class="flow-arrow fa1">➜</div><div class="flow-arrow fa2">➜</div><div class="flow-arrow fa3">➜</div>'+
-    '<div class="eddy-ring"></div>'+
-    '<div class="kayak-marker"></div>'+
-    '<div class="attack-point"></div>'+
-    '<svg class="cast-line" viewBox="0 0 160 90"><path d="M5 78 Q70 18 150 18"/></svg>'+
-    '<div class="step-caption">'+captions[tutorialStep]+'</div>'+
-  '</div>';
- }
- let base=tutorialGraphic(kind);
- if(tutorialStep===0)return base;
- if(tutorialStep===1)return base.replace("</svg>",'<text x="24" y="235" class="smalltxt">Why fish hold: current relief + forage access</text></svg>');
- if(tutorialStep===2)return base.replace("</svg>",'<path class="cast" d="M70 224Q145 156 230 121"/><text x="154" y="215" class="smalltxt">Suggested cast path</text></svg>');
- return base.replace("</svg>",'<circle cx="240" cy="150" r="24" fill="none" stroke="#ffd85c" stroke-width="5"/><text x="205" y="198" class="smalltxt">Try this target first</text></svg>');
-}
-function renderTutorialStep(){
- let l=LESSONS[category][current]||LESSONS[category][0];
- let s=TUTORIAL_STEPS[tutorialStep];
- $("tutorialStage").innerHTML=stageGraphic();
- $("tutorialProgress").style.width=((tutorialStep+1)/TUTORIAL_STEPS.length*100)+"%";
- $("stepDots").innerHTML=TUTORIAL_STEPS.map((x,i)=>'<button class="stepdot '+(i===tutorialStep?"active":"")+'" data-ts="'+i+'">'+(i+1)+' '+x.name+'</button>').join("");
- $("tutorialStepCard").innerHTML='<h3>'+s.title+'</h3><ul>'+s.bullets.map(b=>'<li>'+b+'</li>').join("")+'</ul><div class="takeaway">KEY TAKEAWAY — '+s.takeaway+'</div>';$("tutorialCredit").textContent=((LESSONS[category][current]||[])[5]==="eddy")?"River image: National Park Service, New River Gorge (public domain)":"Illustrated tutorial graphic";
- $$("[data-ts]").forEach(b=>b.onclick=()=>{tutorialStep=+b.dataset.ts;stopTutorial();renderTutorialStep()});
-}
-function stopTutorial(){tutorialPlaying=false;clearInterval(tutorialTimer);$("playTutorial").textContent="▶ Play Tutorial";renderTutorialStep()}
-function advanceTutorial(){tutorialStep=Math.min(TUTORIAL_STEPS.length-1,tutorialStep+1);renderTutorialStep()}
-function playTutorial(){if(tutorialPlaying){stopTutorial();return}tutorialPlaying=true;$("playTutorial").textContent="❚❚ Pause";renderTutorialStep();tutorialTimer=setInterval(()=>{if(tutorialStep>=TUTORIAL_STEPS.length-1){stopTutorial();return}tutorialStep++;renderTutorialStep()},3200)}
-function openSheet(html){$("sheet").innerHTML=html;$("modal").classList.add("open")}
-function closeSheet(){$("modal").classList.remove("open")}
-function openInfo(title,text){openSheet('<h2>'+title+'</h2><p>'+text+'</p><div class="sheetactions"><button class="save" id="closeOne">Close</button></div>');$("closeOne").onclick=closeSheet}
-function saveActive(){localStorage.setItem("kfj_active_trip",JSON.stringify(trip))}
-function startTimer(){clearInterval(timerHandle);if(trip.active)timerHandle=setInterval(renderTrip,1000)}
-function renderTrip(){if(trip.active&&trip.start){let s=Math.floor((Date.now()-trip.start)/1000);$("timer").textContent=[Math.floor(s/3600),Math.floor((s%3600)/60),s%60].map(x=>String(x).padStart(2,"0")).join(":")}else $("timer").textContent="00:00:00";$("where").textContent=trip.active?(trip.location||"Unnamed Water"):"No active trip";$("count").textContent=trip.catches.length;let vals=trip.catches.map(c=>+c.length||0).filter(Boolean);$("largest").textContent=vals.length?Math.max(...vals).toFixed(2)+'″':"—";let mins=trip.start?Math.max(1,(Date.now()-trip.start)/60000):0;$("rate").textContent=trip.catches.length?(mins/trip.catches.length).toFixed(1):"—"}
-function startTripForm(seed={}){openSheet('<h2>Start a Trip</h2><div class="field"><label>Angler</label><input id="fAng" value="'+(seed.angler||trip.angler||profile.name||"Angler")+'"></div><div class="field"><label>Water / Location</label><input id="fLoc" value="'+(seed.location||"")+'" placeholder="New River — Brooks Falls to Sandstone Falls"></div><div class="field"><label>Water Type</label><select id="fType"><option>River</option><option>Lake</option><option>Other</option></select></div><div class="field"><label>Tournament / Event</label><input id="fEvent" value="'+(seed.event||"")+'" placeholder="Optional"></div><div class="sheetactions"><button class="cancel" id="cancel">Cancel</button><button class="save" id="go">Start Trip</button></div>');$("cancel").onclick=closeSheet;$("go").onclick=()=>{trip={active:true,start:Date.now(),end:null,ownerId:account?account.id:"local-guest",angler:$("fAng").value||"Angler",location:$("fLoc").value||"Unnamed Water",waterType:$("fType").value,event:$("fEvent").value,catches:[],notes:"",science:{},patterns:[],photos:[]};saveActive();closeSheet();startTimer();show("ontrip")}}
-function compress(file,max=900,q=.7){return new Promise((resolve,reject)=>{let r=new FileReader();r.onload=()=>{let im=new Image();im.onload=()=>{let w=im.width,h=im.height,s=Math.min(1,max/Math.max(w,h));w=Math.round(w*s);h=Math.round(h*s);let c=document.createElement("canvas");c.width=w;c.height=h;c.getContext("2d").drawImage(im,0,0,w,h);resolve(c.toDataURL("image/jpeg",q))};im.onerror=reject;im.src=r.result};r.onerror=reject;r.readAsDataURL(file)})}
-async function photoMeta(file){try{if(!window.exifr)return null;let m=await exifr.parse(file,{gps:true,exif:true,tiff:true});if(!m)return null;let lat=m.latitude,lon=m.longitude,dt=m.DateTimeOriginal||m.CreateDate||m.ModifyDate||null;return (Number.isFinite(lat)&&Number.isFinite(lon))?{lat,lon,capturedAt:dt?new Date(dt).toISOString():null,source:"photo"}:null}catch(e){return null}}
-function phoneCoords(){return new Promise((resolve,reject)=>{if(!navigator.geolocation)return reject(new Error("Geolocation unavailable"));navigator.geolocation.getCurrentPosition(p=>resolve({lat:p.coords.latitude,lon:p.coords.longitude,capturedAt:new Date().toISOString(),source:"phone"}),reject,{enableHighAccuracy:true,timeout:12000,maximumAge:60000})})}
-function dir16(d){let a=["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];return a[Math.round((((+d||0)%360)+360)%360/22.5)%16]}
-function wxName(c){let m={0:"Clear",1:"Mainly clear",2:"Partly cloudy",3:"Overcast",45:"Fog",48:"Rime fog",51:"Light drizzle",53:"Drizzle",55:"Heavy drizzle",61:"Light rain",63:"Rain",65:"Heavy rain",71:"Light snow",73:"Snow",75:"Heavy snow",80:"Rain showers",81:"Rain showers",82:"Heavy showers",95:"Thunderstorm"};return m[c]||"Weather code "+c}
-async function autoScience(coords){if(!coords)throw new Error("No location available");let lat=coords.lat,lon=coords.lon;let u="https://api.open-meteo.com/v1/forecast?latitude="+lat+"&longitude="+lon+"&current=temperature_2m,weather_code,wind_speed_10m,wind_direction_10m,pressure_msl&hourly=pressure_msl,precipitation&past_days=1&forecast_days=1&daily=sunrise,sunset&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=auto";let r=await fetch(u);if(!r.ok)throw new Error("Weather lookup failed");let d=await r.json();let cur=d.current||{}, h=d.hourly||{}, rain=0;let now=Date.now();(h.time||[]).forEach((t,i)=>{let ts=Date.parse(t);if(ts>=now-86400000&&ts<=now)rain+=+(h.precipitation?.[i]||0)});let ps=h.pressure_msl||[], pts=h.time||[];let pNow=+cur.pressure_msl||0,pOld=0;for(let i=0;i<pts.length;i++){if(Date.parse(pts[i])>=now-86400000){pOld=+ps[i]||0;break}}let pct=(pNow&&pOld)?((pNow-pOld)/pOld*100):0;let trend=pct>0.05?"Rising":pct<-0.05?"Falling":"Steady";trip.coords=coords;trip.science={...(trip.science||{}),weather:wxName(cur.weather_code)+" • "+Math.round(cur.temperature_2m||0)+"°F",wind:dir16(cur.wind_direction_10m)+" "+Math.round(cur.wind_speed_10m||0)+" mph",pressure:(pNow?pNow.toFixed(1)+" hPa • ":"")+trend+(pOld?" ("+(pct>=0?"+":"")+pct.toFixed(2)+"%)":""),rain:rain.toFixed(2)+'" in',bite:(d.daily?.sunrise?.[0]?"Sunrise "+new Date(d.daily.sunrise[0]).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})+" • Sunset "+new Date(d.daily.sunset[0]).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"}):""),source:"Auto from "+coords.source+" location"};saveActive();return trip.science}
-function logCatch(){if(!trip.active){startTripForm();return}openSheet('<h2>Log Catch</h2><div class="field"><label>Species</label><input id="cSpecies" value="Bass"></div><div class="field"><label>Length (inches)</label><input id="cLen" inputmode="decimal"></div><div class="field"><label>Bait / Lure</label><input id="cBait" placeholder="Ned Rig — Green Pumpkin"></div><div class="field"><label>Technique / Presentation</label><input id="cTech" placeholder="Drifted through downstream seam"></div><div class="field"><label>Water Feature</label><input id="cFeat" placeholder="Boulder break"></div><div class="field"><label>Photo</label><input id="cPhoto" type="file" accept="image/*" capture="environment"></div><div class="sheetactions"><button class="cancel" id="cancel">Cancel</button><button class="save" id="go">Save Catch</button></div>');$("cancel").onclick=closeSheet;$("go").onclick=async()=>{let pic="";let f=$("cPhoto").files[0];if(f)try{let pm=await photoMeta(f);if(pm&&!trip.coords)trip.coords=pm;pic=await compress(f)}catch(e){}trip.catches.push({species:$("cSpecies").value,length:+$("cLen").value||0,bait:$("cBait").value||"Unspecified",technique:$("cTech").value,feature:$("cFeat").value,time:Date.now(),photo:pic});saveActive();closeSheet();renderTrip()}}
-function addPhoto(){if(!trip.active){startTripForm();return}openSheet('<h2>Add Trip Photo</h2><div class="field"><input id="pFile" type="file" accept="image/*" capture="environment"></div><div class="sheetactions"><button class="cancel" id="cancel">Cancel</button><button class="save" id="go">Save Photo</button></div>');$("cancel").onclick=closeSheet;$("go").onclick=async()=>{let f=$("pFile").files[0];if(f)try{let pm=await photoMeta(f);if(pm)trip.coords=pm;trip.photos.push(await compress(f));saveActive()}catch(e){}closeSheet()}}
-function scienceForm(){if(!trip.active){startTripForm();return}let s=trip.science||{};openSheet('<h2>Science & Conditions</h2><div class="learnActions" style="padding:0 0 8px"><button class="cta" id="autoPhoto">Auto-Fill Science</button><button class="cta secondary" id="usePhone">Use Phone Location</button></div><div class="muted" id="scienceSource">'+(trip.coords?('Location source: '+trip.coords.source+' • '+trip.coords.lat.toFixed(5)+', '+trip.coords.lon.toFixed(5)):'No GPS location stored yet. Add a geotagged photo or use phone location.')+'</div><div class="field"><label>Wind</label><input id="sWind" value="'+(s.wind||"")+'" placeholder="SW 8 mph"></div><div class="field"><label>Pressure Trend</label><input id="sPressure" value="'+(s.pressure||"")+'" placeholder="Falling"></div><div class="field"><label>Flow / Gauge</label><input id="sFlow" value="'+(s.flow||"")+'" placeholder="3,250 CFS • Falling 4%"></div><div class="field"><label>Rainfall 24h</label><input id="sRain" value="'+(s.rain||"")+'"></div><div class="field"><label>Water Temp / Clarity</label><input id="sWater" value="'+(s.water||"")+'" placeholder="54°F • Clear"></div><div class="field"><label>Major / Minor Window</label><input id="sBite" value="'+(s.bite||"")+'"></div><div class="sheetactions"><button class="cancel" id="cancel">Cancel</button><button class="save" id="go">Save</button></div>');$("cancel").onclick=closeSheet;$("autoPhoto").onclick=async()=>{try{let c=trip.coords;if(!c)throw new Error("No geotagged photo stored yet. Use Phone Location or add a photo with GPS.");let sc=await autoScience(c);$("sWind").value=sc.wind||"";$("sPressure").value=sc.pressure||"";$("sRain").value=sc.rain||"";$("sBite").value=sc.bite||"";$("scienceSource").textContent=sc.source+" • "+c.lat.toFixed(5)+", "+c.lon.toFixed(5)}catch(e){alert(e.message)}};$("usePhone").onclick=async()=>{try{let c=await phoneCoords();trip.coords=c;let sc=await autoScience(c);$("sWind").value=sc.wind||"";$("sPressure").value=sc.pressure||"";$("sRain").value=sc.rain||"";$("sBite").value=sc.bite||"";$("scienceSource").textContent=sc.source+" • "+c.lat.toFixed(5)+", "+c.lon.toFixed(5)}catch(e){alert("Location unavailable: "+e.message)}};$("go").onclick=()=>{trip.science={...(trip.science||{}),wind:$("sWind").value,pressure:$("sPressure").value,flow:$("sFlow").value,rain:$("sRain").value,water:$("sWater").value,bite:$("sBite").value};saveActive();closeSheet()}}
-function detailsForm(){if(!trip.active){startTripForm();return}openSheet('<h2>Trip Details</h2><div class="field"><label>Location</label><input id="dLoc" value="'+(trip.location||"")+'"></div><div class="field"><label>Companions</label><input id="dComp" value="'+(trip.companions||"")+'"></div><div class="field"><label>Kayak</label><input id="dKayak" value="'+(trip.kayak||"")+'" placeholder="Jackson BigRig"></div><div class="sheetactions"><button class="cancel" id="cancel">Cancel</button><button class="save" id="go">Save</button></div>');$("cancel").onclick=closeSheet;$("go").onclick=()=>{trip.location=$("dLoc").value;trip.companions=$("dComp").value;trip.kayak=$("dKayak").value;saveActive();closeSheet();renderTrip()}}
-function notesForm(){if(!trip.active){startTripForm();return}openSheet('<h2>Trip Notes</h2><div class="field"><textarea id="n" rows="6">'+(trip.notes||"")+'</textarea></div><div class="sheetactions"><button class="cancel" id="cancel">Cancel</button><button class="save" id="go">Save Notes</button></div>');$("cancel").onclick=closeSheet;$("go").onclick=()=>{trip.notes=$("n").value;saveActive();closeSheet()}}
-function endTrip(){if(!trip.active){show("journal");return}trip.active=false;trip.end=Date.now();let arr=readJSON("kfj_journal",[]);arr.unshift(JSON.parse(JSON.stringify(trip)));localStorage.setItem("kfj_journal",JSON.stringify(arr.slice(0,100)));localStorage.removeItem("kfj_active_trip");clearInterval(timerHandle);displayedTrip=trip;show("tripcard")}
-function renderCard(t){
- t=t||trip; displayedTrip=t;
- let end=t.end||Date.now(), mins=t.start?Math.max(1,Math.round((end-t.start)/60000)):0;
- let vals=(t.catches||[]).map(c=>+c.length||0).filter(Boolean);
- let largest=vals.length?Math.max(...vals):0;
- let rate=(t.catches&&t.catches.length)?(mins/t.catches.length):0;
- $("tcTitle").textContent=(t.angler||"Angler")+"'s Trip";
- $("tcLoc").textContent=t.location||"—";
- $("tcDate").textContent=t.start?new Date(t.start).toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"}):"—";
- $("tcTime").textContent=Math.floor(mins/60)+":"+String(mins%60).padStart(2,"0");
- $("tcCatch").textContent=(t.catches||[]).length;
- $("tcLargest").textContent=largest?largest.toFixed(2)+'″':"—";
- $("tcRate").textContent=rate?rate.toFixed(1):"—";
- let hero=(t.photos&&t.photos[0]) || ((t.catches||[]).find(c=>c.photo)||{}).photo || "";
- $("tcHero").style.backgroundImage=hero?'linear-gradient(rgba(3,42,29,.18),rgba(3,42,29,.86)),url("'+hero+'")':'linear-gradient(rgba(3,42,29,.2),rgba(3,42,29,.86)),linear-gradient(140deg,#95d0de,#2d7f91 52%,#294f39)';
- let profile=(t.profilePhoto||"");
- $("tcProfile").innerHTML=profile?'<img src="'+profile+'" alt="Angler profile">':icon("i-user");
- let s=t.science||{};
- let scienceRows=[
-  ["Weather",s.weather||"Not entered","☁"],
-  ["Wind",s.wind||"Not entered","↝"],
-  ["Pressure",s.pressure||"Not entered","↗"],
-  ["Flow / Gauge",s.flow||"Not entered","≈"],
-  ["Rain 24h",s.rain||"Not entered","☂"],
-  ["Water",s.water||"Not entered","◉"],
-  ["Bite Window",s.bite||"Not entered","◷"]
- ];
- $("tcScience").innerHTML=scienceRows.map(x=>'<div class="row"><b><span>'+x[2]+'</span>'+x[0]+'</b><span>'+x[1]+'</span></div>').join("");
- let baitMap={};
- (t.catches||[]).forEach(c=>{let k=(c.bait||"").trim(); if(k) baitMap[k]=(baitMap[k]||0)+1});
- let baitList=Object.entries(baitMap).sort((a,b)=>b[1]-a[1]).slice(0,3);
- $("tcBaits").innerHTML=baitList.length?baitList.map(x=>'<div class="tc-bait">'+icon("i-fish")+'<b>'+x[0]+'</b><small>'+x[1]+' catch'+(x[1]===1?"":"es")+'</small></div>').join(""):'<div class="tc-bait">'+icon("i-fish")+'<b>No bait data</b><small>Log catches to populate</small></div>';
- let best=(t.catches||[]).filter(c=>c.length).sort((a,b)=>(+b.length||0)-(+a.length||0)).slice(0,5);
- $("bestFive").innerHTML=[0,1,2,3,4].map(i=>best[i]?'<div class="tc-fish">'+(best[i].photo?'<img src="'+best[i].photo+'" alt="Catch '+(i+1)+'">':icon("i-fish"))+'</div>':'<div class="tc-fish">'+icon("i-fish")+'</div>').join("");
- let mine=!t.ownerId || (account && t.ownerId===account.id) || t.ownerId==="local-guest";
- $("amend").style.display=mine?"":"none";
- $("share").style.display=mine?"":"none";
-}
-
-function safeSet(key,val){try{localStorage.setItem(key,JSON.stringify(val));return true}catch(e){console.error("Storage error",key,e);return false}}
-function saveAccount(){
- let ok1=safeSet("kfj_account",account);
- let leanProfile={...profile,photo:profile.photo||""};
- let ok2=safeSet("kfj_profile",leanProfile);
- let ok3=safeSet("kfj_prefs",prefs);
- updateAccountTag();
- return ok1&&ok2&&ok3;
-}
-function updateAccountTag(){$("accountTag").textContent=account?(profile.name+" • Signed In"):"Learn • Fish • Log • Share"}
-function localPasswordHash(text){
- let h1=0x811c9dc5,h2=0x9e3779b9;
- for(let i=0;i<text.length;i++){let c=text.charCodeAt(i);h1=Math.imul(h1^c,16777619);h2=Math.imul(h2^(c+i),2246822519)}
- return ((h1>>>0).toString(16).padStart(8,"0")+(h2>>>0).toString(16).padStart(8,"0"));
-}
-function credentialKey(email){return "kfj_cred_"+email.trim().toLowerCase()}
-async function verifyOrCreateCredential(email,password){
- let key=credentialKey(email), rec=null;
- try{rec=JSON.parse(localStorage.getItem(key)||"null")}catch(e){}
- if(rec){
-  let h=localPasswordHash((rec.salt||"")+password);
-  return h===rec.hash?{ok:true,created:false}:{ok:false,error:"Incorrect password."};
- }
- let salt=String(Date.now())+"-"+Math.random().toString(36).slice(2);
- let hash=localPasswordHash(salt+password);
- try{localStorage.setItem(key,JSON.stringify({salt,hash,createdAt:Date.now()}))}catch(e){return {ok:false,error:"Could not save this test account on this device."}}
- return {ok:true,created:true};
-}
-function startupLoginSync(){
- try{
-  var email=document.getElementById("startEmail").value.trim();
-  var name=document.getElementById("startName").value.trim();
-  var password=document.getElementById("startPassword").value;
-  var status=document.getElementById("startLoginStatus");
-  if(!email||email.indexOf("@")<1){status.textContent="Enter a valid email address.";return false}
-  if(!password||password.length<6){status.textContent="Password must be at least 6 characters.";return false}
-  status.textContent="Signing in...";
-  var id="acct-"+Math.abs(Array.from(email.toLowerCase()).reduce(function(h,c){return ((h*31+c.charCodeAt(0))|0)},2166136261)).toString(36);
-  account={id:id,email:email,signedInAt:Date.now()};
-  if(name)profile.name=name;
-  try{localStorage.setItem("kfj_account",JSON.stringify(account));localStorage.setItem("kfj_profile",JSON.stringify(profile))}catch(e){}
-  try{renderAccount()}catch(e){}
-  document.querySelectorAll(".screen").forEach(function(x){x.classList.remove("active")});
-  var target=document.getElementById("account");
-  if(target)target.classList.add("active");
-  var nav=document.querySelector("nav");
-  if(nav)nav.style.display="grid";
-  status.textContent="Signed in.";
-  return false;
- }catch(e){
-  var s=document.getElementById("startLoginStatus");
-  if(s)s.textContent="Sign-in error: "+(e&&e.message?e.message:"unknown error");
-  return false;
- }
-}
-async function startupLogin(){
- let email=$("startEmail").value.trim(), name=$("startName").value.trim(), password=$("startPassword").value;
- if(!email||!email.includes("@")){$("startLoginStatus").textContent="Enter a valid email address.";return}
- if(!password||password.length<6){$("startLoginStatus").textContent="Password must be at least 6 characters.";return}
- $("startLoginStatus").textContent="Checking account...";
- let auth=await verifyOrCreateCredential(email,password);
- if(!auth.ok){$("startLoginStatus").textContent=auth.error;return}
- let id="acct-"+Array.from(email.toLowerCase()).reduce((h,c)=>((h*31+c.charCodeAt(0))>>>0),2166136261).toString(36);
- account={id,email,signedInAt:Date.now()};
- if(name)profile.name=name;
- let persisted=saveAccount();
- $("startLoginStatus").textContent=auth.created?"Account created. Opening your profile...":"Signed in. Opening your profile...";
- setTimeout(()=>{renderAccount();show("account")},250);
-}
-function signInForm(){
- openSheet('<h2>Sign In / Create Account</h2><p class="muted">Use your email and password. New emails create a test account on this device.</p><div class="field"><label>Email</label><input id="loginEmail" type="email" autocomplete="email" placeholder="you@example.com"></div><div class="field"><label>Display Name</label><input id="loginName" autocomplete="name" value="'+(profile.name||"")+'"></div><div class="field"><label>Password</label><div class="password-wrap"><input id="loginPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters"><button type="button" class="password-toggle" id="toggleLoginPassword">Show</button></div></div><div id="loginStatus" class="muted" style="min-height:22px;margin-top:8px"></div><div class="sheetactions"><button class="cancel" id="cancel">Cancel</button><button class="save" id="go">Sign In</button></div>');
- $("cancel").onclick=closeSheet;
- if($("toggleLoginPassword"))$("toggleLoginPassword").onclick=()=>{let p=$("loginPassword");let show=p.type==="password";p.type=show?"text":"password";$("toggleLoginPassword").textContent=show?"Hide":"Show"};
- $("go").onclick=async()=>{
-  let email=$("loginEmail").value.trim(),name=$("loginName").value.trim(),password=$("loginPassword").value;
-  if(!email||!email.includes("@")){$("loginStatus").textContent="Enter a valid email address.";return}
-  if(!password||password.length<6){$("loginStatus").textContent="Password must be at least 6 characters.";return}
-  $("loginStatus").textContent="Checking account...";
-  let auth=await verifyOrCreateCredential(email,password);
-  if(!auth.ok){$("loginStatus").textContent=auth.error;return}
-  let id="acct-"+Array.from(email.toLowerCase()).reduce((h,c)=>((h*31+c.charCodeAt(0))>>>0),2166136261).toString(36);
-  account={id,email,signedInAt:Date.now()};
-  if(name)profile.name=name;
-  saveAccount();
-  $("loginStatus").textContent=auth.created?"Account created.":"Signed in successfully.";
-  setTimeout(()=>{closeSheet();renderAccount();show("account")},300);
- }
-}
-
-function signOut(){account=null;localStorage.removeItem("kfj_account");updateAccountTag();renderAccount()}
-function editProfile(){
- openSheet('<h2>Edit Profile</h2><div style="display:flex;align-items:center;gap:12px;margin-bottom:10px"><div class="profilepic" id="editPreview">'+(profile.photo?'<img src="'+profile.photo+'" alt="" style="width:100%;height:100%;object-fit:cover">':icon("i-user"))+'</div><div class="muted">Choose a photo below, then tap Save Profile.</div></div><div class="field"><label>Name</label><input id="epName" value="'+(profile.name||"")+'"></div><div class="field"><label>Hometown / State</label><input id="epHome" value="'+(profile.home||"")+'"></div><div class="field"><label>About Me</label><textarea id="epAbout" rows="4">'+(profile.about||"")+'</textarea></div><div class="field"><label>Kayak</label><input id="epKayak" value="'+(profile.kayak||"")+'"></div><div class="field"><label>Electronics</label><input id="epElec" value="'+(profile.electronics||"")+'"></div><div class="field"><label>Teams</label><input id="epTeams" value="'+(profile.teams||"")+'"></div><div class="field"><label>Sponsors</label><input id="epSponsors" value="'+(profile.sponsors||"")+'"></div><div class="field"><label>Profile Photo</label><input id="epPhoto" type="file" accept="image/*" capture="user"></div><div class="sheetactions"><button class="cancel" id="cancel">Cancel</button><button class="save" id="go">Save Profile</button></div><button class="cta secondary" style="width:100%;margin-top:10px" id="doneHome">Done — Go to Home</button>');
- $("cancel").onclick=closeSheet;
- if($("doneHome"))$("doneHome").onclick=()=>{closeSheet();show("home")};
- $("epPhoto").onchange=async()=>{let file=$("epPhoto").files&&$("epPhoto").files[0];if(!file)return;try{let preview=await compress(file,700,.72);$("editPreview").innerHTML='<img src="'+preview+'" alt="Selected profile photo" style="width:100%;height:100%;object-fit:cover">';$("editPreview").dataset.preview=preview}catch(e){alert("Could not read that photo. Please choose another image.")}};
- $("go").onclick=async()=>{profile.name=$("epName").value.trim()||profile.name;profile.home=$("epHome").value.trim();profile.about=$("epAbout").value.trim();profile.kayak=$("epKayak").value.trim();profile.electronics=$("epElec").value.trim();profile.teams=$("epTeams").value.trim();profile.sponsors=$("epSponsors").value.trim();if($("editPreview").dataset.preview)profile.photo=$("editPreview").dataset.preview;saveAccount();closeSheet();renderAccount();renderDirectory();show("account")}
-}
-function resetTestPassword(){
- openSheet('<h2>Reset Test Password</h2><p class="muted">This only resets the password stored on this device.</p><div class="field"><label>Email</label><input id="resetEmail" type="email" placeholder="you@example.com"></div><div class="sheetactions"><button class="cancel" id="cancel">Cancel</button><button class="save" id="go">Reset</button></div>');
- $("cancel").onclick=closeSheet;$("go").onclick=()=>{let e=$("resetEmail").value.trim().toLowerCase();if(!e)return;localStorage.removeItem(credentialKey(e));closeSheet();alert("Test password cleared. Sign in again with that email to create a new password.")}
-}
-function cleanupTestStorage(){
- if(!confirm("Clear saved test trips, shared test cards, and active trip data from this iPhone? Your profile/account will be kept."))return;
- localStorage.removeItem("kfj_active_trip");
- localStorage.removeItem("kfj_journal");
- localStorage.removeItem("kfj_community");
- trip={active:false,start:null,end:null,location:"",angler:profile.name||"Angler",waterType:"River",catches:[],notes:"",science:{},patterns:[],photos:[]};
- alert("Old test trip/photo storage cleared. Try signing in again.");
-}
-function renderAccount(){updateAccountTag();$("myName").textContent=profile.name||"Guest Angler";$("myHome").textContent=account?(profile.home||account.email):"Not signed in";$("myProfilePic").innerHTML=profile.photo?'<img src="'+profile.photo+'" alt="" style="width:100%;height:100%;object-fit:cover">':icon("i-user");$("accountActions").innerHTML=account?'<div class="account-badge">Signed in as '+account.email+'</div><div class="owner-tools"><button class="cta secondary" id="editProf">Edit Profile / Photo</button><button class="cta" id="signOutBtn">Sign Out</button><button class="cta secondary" id="clubsBtn">My Clubs</button><button class="cta secondary" id="settingsBtn">Settings</button></div>':'<p>You are browsing as a guest. Sign in to establish ownership of profiles, trips and cards on this device.</p><button class="cta" style="width:100%" id="signInBtn">Sign In / Create Account</button><button class="cta secondary" style="width:100%;margin-top:8px" id="resetPasswordBtn">Reset Test Password</button><button class="cta secondary" style="width:100%;margin-top:8px" id="cleanupBtn">Clear Old Test Photos / Trips</button>';if(account){$("editProf").onclick=editProfile;$("signOutBtn").onclick=signOut;$("clubsBtn").onclick=()=>show("clubs");$("settingsBtn").onclick=()=>show("settings")}else { $("signInBtn").onclick=signInForm; $("cleanupBtn").onclick=cleanupTestStorage; $("resetPasswordBtn").onclick=resetTestPassword; }$("myProfileSummary").innerHTML='<p><b>'+(profile.name||"Angler")+'</b><br>'+(profile.home||"Hometown not set")+'</p><p class="muted">'+(profile.about||"No bio yet.")+'</p><div class="row"><b>Kayak</b><span>'+(profile.kayak||"Not entered")+'</span></div><div class="row"><b>Electronics</b><span>'+(profile.electronics||"Not entered")+'</span></div><div class="row"><b>Teams</b><span>'+(profile.teams||"Not entered")+'</span></div><div class="row"><b>Sponsors</b><span>'+(profile.sponsors||"Not entered")+'</span></div>';$("myClubsSummary").innerHTML='<p>Club memberships and private club journals will appear here.</p><button class="cta secondary" style="width:100%" id="clubsSummaryBtn">Open My Clubs</button>';$("clubsSummaryBtn").onclick=()=>show("clubs");if($("profileEditTop"))$("profileEditTop").onclick=editProfile;if($("accountHomeBtn"))$("accountHomeBtn").onclick=()=>show("home")}
-function renderClubs(){$("clubsList").innerHTML='<div class="clubcard"><h3>My Clubs</h3><p class="muted">Private club access will support 4-digit club codes, tournaments, AOY tracking and sponsor cards.</p><button class="cta" style="width:100%" id="joinClub">Join a Club</button></div><div class="clubcard"><h3>WV Kayak Anglers</h3><p>Community workspace preview.</p><div class="owner-tools"><button class="cta secondary" data-go="tourney">Tournaments</button><button class="cta secondary" data-go="community">Reports</button></div></div>';$("joinClub").onclick=()=>openInfo("Join a Club","Club code entry and server-backed membership will be enabled when account sync goes live.");$$("[data-go]").forEach(b=>b.onclick=()=>show(b.dataset.go))}
-function renderSettings(){$("settingsBody").innerHTML='<div class="panel"><h3>Privacy & Sharing</h3><div class="body"><div class="toggleRow"><div><b>Show me in Angler Directory</b><div class="muted">Public by default, with opt-out.</div></div><button class="toggle '+(prefs.directory?"on":"")+'" data-pref="directory"></button></div><div class="toggleRow"><div><b>Share new Trip Cards by default</b><div class="muted">Off is safest; you can always share manually.</div></div><button class="toggle '+(prefs.defaultShare?"on":"")+'" data-pref="defaultShare"></button></div><div class="toggleRow"><div><b>Show precise location on public card</b><div class="muted">Keep off to protect exact fishing spots.</div></div><button class="toggle '+(prefs.locationOnCard?"on":"")+'" data-pref="locationOnCard"></button></div></div></div>';$$("[data-pref]").forEach(b=>b.onclick=()=>{let k=b.dataset.pref;prefs[k]=!prefs[k];saveAccount();renderSettings()})}
-function readJSON(key,fallback){
- try{const raw=localStorage.getItem(key);return raw?JSON.parse(raw):fallback}catch(e){console.warn("Bad local data",key,e);return fallback}
-}
-function renderJournal(){let arr=readJSON("kfj_journal",[]);$("journalList").innerHTML=arr.length?arr.map((t,i)=>'<button class="card" data-j="'+i+'"><div class="cardrow"><div class="avatar">'+icon("i-note")+'</div><div><h3>'+(t.location||"Saved Trip")+'</h3><div class="muted">'+new Date(t.start).toLocaleDateString()+' • '+t.catches.length+' catches • '+(t.event||"Regular Trip")+'</div></div><div class="chev">›</div></div></button>').join(""):'<div class="card"><h3>No saved trips yet.</h3><p>Start a trip and your Journal will build here.</p></div>';$$("[data-j]").forEach(b=>b.onclick=()=>{displayedTrip=arr[+b.dataset.j];show("tripcard")})}
-function renderCommunity(){let arr=readJSON("kfj_community",[]);$("communityList").innerHTML=arr.length?arr.map((t,i)=>'<button class="card" data-c="'+i+'"><div class="cardrow"><div class="avatar">'+icon("i-users")+'</div><div><h3>'+(t.angler||"Angler")+' • '+(t.location||"Trip")+'</h3><div class="muted">'+t.catches.length+' catches • '+new Date(t.start).toLocaleDateString()+'</div></div><div class="chev">›</div></div></button>').join(""):'<div class="card"><h3>No shared Trip Cards yet.</h3><p>Sharing is deliberate. Saved journal trips remain private until the angler shares them.</p></div>';$$("[data-c]").forEach(b=>b.onclick=()=>{displayedTrip=arr[+b.dataset.c];show("tripcard")})}
-const TOURNEYS=[["WVKA Big Cash Event","May 22, 2027","Summersville / Gauley"],["WVKA Big Cash Event","June 26, 2027","Bluestone / New / Greenbrier"],["WVKA Big Cash Event","July 17, 2027","Jackson County Shootout"],["WVKA Big Cash Event","August 21, 2027","Stonewall / Stonecoal / West Fork"],["WVKA Big Cash Event","September 18, 2027","Cheat Lake / River"]];
-function renderTourneys(){$("tourneyList").innerHTML=TOURNEYS.map((t,i)=>'<div class="card"><div class="cardrow"><div class="avatar">'+icon("i-trophy")+'</div><div><h3>'+t[0]+'</h3><div class="muted">'+t[1]+' • '+t[2]+'</div></div></div><div class="learnActions" style="padding:10px 0 0"><button class="cta secondary" data-tinfo="'+i+'">Event Details</button><button class="cta" data-tlog="'+i+'">Log This Event</button></div></div>').join("");$$("[data-tinfo]").forEach(b=>b.onclick=()=>openInfo("Tournament Details",TOURNEYS[+b.dataset.tinfo].join(" • ")+" • CPR via TourneyX • Ketch metal boards"));$$("[data-tlog]").forEach(b=>b.onclick=()=>{let t=TOURNEYS[+b.dataset.tlog];startTripForm({location:t[2],event:t[0]+" — "+t[1]})})}
-const ANGLERS=[{name:"John Rapp",home:"West Virginia",about:"Kayak angler, community organizer and host of the Rusty Hook Podcast.",trips:3,catches:52,largest:'18.25″'},{name:"Jody Queen",home:"West Virginia",about:"Influential kayak angler and community contributor.",trips:0,catches:0,largest:"—"},{name:"Buddy Vance",home:"West Virginia",about:"Tournament angler and community contributor.",trips:0,catches:0,largest:"—"}];
-function renderDirectory(){$("directoryList").innerHTML=ANGLERS.map((a,i)=>'<button class="card" data-a="'+i+'"><div class="cardrow"><div class="avatar">'+icon("i-user")+'</div><div><h3>'+a.name+'</h3><div class="muted">'+a.home+' • '+a.trips+' trips • '+a.catches+' catches</div></div><div class="chev">›</div></div></button>').join("");$$("[data-a]").forEach(b=>b.onclick=()=>renderProfile(+b.dataset.a))}
-function renderProfile(i){let a=ANGLERS[i];$("pName").textContent=a.name;$("pHome").textContent=a.home;$("publicProfilePic").innerHTML=(profile.photo&&a.name===profile.name)?'<img src="'+profile.photo+'" alt="" style="width:100%;height:100%;object-fit:cover">':icon("i-user");$("profileBody").innerHTML='<div class="panel"><h3>About Me</h3><div class="body"><p>'+a.about+'</p></div></div><div class="stats"><div class="stat">Trips<strong>'+a.trips+'</strong></div><div class="stat">Catches<strong>'+a.catches+'</strong></div><div class="stat">Largest<strong>'+a.largest+'</strong></div></div><div class="panel"><h3>Links</h3><div class="body"><button class="cta secondary" style="width:100%" id="profileReports">Published Reports / Trip Cards</button></div></div>';$("profileReports").onclick=()=>show("community");show("profile")}
-$$("[data-go]").forEach(b=>b.onclick=()=>{if(b.dataset.cat){category=b.dataset.cat;renderLessons()}show(b.dataset.go)});
-$$("[data-cat]").forEach(b=>b.onclick=()=>{category=b.dataset.cat;renderLessons()});
-$$("[data-mode]").forEach(b=>b.onclick=()=>{mode=b.dataset.mode;renderLearnCard()});
-$("start").onclick=()=>startTripForm();$("journalNew").onclick=()=>startTripForm();$("catch").onclick=logCatch;$("photo").onclick=addPhoto;$("science").onclick=scienceForm;$("details").onclick=detailsForm;$("notes").onclick=notesForm;$("end").onclick=endTrip;
-$("castAngle").onclick=()=>openInfo("Cast Angle","Keep the kayak outside the strike zone. Cast beyond the target so the lure enters the seam, pocket or break naturally rather than landing directly on the fish.");
-$("baitRec").onclick=()=>{let l=LESSONS[category][current]||LESSONS[category][0];openInfo("Recommended Baits",l[4].split("|").join(" • "))};
-$("share").onclick=()=>{if(!displayedTrip)return;let a=readJSON("kfj_community",[]);if(!a.some(x=>x.start===displayedTrip.start))a.unshift(JSON.parse(JSON.stringify(displayedTrip)));localStorage.setItem("kfj_community",JSON.stringify(a.slice(0,100)));show("community")};
-$("amend").onclick=()=>{if(!displayedTrip)return;trip=displayedTrip;detailsForm()};
-$("back").onclick=()=>{if(historyStack.length>1)historyStack.pop();show(historyStack[historyStack.length-1]||"home",false)};
-$("menu").onclick=()=>{openSheet('<h2>KayakFishingJournal.com</h2><div class="list" style="padding:0"><button class="card" data-menu="home">Home</button><button class="card" data-menu="learn">Learn & Improve</button><button class="card" data-menu="journal">Journal</button><button class="card" data-menu="tourney">Find a Tourney</button><button class="card" data-menu="directory">Angler Directory</button><button class="card" data-menu="community">Community Reports</button></div>');$$("[data-menu]").forEach(b=>b.onclick=()=>{closeSheet();show(b.dataset.menu)})};
-$("accountBtn").onclick=()=>show("account");$("prevStep").onclick=()=>{tutorialStep=Math.max(0,tutorialStep-1);stopTutorial();renderTutorialStep()};$("nextStep").onclick=()=>{tutorialStep=Math.min(TUTORIAL_STEPS.length-1,tutorialStep+1);stopTutorial();renderTutorialStep()};$("playTutorial").onclick=playTutorial;$("modal").onclick=e=>{if(e.target===$("modal"))closeSheet()};
-function installFailSafeControls(){
- document.addEventListener("click",function(e){
-  const btn=e.target.closest("button");
-  if(!btn)return;
-  try{
-   if(btn.dataset.go){if(btn.dataset.cat){category=btn.dataset.cat;renderLessons()}show(btn.dataset.go);return}
-   if(btn.dataset.cat && btn.classList.contains("tab")){category=btn.dataset.cat;renderLessons();return}
-   if(btn.dataset.mode){mode=btn.dataset.mode;renderLearnCard();return}
-   if(btn.id==="accountBtn"){show("account");return}
-   if(btn.id==="back"){if(historyStack.length>1)historyStack.pop();show(historyStack[historyStack.length-1]||"home",false);return}
-   if(btn.id==="accountHomeBtn"){show("home");return}
-   if(btn.id==="profileEditTop"||btn.id==="editProf"){editProfile();return}
-   if(btn.id==="signOutBtn"){signOut();return}
-   if(btn.id==="clubsBtn"||btn.id==="clubsSummaryBtn"){show("clubs");return}
-   if(btn.id==="settingsBtn"){show("settings");return}
-   if(btn.id==="start"||btn.id==="journalNew"){startTripForm();return}
-   if(btn.id==="playTutorial"){playTutorial();return}
-   if(btn.id==="prevStep"){tutorialStep=Math.max(0,tutorialStep-1);stopTutorial();renderTutorialStep();return}
-   if(btn.id==="nextStep"){tutorialStep=Math.min(TUTORIAL_STEPS.length-1,tutorialStep+1);stopTutorial();renderTutorialStep();return}
-  }catch(err){console.error("Button action failed",btn.id||btn.dataset.go,err);alert("That button hit an error. Build 2026.11.03.1");}
- },true);
-}
-installFailSafeControls();
-function auditLinks(){let missing=[];$$("[data-go]").forEach(b=>{let id=b.dataset.go;if(id&&!$(id))missing.push(id)});if(missing.length)console.warn("Missing destinations:",[...new Set(missing)])}try{renderLessons()}catch(e){console.error("renderLessons",e)}
-try{renderTrip()}catch(e){console.error("renderTrip",e)}
-try{renderJournal()}catch(e){console.error("renderJournal",e)}
-try{renderCommunity()}catch(e){console.error("renderCommunity",e)}
-try{renderAccount()}catch(e){console.error("renderAccount",e)}
-try{auditLinks()}catch(e){console.error("auditLinks",e)}
-const nav0=document.querySelector("nav");if(nav0)nav0.style.display="none";
-if(account){if($("startEmail"))$("startEmail").value=account.email||"";if($("startName"))$("startName").value=profile.name||""}
-if(trip.active)startTimer();
-</script>
-</body></html>
+<nav class="bottom-nav"><a href="#/home">Home</a><a href="#/on-trip">On Trip</a><a href="#/learn">Learn</a><a href="#/journal">Journal</a><a href="#/community">Community</a></nav>
+<div class="build">Mobile Build v2.0</div>
+<script src="app.js?v=2" defer></script>
+</body>
+</html>
