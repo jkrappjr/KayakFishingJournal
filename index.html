@@ -302,10 +302,10 @@ let profile=JSON.parse(localStorage.getItem("kfj_profile")||"null")||{name:"John
 let prefs=JSON.parse(localStorage.getItem("kfj_prefs")||"null")||{directory:true,defaultShare:false,locationOnCard:false};
 let timerHandle=null;
 
-function show(id,push=true){$(".screen").forEach(x=>x.classList.remove("active"));$(id).classList.add("active");document.querySelector("nav").style.display=(id==="signin"?"none":"grid");$(".navbtn").forEach(b=>b.classList.toggle("active",b.dataset.go===id));if(push&&historyStack[historyStack.length-1]!==id)historyStack.push(id);if(id==="learn")renderLessons();if(id==="ontrip")renderTrip();if(id==="journal")renderJournal();if(id==="community")renderCommunity();if(id==="tourney")renderTourneys();if(id==="directory")renderDirectory();if(id==="tripcard")renderCard(displayedTrip||trip);if(id==="account")renderAccount();if(id==="clubs")renderClubs();if(id==="settings")renderSettings();window.scrollTo(0,0)}
+function show(id,push=true){$$(".screen").forEach(x=>x.classList.remove("active"));$(id).classList.add("active");document.querySelector("nav").style.display=(id==="signin"?"none":"grid");$$(".navbtn").forEach(b=>b.classList.toggle("active",b.dataset.go===id));if(push&&historyStack[historyStack.length-1]!==id)historyStack.push(id);if(id==="learn")renderLessons();if(id==="ontrip")renderTrip();if(id==="journal")renderJournal();if(id==="community")renderCommunity();if(id==="tourney")renderTourneys();if(id==="directory")renderDirectory();if(id==="tripcard")renderCard(displayedTrip||trip);if(id==="account")renderAccount();if(id==="clubs")renderClubs();if(id==="settings")renderSettings();window.scrollTo(0,0)}
 function icon(id){return '<svg class="ico"><use href="#'+id+'"/></svg>'}
 function renderLessons(){
- $(".tab").forEach(b=>b.classList.toggle("active",b.dataset.cat===category));
+ $$(".tab").forEach(b=>b.classList.toggle("active",b.dataset.cat===category));
  if(category==="water"){
   const riverPhotos=[
    "https://npgallery.nps.gov/GetAsset/E1354DBB-155D-451F-67B7D2564D66FBDA/proxyhires.jpg",
@@ -608,6 +608,6 @@ $("amend").onclick=()=>{if(!displayedTrip)return;trip=displayedTrip;detailsForm(
 $("back").onclick=()=>{if(historyStack.length>1)historyStack.pop();show(historyStack[historyStack.length-1]||"home",false)};
 $("menu").onclick=()=>{openSheet('<h2>KayakFishingJournal.com</h2><div class="list" style="padding:0"><button class="card" data-menu="home">Home</button><button class="card" data-menu="learn">Learn & Improve</button><button class="card" data-menu="journal">Journal</button><button class="card" data-menu="tourney">Find a Tourney</button><button class="card" data-menu="directory">Angler Directory</button><button class="card" data-menu="community">Community Reports</button></div>');$$("[data-menu]").forEach(b=>b.onclick=()=>{closeSheet();show(b.dataset.menu)})};
 $("accountBtn").onclick=()=>show("account");$("prevStep").onclick=()=>{tutorialStep=Math.max(0,tutorialStep-1);stopTutorial();renderTutorialStep()};$("nextStep").onclick=()=>{tutorialStep=Math.min(TUTORIAL_STEPS.length-1,tutorialStep+1);stopTutorial();renderTutorialStep()};$("playTutorial").onclick=playTutorial;$("modal").onclick=e=>{if(e.target===$("modal"))closeSheet()};
-function auditLinks(){let missing=[];$("[data-go]").forEach(b=>{let id=b.dataset.go;if(id&&!$(id))missing.push(id)});if(missing.length)console.warn("Missing destinations:",[...new Set(missing)])}renderLessons();renderTrip();renderJournal();renderCommunity();renderAccount();auditLinks();document.querySelector("nav").style.display="none";if(account){$("startEmail").value=account.email||"";$("startName").value=profile.name||""}if(trip.active)startTimer();
+function auditLinks(){let missing=[];$$("[data-go]").forEach(b=>{let id=b.dataset.go;if(id&&!$(id))missing.push(id)});if(missing.length)console.warn("Missing destinations:",[...new Set(missing)])}renderLessons();renderTrip();renderJournal();renderCommunity();renderAccount();auditLinks();document.querySelector("nav").style.display="none";if(account){$("startEmail").value=account.email||"";$("startName").value=profile.name||""}if(trip.active)startTimer();
 </script>
 </body></html>
