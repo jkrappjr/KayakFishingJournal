@@ -70,6 +70,34 @@ nav{position:fixed;z-index:40;left:50%;transform:translateX(-50%);bottom:0;width
 .clubcard{border:2px solid #d9ae48;border-radius:16px;background:linear-gradient(#fffdf8,#f2e8cf);padding:12px;margin-bottom:10px}
 .tutorial-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.tutorial-tile{border:2px solid var(--gold);border-radius:16px;overflow:hidden;background:#073725;color:white;text-align:left;padding:0;box-shadow:var(--shadow)}.tutorial-tile .tileart{height:110px;display:grid;place-items:center;background:linear-gradient(145deg,#8acbd8,#2e7785 55%,#173d2e);position:relative;overflow:hidden}.tutorial-tile .tileart svg{width:100%;height:100%}.tutorial-tile .tilecopy{padding:9px}.tutorial-tile b{font-size:15px}.tutorial-tile small{display:block;color:#e7e0c5;margin-top:3px}.tutorial-tile.active{box-shadow:0 0 0 3px #ffe476,0 9px 24px #0005}
 .tutorial-shell{background:linear-gradient(#063a29,#03281d);color:white;border-top:3px solid var(--gold);border-bottom:3px solid var(--gold)}.tutorial-head{padding:12px 14px}.tutorial-head h2{margin:0;color:#ffe394;font-size:26px}.tutorial-head small{color:#fff0c4}.tutorial-video{margin:0 12px;border:2px solid var(--gold);border-radius:15px;overflow:hidden;background:#0a231b}.tutorial-stage{height:250px;position:relative;overflow:hidden;background:linear-gradient(#87cad8,#2c7586 58%,#183c2e)}.tutorial-stage svg{width:100%;height:100%;display:block}.tutorial-progress{height:8px;background:#222;margin:0}.tutorial-progress i{display:block;height:100%;background:linear-gradient(90deg,#f5d663,#c89218);width:20%;transition:width .35s}.stepdots{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:10px 12px;background:#082f23}.stepdot{border:1px solid #d7bd69;border-radius:999px;min-height:44px;background:#0e4733;color:white;font-size:11px;font-weight:850}.stepdot.active{background:linear-gradient(#ffe477,#dca529);color:#17271f}.tutorial-body{padding:12px}.tutorial-step-card{background:var(--cream);color:var(--ink);border:2px solid #d7bd69;border-radius:15px;padding:12px}.tutorial-step-card h3{margin:0 0 8px;color:var(--g)}.tutorial-step-card ul{padding-left:20px;margin:7px 0}.takeaway{margin-top:10px;background:linear-gradient(#f6df91,#d5aa3f);color:#173026;border-radius:12px;padding:10px;font-weight:800}.tutorial-controls{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:8px;padding:10px 12px 14px}.tutorial-controls button{min-height:52px;border-radius:13px;border:2px solid #d1aa44;font-weight:900}.playbtn{background:linear-gradient(#ffe36f,#d7a328)}.prevnext{background:#123f31;color:white}
+.photo-tutorial{position:absolute;inset:0;background-size:cover;background-position:center;overflow:hidden}
+.photo-tutorial:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,20,15,.04),rgba(0,20,15,.28))}
+.eddy-photo{background-image:url("https://npgallery.nps.gov/GetAsset/E1354DBB-155D-451F-67B7D2564D66FBDA/proxyhires.jpg")}
+.motion-label{position:absolute;z-index:5;background:linear-gradient(#ffe780,#d9ae48);color:#173025;border:2px solid #7d5c13;border-radius:10px;padding:5px 8px;font-weight:950;font-size:12px;box-shadow:0 3px 8px #0005}
+.current-label{right:14px;top:18px}.eddy-label{left:46%;top:42%}.target-label{right:12%;bottom:22%}
+.flow-arrow{position:absolute;z-index:4;color:#73e5ff;font-size:34px;font-weight:950;text-shadow:0 2px 5px #000;opacity:.9}
+.fa1{right:6%;top:26%}.fa2{right:18%;top:32%}.fa3{right:30%;top:38%}
+.eddy-ring{position:absolute;z-index:4;left:35%;top:36%;width:120px;height:78px;border:7px dashed #ffd83d;border-radius:50%;filter:drop-shadow(0 2px 3px #0008)}
+.eddy-ring:after{content:"➜";position:absolute;right:-12px;top:20px;color:#ffd83d;font-size:30px}
+.kayak-marker{position:absolute;z-index:5;left:48%;bottom:5%;width:58px;height:24px;border-radius:70% 70% 55% 55%;background:#da8529;border:3px solid #252c29;transform:rotate(-8deg);box-shadow:0 3px 7px #0007}
+.kayak-marker:after{content:"";position:absolute;left:25px;top:-22px;width:9px;height:24px;border-radius:8px;background:#22332d}
+.attack-point{position:absolute;z-index:5;right:18%;bottom:27%;width:42px;height:42px;border:5px solid #ffe03e;border-radius:50%;box-shadow:0 0 0 6px #ffe03e33}
+.cast-line{position:absolute;z-index:4;left:54%;bottom:11%;width:38%;height:36%;pointer-events:none}.cast-line path{fill:none;stroke:#ffe03e;stroke-width:4;stroke-dasharray:10 8;stroke-linecap:round}
+.step-caption{position:absolute;z-index:6;left:10px;bottom:8px;background:#062f22dd;color:white;border:1px solid #d9ae48;border-radius:9px;padding:5px 8px;font-size:11px;font-weight:800}
+.photo-tutorial:not(.playing) .flow-arrow,.photo-tutorial:not(.playing) .eddy-ring,.photo-tutorial:not(.playing) .cast-line path,.photo-tutorial:not(.playing) .attack-point{animation-play-state:paused}
+.photo-tutorial.playing .flow-arrow{animation:flowmove 1.8s linear infinite}
+.photo-tutorial.playing .fa2{animation-delay:.35s}.photo-tutorial.playing .fa3{animation-delay:.7s}
+.photo-tutorial.playing .eddy-ring{animation:eddyspin 3.2s linear infinite}
+.photo-tutorial.playing .cast-line path{animation:dashmove 1.4s linear infinite}
+.photo-tutorial.playing .attack-point{animation:targetpulse 1.25s ease-in-out infinite}
+@keyframes flowmove{0%{transform:translateX(0);opacity:.25}50%{opacity:1}100%{transform:translateX(-34px);opacity:.25}}
+@keyframes eddyspin{to{transform:rotate(360deg)}}
+@keyframes dashmove{to{stroke-dashoffset:-36}}
+@keyframes targetpulse{0%,100%{transform:scale(.88);box-shadow:0 0 0 3px #ffe03e33}50%{transform:scale(1.12);box-shadow:0 0 0 12px #ffe03e22}}
+.photo-tutorial.step-0 .cast-line,.photo-tutorial.step-0 .attack-point{opacity:.25}
+.photo-tutorial.step-1 .cast-line,.photo-tutorial.step-1 .attack-point{opacity:.18}
+.photo-tutorial.step-2 .cast-line,.photo-tutorial.step-2 .attack-point{opacity:1}
+.photo-tutorial.step-3 .cast-line,.photo-tutorial.step-3 .attack-point{opacity:1}
 @media(max-width:380px){.homegrid{padding:10px}.homebtn{min-height:108px}.lesson{grid-template-columns:82px 1fr 24px}.tabs{grid-template-columns:repeat(2,1fr)}.tc-headcopy h2{font-size:22px}.tc-profile{width:74px;height:74px;flex-basis:74px}.tc-stat strong{font-size:17px}.tc-ribbon{font-size:16px}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/exifr/dist/full.umd.js"></script>\n</head>
@@ -123,7 +151,7 @@ nav{position:fixed;z-index:40;left:50%;transform:translateX(-50%);bottom:0;width
     <div class="tutorial-progress"><i id="tutorialProgress"></i></div>
   </div>
   <div class="stepdots" id="stepDots"></div>
-  <div class="tutorial-body"><div class="tutorial-step-card" id="tutorialStepCard"></div></div>
+  <div class="tutorial-body"><div class="tutorial-step-card" id="tutorialStepCard"></div><div class="muted" id="tutorialCredit" style="color:#eadfbf;padding:6px 4px 0;font-size:10px"></div></div>
   <div class="tutorial-controls"><button class="prevnext" id="prevStep">Previous</button><button class="playbtn" id="playTutorial">▶ Play Tutorial</button><button class="prevnext" id="nextStep">Next</button></div>
 </div>
 <div class="learnart" id="learnArt" style="display:none"></div>
@@ -322,7 +350,27 @@ function renderLearnCard(){
 
 function stageGraphic(){
  let l=LESSONS[category][current]||LESSONS[category][0];
- let base=tutorialGraphic(l[5]||"seam");
+ let kind=l[5]||"seam";
+ if(kind==="eddy"){
+  let captions=[
+   "SEE IT — find the seam and rotating soft water.",
+   "UNDERSTAND IT — current relief beside food delivery.",
+   "FISH IT — cast seam first, then center, then exit.",
+   "TRY IT — repeat the same angle before changing variables."
+  ];
+  return '<div class="photo-tutorial eddy-photo step-'+tutorialStep+(tutorialPlaying?' playing':'')+'">'+
+    '<div class="motion-label current-label">CURRENT SEAM</div>'+
+    '<div class="motion-label eddy-label">EDDY</div>'+
+    '<div class="motion-label target-label">CAST TARGET</div>'+
+    '<div class="flow-arrow fa1">➜</div><div class="flow-arrow fa2">➜</div><div class="flow-arrow fa3">➜</div>'+
+    '<div class="eddy-ring"></div>'+
+    '<div class="kayak-marker"></div>'+
+    '<div class="attack-point"></div>'+
+    '<svg class="cast-line" viewBox="0 0 160 90"><path d="M5 78 Q70 18 150 18"/></svg>'+
+    '<div class="step-caption">'+captions[tutorialStep]+'</div>'+
+  '</div>';
+ }
+ let base=tutorialGraphic(kind);
  if(tutorialStep===0)return base;
  if(tutorialStep===1)return base.replace("</svg>",'<text x="24" y="235" class="smalltxt">Why fish hold: current relief + forage access</text></svg>');
  if(tutorialStep===2)return base.replace("</svg>",'<path class="cast" d="M70 224Q145 156 230 121"/><text x="154" y="215" class="smalltxt">Suggested cast path</text></svg>');
@@ -334,12 +382,12 @@ function renderTutorialStep(){
  $("tutorialStage").innerHTML=stageGraphic();
  $("tutorialProgress").style.width=((tutorialStep+1)/TUTORIAL_STEPS.length*100)+"%";
  $("stepDots").innerHTML=TUTORIAL_STEPS.map((x,i)=>'<button class="stepdot '+(i===tutorialStep?"active":"")+'" data-ts="'+i+'">'+(i+1)+' '+x.name+'</button>').join("");
- $("tutorialStepCard").innerHTML='<h3>'+s.title+'</h3><ul>'+s.bullets.map(b=>'<li>'+b+'</li>').join("")+'</ul><div class="takeaway">KEY TAKEAWAY — '+s.takeaway+'</div>';
+ $("tutorialStepCard").innerHTML='<h3>'+s.title+'</h3><ul>'+s.bullets.map(b=>'<li>'+b+'</li>').join("")+'</ul><div class="takeaway">KEY TAKEAWAY — '+s.takeaway+'</div>';$("tutorialCredit").textContent=((LESSONS[category][current]||[])[5]==="eddy")?"River image: National Park Service, New River Gorge (public domain)":"Illustrated tutorial graphic";
  $$("[data-ts]").forEach(b=>b.onclick=()=>{tutorialStep=+b.dataset.ts;stopTutorial();renderTutorialStep()});
 }
-function stopTutorial(){tutorialPlaying=false;clearInterval(tutorialTimer);$("playTutorial").textContent="▶ Play Tutorial"}
+function stopTutorial(){tutorialPlaying=false;clearInterval(tutorialTimer);$("playTutorial").textContent="▶ Play Tutorial";renderTutorialStep()}
 function advanceTutorial(){tutorialStep=Math.min(TUTORIAL_STEPS.length-1,tutorialStep+1);renderTutorialStep()}
-function playTutorial(){if(tutorialPlaying){stopTutorial();return}tutorialPlaying=true;$("playTutorial").textContent="❚❚ Pause";tutorialTimer=setInterval(()=>{if(tutorialStep>=TUTORIAL_STEPS.length-1){stopTutorial();return}tutorialStep++;renderTutorialStep()},2600)}
+function playTutorial(){if(tutorialPlaying){stopTutorial();return}tutorialPlaying=true;$("playTutorial").textContent="❚❚ Pause";renderTutorialStep();tutorialTimer=setInterval(()=>{if(tutorialStep>=TUTORIAL_STEPS.length-1){stopTutorial();return}tutorialStep++;renderTutorialStep()},3200)}
 function openSheet(html){$("sheet").innerHTML=html;$("modal").classList.add("open")}
 function closeSheet(){$("modal").classList.remove("open")}
 function openInfo(title,text){openSheet('<h2>'+title+'</h2><p>'+text+'</p><div class="sheetactions"><button class="save" id="closeOne">Close</button></div>');$("closeOne").onclick=closeSheet}
