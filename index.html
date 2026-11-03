@@ -36,7 +36,21 @@ svg.ico{width:34px;height:34px;display:block;fill:none;stroke:currentColor;strok
 .list{padding:12px;display:grid;gap:10px}.card{border:2px solid #dac16f;background:var(--cream);border-radius:17px;padding:12px;text-align:left;box-shadow:0 5px 14px #0001}.card h3{margin:0 0 5px}.muted{color:#667069;font-size:13px}.cardrow{display:grid;grid-template-columns:52px 1fr 24px;gap:10px;align-items:center}.avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(#1b6749,#052f22);border:2px solid var(--gold);display:grid;place-items:center;color:white}.avatar .ico{color:var(--gold2)}
 nav{position:fixed;z-index:40;left:50%;transform:translateX(-50%);bottom:0;width:min(520px,100%);background:linear-gradient(#063725,#03291b);border-top:3px solid var(--gold);padding:6px 5px calc(6px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(5,1fr);gap:3px}.navbtn{border:0;background:transparent;color:white;min-height:58px;font-size:11px;font-weight:800;border-radius:10px}.navbtn .ico{margin:0 auto 2px;width:25px;height:25px}.navbtn.active{background:#ffffff19;color:#ffe39a}
 .modal{position:fixed;inset:0;z-index:70;background:#0009;display:none;align-items:end}.modal.open{display:grid}.sheet{background:var(--iv);border-radius:22px 22px 0 0;padding:16px;max-height:86vh;overflow:auto;border-top:3px solid var(--gold)}.sheet h2{margin:0 0 10px}.field{margin:10px 0}.field label{font-weight:800;display:block;margin-bottom:5px}.field input,.field select,.field textarea{width:100%;padding:12px;border:1px solid #bcae83;border-radius:12px;background:white}.sheetactions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sheetactions button{min-height:52px;border-radius:14px;font-weight:900}.cancel{background:#eee;border:1px solid #bbb}.save{background:linear-gradient(#f2d268,#d2a02b);border:1px solid #a86c00}.profilehero{padding:22px 14px;background:linear-gradient(#0b543b,#052f22);color:white;text-align:center;border-bottom:3px solid var(--gold)}.profilepic{width:108px;height:108px;border-radius:50%;margin:auto;border:4px solid var(--gold);background:linear-gradient(#679d84,#173e30);display:grid;place-items:center}.profilepic .ico{width:60px;height:60px;color:white}.profilehero h2{margin:10px 0 2px}.profilehero small{color:var(--gold2)}
-@media(max-width:380px){.homegrid{padding:10px}.homebtn{min-height:108px}.lesson{grid-template-columns:82px 1fr 24px}.tabs{grid-template-columns:repeat(2,1fr)}}
+.tripcard-new{margin:12px;border:3px solid var(--gold);border-radius:22px;overflow:hidden;background:linear-gradient(#faf5e7,#efe2c3);box-shadow:var(--shadow)}
+.tc-hero{min-height:190px;position:relative;display:flex;align-items:flex-end;gap:12px;padding:18px;background:linear-gradient(rgba(3,42,29,.2),rgba(3,42,29,.86)),linear-gradient(140deg,#95d0de,#2d7f91 52%,#294f39);background-size:cover;background-position:center}
+.tc-profile{width:84px;height:84px;flex:0 0 84px;border-radius:16px;border:3px solid var(--gold);background:linear-gradient(#edf0e8,#bccfbe);display:grid;place-items:center;overflow:hidden;color:var(--g)}
+.tc-profile .ico{width:48px;height:48px}.tc-profile img{width:100%;height:100%;object-fit:cover}
+.tc-headcopy{color:white;text-shadow:0 2px 4px #000}.tc-headcopy h2{margin:0 0 7px;font-size:25px}.tc-location{font-size:16px;font-weight:850;line-height:1.25}.tc-date{margin-top:5px;color:#f7df9d;font-weight:800}
+.tc-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px;background:#f4ead0;border-top:3px solid var(--gold);border-bottom:1px solid #d4b866}
+.tc-stat{background:linear-gradient(#ffe47c,#e6ad28);border:1px solid #b98513;border-radius:11px 11px 18px 18px;text-align:center;padding:8px 4px;color:#15231b;box-shadow:inset 0 1px 0 #fff8}
+.tc-stat small{display:block;font-size:10px;font-weight:900;line-height:1.05}.tc-stat strong{display:block;font-size:20px;margin-top:3px}
+.tc-section{margin:10px;border:1px solid #d5bd71;border-radius:14px;overflow:hidden;background:#fffdf5}
+.tc-ribbon{background:linear-gradient(#0b5138,#052f22);color:white;font-weight:950;padding:9px 11px;border-bottom:2px solid var(--gold);font-size:18px}.tc-ribbon span{font-size:11px;color:#f3db97}
+.tc-science{padding:8px 12px}.tc-science .row{padding:7px 0;font-size:14px}.tc-science .row b{display:flex;align-items:center;gap:6px}
+.tc-baits{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px}.tc-bait{min-height:112px;border:1px solid #d8bf72;border-radius:12px;background:linear-gradient(#fff,#f7eed7);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px}.tc-bait .ico{width:52px;height:52px;color:#7b5e17;filter:drop-shadow(0 3px 2px #0002)}.tc-bait b{font-size:13px;margin-top:4px}.tc-bait small{font-size:11px;color:#6b716d;margin-top:2px}
+.tc-bestfive{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;padding:10px}.tc-fish{aspect-ratio:.78;border:2px solid var(--gold);border-radius:10px;overflow:hidden;background:linear-gradient(#7ec1a3,#335e47);display:grid;place-items:center}.tc-fish img{width:100%;height:100%;object-fit:cover}.tc-fish .ico{width:30px;height:30px;color:#12382a}
+.tc-footer{text-align:center;padding:10px 12px 14px;font-weight:950;color:var(--g);letter-spacing:.2px}
+@media(max-width:380px){.homegrid{padding:10px}.homebtn{min-height:108px}.lesson{grid-template-columns:82px 1fr 24px}.tabs{grid-template-columns:repeat(2,1fr)}.tc-headcopy h2{font-size:22px}.tc-profile{width:74px;height:74px;flex-basis:74px}.tc-stat strong{font-size:17px}.tc-ribbon{font-size:16px}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/exifr/dist/full.umd.js"></script>\n</head>
 <body>
@@ -97,13 +111,29 @@ nav{position:fixed;z-index:40;left:50%;transform:translateX(-50%);bottom:0;width
 <div class="tools"><button class="tool" id="science"><svg class="ico"><use href="#i-cloud"/></svg>Science</button><button class="tool" id="details"><svg class="ico"><use href="#i-pin"/></svg>Trip Details</button><button class="tool" id="notes"><svg class="ico"><use href="#i-note"/></svg>Notes</button></div>
 <button class="end" id="end">END TRIP & SAVE</button></section>
 
-<section id="tripcard" class="screen"><div class="section">
-<div class="panel"><h3 id="tcTitle">Trip Card</h3><div class="body"><div class="row"><b>Location</b><span id="tcLoc">—</span></div><div class="row"><b>Time on Water</b><span id="tcTime">—</span></div><div class="row"><b>Catches</b><span id="tcCatch">0</span></div><div class="row"><b>Largest</b><span id="tcLargest">—</span></div></div></div>
-<div class="panel"><h3>Science & Conditions</h3><div class="body" id="tcScience"></div></div>
-<div class="panel"><h3>What Worked</h3><div class="body baitgrid" id="tcBaits"></div></div>
-<div class="panel"><h3>Best Five</h3><div class="body fishgrid" id="bestFive"></div></div>
-<div class="learnActions"><button class="cta secondary" id="amend">Amend Trip</button><button class="cta" id="share">Share Trip Card</button></div>
-</div></section>
+<section id="tripcard" class="screen">
+<div class="tripcard-new">
+  <div class="tc-hero" id="tcHero">
+    <div class="tc-profile" id="tcProfile"><svg class="ico"><use href="#i-user"/></svg></div>
+    <div class="tc-headcopy">
+      <h2 id="tcTitle">Trip Card</h2>
+      <div class="tc-location">📍 <span id="tcLoc">—</span></div>
+      <div class="tc-date" id="tcDate">—</div>
+    </div>
+  </div>
+  <div class="tc-stats">
+    <div class="tc-stat"><small>Time on Water</small><strong id="tcTime">—</strong></div>
+    <div class="tc-stat"><small>Catches</small><strong id="tcCatch">0</strong></div>
+    <div class="tc-stat"><small>Largest</small><strong id="tcLargest">—</strong></div>
+    <div class="tc-stat"><small>Min / Catch</small><strong id="tcRate">—</strong></div>
+  </div>
+  <div class="tc-section"><div class="tc-ribbon">Science & Conditions</div><div class="tc-science" id="tcScience"></div></div>
+  <div class="tc-section"><div class="tc-ribbon">What Worked <span>(Baits & Techniques)</span></div><div class="tc-baits" id="tcBaits"></div></div>
+  <div class="tc-section"><div class="tc-ribbon">Best Five</div><div class="tc-bestfive" id="bestFive"></div></div>
+  <div class="tc-footer">KayakFishingJournal.com</div>
+</div>
+<div class="learnActions" style="padding:12px"><button class="cta secondary" id="amend">Amend Trip</button><button class="cta" id="share">Share Trip Card</button></div>
+</section>
 
 <section id="journal" class="screen"><div class="list"><div class="sectionhead"><div><h2>My Journal</h2><small>Saved on this device first.</small></div><button class="cta" id="journalNew">+ Trip</button></div><div id="journalList"></div></div></section>
 <section id="community" class="screen"><div class="list"><div class="sectionhead"><div><h2>Community Reports</h2><small>Only reports anglers choose to share.</small></div></div><div id="communityList"></div></div></section>
@@ -188,7 +218,41 @@ function scienceForm(){if(!trip.active){startTripForm();return}let s=trip.scienc
 function detailsForm(){if(!trip.active){startTripForm();return}openSheet('<h2>Trip Details</h2><div class="field"><label>Location</label><input id="dLoc" value="'+(trip.location||"")+'"></div><div class="field"><label>Companions</label><input id="dComp" value="'+(trip.companions||"")+'"></div><div class="field"><label>Kayak</label><input id="dKayak" value="'+(trip.kayak||"")+'" placeholder="Jackson BigRig"></div><div class="sheetactions"><button class="cancel" id="cancel">Cancel</button><button class="save" id="go">Save</button></div>');$("cancel").onclick=closeSheet;$("go").onclick=()=>{trip.location=$("dLoc").value;trip.companions=$("dComp").value;trip.kayak=$("dKayak").value;saveActive();closeSheet();renderTrip()}}
 function notesForm(){if(!trip.active){startTripForm();return}openSheet('<h2>Trip Notes</h2><div class="field"><textarea id="n" rows="6">'+(trip.notes||"")+'</textarea></div><div class="sheetactions"><button class="cancel" id="cancel">Cancel</button><button class="save" id="go">Save Notes</button></div>');$("cancel").onclick=closeSheet;$("go").onclick=()=>{trip.notes=$("n").value;saveActive();closeSheet()}}
 function endTrip(){if(!trip.active){show("journal");return}trip.active=false;trip.end=Date.now();let arr=JSON.parse(localStorage.getItem("kfj_journal")||"[]");arr.unshift(JSON.parse(JSON.stringify(trip)));localStorage.setItem("kfj_journal",JSON.stringify(arr.slice(0,100)));localStorage.removeItem("kfj_active_trip");clearInterval(timerHandle);displayedTrip=trip;show("tripcard")}
-function renderCard(t){t=t||trip;displayedTrip=t;let end=t.end||Date.now(),mins=t.start?Math.max(1,Math.round((end-t.start)/60000)):0,vals=t.catches.map(c=>+c.length||0).filter(Boolean);$("tcTitle").textContent=(t.angler||"Angler")+"'s Trip Card";$("tcLoc").textContent=t.location||"—";$("tcTime").textContent=Math.floor(mins/60)+":"+String(mins%60).padStart(2,"0");$("tcCatch").textContent=t.catches.length;$("tcLargest").textContent=vals.length?Math.max(...vals).toFixed(2)+'″':"—";let s=t.science||{};$("tcScience").innerHTML=[["Wind",s.wind],["Pressure",s.pressure],["Flow / Gauge",s.flow],["Rain 24h",s.rain],["Water",s.water],["Bite Window",s.bite]].map(x=>'<div class="row"><b>'+x[0]+'</b><span>'+(x[1]||"Not entered")+'</span></div>').join("");let m={};t.catches.forEach(c=>m[c.bait]=(m[c.bait]||0)+1);let b=Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,3);$("tcBaits").innerHTML=b.length?b.map(x=>'<div class="bait">'+icon("i-fish")+'<b>'+x[0]+'</b><small>'+x[1]+' catch'+(x[1]===1?"":"es")+'</small></div>').join(""):'<div class="bait">'+icon("i-fish")+'<b>No baits logged</b></div>';let best=t.catches.filter(c=>c.length).sort((a,b)=>b.length-a.length).slice(0,5);$("bestFive").innerHTML=[0,1,2,3,4].map(i=>best[i]?'<div class="fish">'+(best[i].photo?'<img src="'+best[i].photo+'">':icon("i-fish"))+'</div>':'<div class="fish">'+icon("i-fish")+'</div>').join("")}
+function renderCard(t){
+ t=t||trip; displayedTrip=t;
+ let end=t.end||Date.now(), mins=t.start?Math.max(1,Math.round((end-t.start)/60000)):0;
+ let vals=(t.catches||[]).map(c=>+c.length||0).filter(Boolean);
+ let largest=vals.length?Math.max(...vals):0;
+ let rate=(t.catches&&t.catches.length)?(mins/t.catches.length):0;
+ $("tcTitle").textContent=(t.angler||"Angler")+"'s Trip";
+ $("tcLoc").textContent=t.location||"—";
+ $("tcDate").textContent=t.start?new Date(t.start).toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"}):"—";
+ $("tcTime").textContent=Math.floor(mins/60)+":"+String(mins%60).padStart(2,"0");
+ $("tcCatch").textContent=(t.catches||[]).length;
+ $("tcLargest").textContent=largest?largest.toFixed(2)+'″':"—";
+ $("tcRate").textContent=rate?rate.toFixed(1):"—";
+ let hero=(t.photos&&t.photos[0]) || ((t.catches||[]).find(c=>c.photo)||{}).photo || "";
+ $("tcHero").style.backgroundImage=hero?'linear-gradient(rgba(3,42,29,.18),rgba(3,42,29,.86)),url("'+hero+'")':'linear-gradient(rgba(3,42,29,.2),rgba(3,42,29,.86)),linear-gradient(140deg,#95d0de,#2d7f91 52%,#294f39)';
+ let profile=(t.profilePhoto||"");
+ $("tcProfile").innerHTML=profile?'<img src="'+profile+'" alt="Angler profile">':icon("i-user");
+ let s=t.science||{};
+ let scienceRows=[
+  ["Weather",s.weather||"Not entered","☁"],
+  ["Wind",s.wind||"Not entered","↝"],
+  ["Pressure",s.pressure||"Not entered","↗"],
+  ["Flow / Gauge",s.flow||"Not entered","≈"],
+  ["Rain 24h",s.rain||"Not entered","☂"],
+  ["Water",s.water||"Not entered","◉"],
+  ["Bite Window",s.bite||"Not entered","◷"]
+ ];
+ $("tcScience").innerHTML=scienceRows.map(x=>'<div class="row"><b><span>'+x[2]+'</span>'+x[0]+'</b><span>'+x[1]+'</span></div>').join("");
+ let baitMap={};
+ (t.catches||[]).forEach(c=>{let k=(c.bait||"").trim(); if(k) baitMap[k]=(baitMap[k]||0)+1});
+ let baitList=Object.entries(baitMap).sort((a,b)=>b[1]-a[1]).slice(0,3);
+ $("tcBaits").innerHTML=baitList.length?baitList.map(x=>'<div class="tc-bait">'+icon("i-fish")+'<b>'+x[0]+'</b><small>'+x[1]+' catch'+(x[1]===1?"":"es")+'</small></div>').join(""):'<div class="tc-bait">'+icon("i-fish")+'<b>No bait data</b><small>Log catches to populate</small></div>';
+ let best=(t.catches||[]).filter(c=>c.length).sort((a,b)=>(+b.length||0)-(+a.length||0)).slice(0,5);
+ $("bestFive").innerHTML=[0,1,2,3,4].map(i=>best[i]?'<div class="tc-fish">'+(best[i].photo?'<img src="'+best[i].photo+'" alt="Catch '+(i+1)+'">':icon("i-fish"))+'</div>':'<div class="tc-fish">'+icon("i-fish")+'</div>').join("");
+}
 function renderJournal(){let arr=JSON.parse(localStorage.getItem("kfj_journal")||"[]");$("journalList").innerHTML=arr.length?arr.map((t,i)=>'<button class="card" data-j="'+i+'"><div class="cardrow"><div class="avatar">'+icon("i-note")+'</div><div><h3>'+(t.location||"Saved Trip")+'</h3><div class="muted">'+new Date(t.start).toLocaleDateString()+' • '+t.catches.length+' catches • '+(t.event||"Regular Trip")+'</div></div><div class="chev">›</div></div></button>').join(""):'<div class="card"><h3>No saved trips yet.</h3><p>Start a trip and your Journal will build here.</p></div>';$$("[data-j]").forEach(b=>b.onclick=()=>{displayedTrip=arr[+b.dataset.j];show("tripcard")})}
 function renderCommunity(){let arr=JSON.parse(localStorage.getItem("kfj_community")||"[]");$("communityList").innerHTML=arr.length?arr.map((t,i)=>'<button class="card" data-c="'+i+'"><div class="cardrow"><div class="avatar">'+icon("i-users")+'</div><div><h3>'+(t.angler||"Angler")+' • '+(t.location||"Trip")+'</h3><div class="muted">'+t.catches.length+' catches • '+new Date(t.start).toLocaleDateString()+'</div></div><div class="chev">›</div></div></button>').join(""):'<div class="card"><h3>No shared Trip Cards yet.</h3><p>Sharing is deliberate. Saved journal trips remain private until the angler shares them.</p></div>';$$("[data-c]").forEach(b=>b.onclick=()=>{displayedTrip=arr[+b.dataset.c];show("tripcard")})}
 const TOURNEYS=[["WVKA Big Cash Event","May 22, 2027","Summersville / Gauley"],["WVKA Big Cash Event","June 26, 2027","Bluestone / New / Greenbrier"],["WVKA Big Cash Event","July 17, 2027","Jackson County Shootout"],["WVKA Big Cash Event","August 21, 2027","Stonewall / Stonecoal / West Fork"],["WVKA Big Cash Event","September 18, 2027","Cheat Lake / River"]];
