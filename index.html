@@ -127,7 +127,24 @@ nav{position:fixed;z-index:40;left:50%;transform:translateX(-50%);bottom:0;width
 <div id="app">
 <header><button class="icon" id="back">‹</button><div><h1>KayakFishingJournal.com</h1><small id="accountTag">Learn • Fish • Log • Share</small></div><button class="icon" id="accountBtn" aria-label="Account"><svg class="ico"><use href="#i-user"/></svg></button></header>
 
-<section id="home" class="screen active">
+<section id="signin" class="screen active">
+<div class="profilehero" style="min-height:260px;display:flex;flex-direction:column;justify-content:center">
+  <div class="profilepic" style="width:118px;height:118px"><svg class="ico"><use href="#i-user"/></svg></div>
+  <h2 style="font-size:28px;margin-top:12px">KayakFishingJournal.com</h2>
+  <small>Sign in to your angler profile</small>
+</div>
+<div class="section">
+  <div class="panel"><h3>Welcome Back</h3><div class="body">
+    <div class="field"><label>Email</label><input id="startEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
+    <div class="field"><label>Display Name</label><input id="startName" autocomplete="name" placeholder="Your name"></div>
+    <div id="startLoginStatus" class="muted" style="min-height:24px"></div>
+    <button class="cta" style="width:100%;min-height:58px" id="startLoginBtn">Sign In / Create Account</button>
+  </div></div>
+  <div class="card"><b>Why sign in?</b><p class="muted">Your profile owns your trips, Trip Cards, community posts, club access, and profile photo.</p></div>
+</div>
+</section>
+
+<section id="home" class="screen">
 <div class="hero"><div class="logo"><b>Kayak Fishing Journal</b><span>Interactive River Guide & Journal</span><em>Kayak Fishing Hits Different</em></div>
 <svg class="kayakmark" viewBox="0 0 300 90"><path fill="#c87822" stroke="#1e2d26" stroke-width="5" d="M25 55c52 25 198 25 250 0-34 36-216 36-250 0Z"/><circle fill="#172b24" cx="150" cy="35" r="18"/><path stroke="#172b24" stroke-width="8" d="M150 50v20m-50-42 98 30"/><path stroke="#e9c75f" stroke-width="7" d="M84 24 215 61"/></svg></div>
 <div class="homegrid">
@@ -207,7 +224,7 @@ nav{position:fixed;z-index:40;left:50%;transform:translateX(-50%);bottom:0;width
   </div>
   <div class="section">
     <div class="panel"><h3>My Account</h3><div class="body" id="accountActions"></div></div>
-    <div class="panel"><h3>My Profile</h3><div class="body" id="myProfileSummary"></div></div>
+    <div class="panel"><h3>My Profile</h3><div class="body"><button class="cta" style="width:100%;margin-bottom:10px" id="profileEditTop">Edit Profile / Add Photo</button><div id="myProfileSummary"></div></div></div>
     <div class="panel"><h3>My Clubs</h3><div class="body" id="myClubsSummary"></div></div>
   </div>
 </section>
@@ -284,7 +301,7 @@ let profile=JSON.parse(localStorage.getItem("kfj_profile")||"null")||{name:"John
 let prefs=JSON.parse(localStorage.getItem("kfj_prefs")||"null")||{directory:true,defaultShare:false,locationOnCard:false};
 let timerHandle=null;
 
-function show(id,push=true){$$(".screen").forEach(x=>x.classList.remove("active"));$(id).classList.add("active");$$(".navbtn").forEach(b=>b.classList.toggle("active",b.dataset.go===id));if(push&&historyStack[historyStack.length-1]!==id)historyStack.push(id);if(id==="learn")renderLessons();if(id==="ontrip")renderTrip();if(id==="journal")renderJournal();if(id==="community")renderCommunity();if(id==="tourney")renderTourneys();if(id==="directory")renderDirectory();if(id==="tripcard")renderCard(displayedTrip||trip);if(id==="account")renderAccount();if(id==="clubs")renderClubs();if(id==="settings")renderSettings();window.scrollTo(0,0)}
+function show(id,push=true){$(".screen").forEach(x=>x.classList.remove("active"));$(id).classList.add("active");document.querySelector("nav").style.display=(id==="signin"?"none":"grid");$(".navbtn").forEach(b=>b.classList.toggle("active",b.dataset.go===id));if(push&&historyStack[historyStack.length-1]!==id)historyStack.push(id);if(id==="learn")renderLessons();if(id==="ontrip")renderTrip();if(id==="journal")renderJournal();if(id==="community")renderCommunity();if(id==="tourney")renderTourneys();if(id==="directory")renderDirectory();if(id==="tripcard")renderCard(displayedTrip||trip);if(id==="account")renderAccount();if(id==="clubs")renderClubs();if(id==="settings")renderSettings();window.scrollTo(0,0)}
 function icon(id){return '<svg class="ico"><use href="#'+id+'"/></svg>'}
 function renderLessons(){
  $(".tab").forEach(b=>b.classList.toggle("active",b.dataset.cat===category));
@@ -470,6 +487,16 @@ function saveAccount(){
  return ok1&&ok2&&ok3;
 }
 function updateAccountTag(){$("accountTag").textContent=account?(profile.name+" • Signed In"):"Learn • Fish • Log • Share"}
+function startupLogin(){
+ let email=$("startEmail").value.trim(), name=$("startName").value.trim();
+ if(!email||!email.includes("@")){$("startLoginStatus").textContent="Enter a valid email address.";return}
+ let id="acct-"+Array.from(email.toLowerCase()).reduce((h,c)=>((h*31+c.charCodeAt(0))>>>0),2166136261).toString(36);
+ account={id,email,signedInAt:Date.now()};
+ if(name)profile.name=name;
+ let persisted=saveAccount();
+ $("startLoginStatus").textContent=persisted?"Signed in. Opening your profile...":"Signed in for this session. Browser storage is limited.";
+ setTimeout(()=>{renderAccount();show("account")},250);
+}
 function signInForm(){
  openSheet('<h2>Sign In / Create Account</h2><p class="muted">Test build: this signs you into this iPhone. A shared server login will replace this in production.</p><div class="field"><label>Email</label><input id="loginEmail" type="email" autocomplete="email" placeholder="you@example.com"></div><div class="field"><label>Display Name</label><input id="loginName" autocomplete="name" value="'+(profile.name||"")+'"></div><div id="loginStatus" class="muted" style="min-height:22px;margin-top:8px"></div><div class="sheetactions"><button class="cancel" id="cancel">Cancel</button><button class="save" id="go">Sign In</button></div>');
  $("cancel").onclick=closeSheet;
@@ -480,9 +507,8 @@ function signInForm(){
   account={id,email,signedInAt:Date.now()};
   if(name)profile.name=name;
   let ok=saveAccount();
-  if(!ok){ $("loginStatus").textContent="This iPhone's browser storage is full. Clear old test trips/photos or use the storage cleanup option below."; account=null; return; }
-  $("loginStatus").textContent="Signed in successfully.";
-  setTimeout(()=>{closeSheet();renderAccount()},350);
+  $("loginStatus").textContent=ok?"Signed in successfully.":"Signed in for this session. Browser storage is limited.";
+  setTimeout(()=>{closeSheet();renderAccount();show("account")},350);
  }
 }
 function signOut(){account=null;localStorage.removeItem("kfj_account");updateAccountTag();renderAccount()}
@@ -500,7 +526,7 @@ function cleanupTestStorage(){
  trip={active:false,start:null,end:null,location:"",angler:profile.name||"Angler",waterType:"River",catches:[],notes:"",science:{},patterns:[],photos:[]};
  alert("Old test trip/photo storage cleared. Try signing in again.");
 }
-function renderAccount(){updateAccountTag();$("myName").textContent=profile.name||"Guest Angler";$("myHome").textContent=account?(profile.home||account.email):"Not signed in";$("myProfilePic").innerHTML=profile.photo?'<img src="'+profile.photo+'" alt="" style="width:100%;height:100%;object-fit:cover">':icon("i-user");$("accountActions").innerHTML=account?'<div class="account-badge">Signed in as '+account.email+'</div><div class="owner-tools"><button class="cta secondary" id="editProf">Edit Profile / Photo</button><button class="cta" id="signOutBtn">Sign Out</button><button class="cta secondary" id="clubsBtn">My Clubs</button><button class="cta secondary" id="settingsBtn">Settings</button></div>':'<p>You are browsing as a guest. Sign in to establish ownership of profiles, trips and cards on this device.</p><button class="cta" style="width:100%" id="signInBtn">Sign In / Create Account</button><button class="cta secondary" style="width:100%;margin-top:8px" id="cleanupBtn">Clear Old Test Photos / Trips</button>';if(account){$("editProf").onclick=editProfile;$("signOutBtn").onclick=signOut;$("clubsBtn").onclick=()=>show("clubs");$("settingsBtn").onclick=()=>show("settings")}else { $("signInBtn").onclick=signInForm; $("cleanupBtn").onclick=cleanupTestStorage; }$("myProfileSummary").innerHTML='<p><b>'+(profile.name||"Angler")+'</b><br>'+(profile.home||"Hometown not set")+'</p><p class="muted">'+(profile.about||"No bio yet.")+'</p><div class="row"><b>Kayak</b><span>'+(profile.kayak||"Not entered")+'</span></div><div class="row"><b>Electronics</b><span>'+(profile.electronics||"Not entered")+'</span></div><div class="row"><b>Teams</b><span>'+(profile.teams||"Not entered")+'</span></div><div class="row"><b>Sponsors</b><span>'+(profile.sponsors||"Not entered")+'</span></div>';$("myClubsSummary").innerHTML='<p>Club memberships and private club journals will appear here.</p><button class="cta secondary" style="width:100%" id="clubsSummaryBtn">Open My Clubs</button>';$("clubsSummaryBtn").onclick=()=>show("clubs")}
+function renderAccount(){updateAccountTag();$("myName").textContent=profile.name||"Guest Angler";$("myHome").textContent=account?(profile.home||account.email):"Not signed in";$("myProfilePic").innerHTML=profile.photo?'<img src="'+profile.photo+'" alt="" style="width:100%;height:100%;object-fit:cover">':icon("i-user");$("accountActions").innerHTML=account?'<div class="account-badge">Signed in as '+account.email+'</div><div class="owner-tools"><button class="cta secondary" id="editProf">Edit Profile / Photo</button><button class="cta" id="signOutBtn">Sign Out</button><button class="cta secondary" id="clubsBtn">My Clubs</button><button class="cta secondary" id="settingsBtn">Settings</button></div>':'<p>You are browsing as a guest. Sign in to establish ownership of profiles, trips and cards on this device.</p><button class="cta" style="width:100%" id="signInBtn">Sign In / Create Account</button><button class="cta secondary" style="width:100%;margin-top:8px" id="cleanupBtn">Clear Old Test Photos / Trips</button>';if(account){$("editProf").onclick=editProfile;$("signOutBtn").onclick=signOut;$("clubsBtn").onclick=()=>show("clubs");$("settingsBtn").onclick=()=>show("settings")}else { $("signInBtn").onclick=signInForm; $("cleanupBtn").onclick=cleanupTestStorage; }$("myProfileSummary").innerHTML='<p><b>'+(profile.name||"Angler")+'</b><br>'+(profile.home||"Hometown not set")+'</p><p class="muted">'+(profile.about||"No bio yet.")+'</p><div class="row"><b>Kayak</b><span>'+(profile.kayak||"Not entered")+'</span></div><div class="row"><b>Electronics</b><span>'+(profile.electronics||"Not entered")+'</span></div><div class="row"><b>Teams</b><span>'+(profile.teams||"Not entered")+'</span></div><div class="row"><b>Sponsors</b><span>'+(profile.sponsors||"Not entered")+'</span></div>';$("myClubsSummary").innerHTML='<p>Club memberships and private club journals will appear here.</p><button class="cta secondary" style="width:100%" id="clubsSummaryBtn">Open My Clubs</button>';$("clubsSummaryBtn").onclick=()=>show("clubs");if($("profileEditTop"))$("profileEditTop").onclick=editProfile}
 function renderClubs(){$("clubsList").innerHTML='<div class="clubcard"><h3>My Clubs</h3><p class="muted">Private club access will support 4-digit club codes, tournaments, AOY tracking and sponsor cards.</p><button class="cta" style="width:100%" id="joinClub">Join a Club</button></div><div class="clubcard"><h3>WV Kayak Anglers</h3><p>Community workspace preview.</p><div class="owner-tools"><button class="cta secondary" data-go="tourney">Tournaments</button><button class="cta secondary" data-go="community">Reports</button></div></div>';$("joinClub").onclick=()=>openInfo("Join a Club","Club code entry and server-backed membership will be enabled when account sync goes live.");$$("[data-go]").forEach(b=>b.onclick=()=>show(b.dataset.go))}
 function renderSettings(){$("settingsBody").innerHTML='<div class="panel"><h3>Privacy & Sharing</h3><div class="body"><div class="toggleRow"><div><b>Show me in Angler Directory</b><div class="muted">Public by default, with opt-out.</div></div><button class="toggle '+(prefs.directory?"on":"")+'" data-pref="directory"></button></div><div class="toggleRow"><div><b>Share new Trip Cards by default</b><div class="muted">Off is safest; you can always share manually.</div></div><button class="toggle '+(prefs.defaultShare?"on":"")+'" data-pref="defaultShare"></button></div><div class="toggleRow"><div><b>Show precise location on public card</b><div class="muted">Keep off to protect exact fishing spots.</div></div><button class="toggle '+(prefs.locationOnCard?"on":"")+'" data-pref="locationOnCard"></button></div></div></div>';$$("[data-pref]").forEach(b=>b.onclick=()=>{let k=b.dataset.pref;prefs[k]=!prefs[k];saveAccount();renderSettings()})}
 function renderJournal(){let arr=JSON.parse(localStorage.getItem("kfj_journal")||"[]");$("journalList").innerHTML=arr.length?arr.map((t,i)=>'<button class="card" data-j="'+i+'"><div class="cardrow"><div class="avatar">'+icon("i-note")+'</div><div><h3>'+(t.location||"Saved Trip")+'</h3><div class="muted">'+new Date(t.start).toLocaleDateString()+' • '+t.catches.length+' catches • '+(t.event||"Regular Trip")+'</div></div><div class="chev">›</div></div></button>').join(""):'<div class="card"><h3>No saved trips yet.</h3><p>Start a trip and your Journal will build here.</p></div>';$$("[data-j]").forEach(b=>b.onclick=()=>{displayedTrip=arr[+b.dataset.j];show("tripcard")})}
@@ -520,7 +546,7 @@ $("share").onclick=()=>{if(!displayedTrip)return;let a=JSON.parse(localStorage.g
 $("amend").onclick=()=>{if(!displayedTrip)return;trip=displayedTrip;detailsForm()};
 $("back").onclick=()=>{if(historyStack.length>1)historyStack.pop();show(historyStack[historyStack.length-1]||"home",false)};
 $("menu").onclick=()=>{openSheet('<h2>KayakFishingJournal.com</h2><div class="list" style="padding:0"><button class="card" data-menu="home">Home</button><button class="card" data-menu="learn">Learn & Improve</button><button class="card" data-menu="journal">Journal</button><button class="card" data-menu="tourney">Find a Tourney</button><button class="card" data-menu="directory">Angler Directory</button><button class="card" data-menu="community">Community Reports</button></div>');$$("[data-menu]").forEach(b=>b.onclick=()=>{closeSheet();show(b.dataset.menu)})};
-$("accountBtn").onclick=()=>show("account");$("prevStep").onclick=()=>{tutorialStep=Math.max(0,tutorialStep-1);stopTutorial();renderTutorialStep()};$("nextStep").onclick=()=>{tutorialStep=Math.min(TUTORIAL_STEPS.length-1,tutorialStep+1);stopTutorial();renderTutorialStep()};$("playTutorial").onclick=playTutorial;$("modal").onclick=e=>{if(e.target===$("modal"))closeSheet()};
-function auditLinks(){let missing=[];$("[data-go]").forEach(b=>{let id=b.dataset.go;if(id&&!$(id))missing.push(id)});if(missing.length)console.warn("Missing destinations:",[...new Set(missing)])}renderLessons();renderTrip();renderJournal();renderCommunity();renderAccount();auditLinks();if(trip.active)startTimer();
+$("startLoginBtn").onclick=startupLogin;$("accountBtn").onclick=()=>show("account");$("prevStep").onclick=()=>{tutorialStep=Math.max(0,tutorialStep-1);stopTutorial();renderTutorialStep()};$("nextStep").onclick=()=>{tutorialStep=Math.min(TUTORIAL_STEPS.length-1,tutorialStep+1);stopTutorial();renderTutorialStep()};$("playTutorial").onclick=playTutorial;$("modal").onclick=e=>{if(e.target===$("modal"))closeSheet()};
+function auditLinks(){let missing=[];$("[data-go]").forEach(b=>{let id=b.dataset.go;if(id&&!$(id))missing.push(id)});if(missing.length)console.warn("Missing destinations:",[...new Set(missing)])}renderLessons();renderTrip();renderJournal();renderCommunity();renderAccount();auditLinks();document.querySelector("nav").style.display="none";if(account){$("startEmail").value=account.email||"";$("startName").value=profile.name||""}if(trip.active)startTimer();
 </script>
 </body></html>
