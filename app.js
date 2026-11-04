@@ -2,17 +2,17 @@ const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const state={trip:load("kfj2_trip",null),journal:load("kfj2_journal",[]),profile:load("kfj2_profile",{name:"Guest Angler",home:"",about:"",kayak:"",electronics:"",teams:"",sponsors:"",photo:""}),account:load("kfj2_account",null),lessonStep:0,lessonPlaying:false,lessonTimer:null};
 
 const lessons={
-eddy:{title:"Eddies & Backwater",steps:[
+eddy:{title:"Eddies & Backwater",scene:"eddy",steps:[
 ["SEE IT","Find the slow or rotating water and the seam where it meets the main current."],
 ["UNDERSTAND IT","Bass can hold with less effort while forage is delivered beside them."],
 ["FISH IT","Keep the kayak outside the prime holding water. Fish seam, center, then exit."],
 ["TRY IT","Repeat the same angle before changing bait, depth or speed."]
 ]},
-seam:{title:"Current Seam",steps:[["SEE IT","Find the visible speed or surface-texture line."],["UNDERSTAND IT","Fast water delivers food beside soft holding water."],["FISH IT","Cast across or beyond the seam and let the bait enter naturally."],["TRY IT","Compare upstream, perpendicular and downstream angles."]]},
-boulder:{title:"Boulder / Current Break",steps:[["SEE IT","Identify the rock and protected pocket."],["UNDERSTAND IT","The obstruction creates current relief."],["FISH IT","Fish upstream edge, pocket and downstream seam."],["TRY IT","Test a natural drift before changing lure."]]},
-ledge:{title:"Ledge / Drop",steps:[["SEE IT","Find the shallow-to-deep transition."],["UNDERSTAND IT","Fish use the depth break as travel and feeding cover."],["FISH IT","Present along the edge, not only across it."],["TRY IT","Work shallow lip, face and base."]]},
-riffle:{title:"Shoal / Riffle",steps:[["SEE IT","Locate broken shallow current and the first drop."],["UNDERSTAND IT","Oxygen, forage and current concentrate fish."],["FISH IT","Target pockets and the first deeper water."],["TRY IT","Compare fast pocket vs first drop."]]},
-tailout:{title:"Pool Tailout",steps:[["SEE IT","Find where the pool narrows and accelerates."],["UNDERSTAND IT","The exit funnels forage and moving fish."],["FISH IT","Work both seams and the center tongue."],["TRY IT","Compare upstream drift with cross-current presentation."]]}
+seam:{title:"Current Seam",scene:"seam",steps:[["SEE IT","Find the visible speed or surface-texture line."],["UNDERSTAND IT","Fast water delivers food beside soft holding water."],["FISH IT","Cast across or beyond the seam and let the bait enter naturally."],["TRY IT","Compare upstream, perpendicular and downstream angles."]]},
+boulder:{title:"Boulder / Current Break",scene:"boulder",steps:[["SEE IT","Identify the rock and protected pocket."],["UNDERSTAND IT","The obstruction creates current relief."],["FISH IT","Fish upstream edge, pocket and downstream seam."],["TRY IT","Test a natural drift before changing lure."]]},
+ledge:{title:"Ledge / Drop",scene:"ledge",steps:[["SEE IT","Find the shallow-to-deep transition."],["UNDERSTAND IT","Fish use the depth break as travel and feeding cover."],["FISH IT","Present along the edge, not only across it."],["TRY IT","Work shallow lip, face and base."]]},
+riffle:{title:"Shoal / Riffle",scene:"riffle",steps:[["SEE IT","Locate broken shallow current and the first drop."],["UNDERSTAND IT","Oxygen, forage and current concentrate fish."],["FISH IT","Target pockets and the first deeper water."],["TRY IT","Compare fast pocket vs first drop."]]},
+tailout:{title:"Pool Tailout",scene:"tailout",steps:[["SEE IT","Find where the pool narrows and accelerates."],["UNDERSTAND IT","The exit funnels forage and moving fish."],["FISH IT","Work both seams and the center tongue."],["TRY IT","Compare upstream drift with cross-current presentation."]]}
 };
 
 function load(k,f){try{const v=localStorage.getItem(k);return v?JSON.parse(v):f}catch{return f}}
@@ -40,7 +40,24 @@ function renderLesson(key){
   $("#lessonTitle").textContent=l.title;
   $("#lessonSteps").innerHTML=l.steps.map((s,i)=>'<button data-step="'+i+'" class="'+(i===state.lessonStep?"active":"")+'">'+(i+1)+" "+s[0]+'</button>').join("");
   $("#lessonCopy").innerHTML="<h3>"+l.steps[state.lessonStep][0]+"</h3><p>"+l.steps[state.lessonStep][1]+"</p>";
+  $("#lessonPhoto").className="lesson-photo scene-"+l.scene+" step-"+state.lessonStep;
+  $("#motionOverlay").className="motion-overlay scene-"+l.scene+(state.lessonPlaying?" playing":"")+" step-"+state.lessonStep;
+  $("#motionOverlay").innerHTML=sceneMarkup(l.scene,state.lessonStep);
   $$(".steps button").forEach(b=>b.onclick=()=>{state.lessonStep=+b.dataset.step;stopLesson();renderLesson(key)});
+}
+function sceneMarkup(scene,step){
+  const cap=[
+    "SEE IT — identify the feature.",
+    "UNDERSTAND IT — see how current and fish position relate.",
+    "FISH IT — visualize kayak position and cast path.",
+    "TRY IT — focus on the highest-percentage target."
+  ][step];
+  if(scene==="eddy")return '<div class="flow a">➜</div><div class="flow b">➜</div><div class="eddy-ring"></div><div class="target"></div><div class="kayak"></div><div class="scene-label">'+cap+'</div>';
+  if(scene==="seam")return '<div class="lane fast"></div><div class="lane slow"></div><div class="seam-line"></div><div class="flow a">➜</div><div class="flow b">➜</div><div class="target seam-target"></div><div class="kayak seam-kayak"></div><div class="scene-label">'+cap+'</div>';
+  if(scene==="boulder")return '<div class="rock-shape"></div><div class="flow a">➜</div><div class="flow b">➜</div><div class="soft-pocket"></div><div class="target boulder-target"></div><div class="kayak"></div><div class="scene-label">'+cap+'</div>';
+  if(scene==="ledge")return '<div class="ledge-shallow"></div><div class="ledge-deep"></div><div class="ledge-edge"></div><div class="target ledge-target"></div><div class="kayak"></div><div class="scene-label">'+cap+'</div>';
+  if(scene==="riffle")return '<div class="riffle-rock r1"></div><div class="riffle-rock r2"></div><div class="riffle-rock r3"></div><div class="flow a">➜</div><div class="flow b">➜</div><div class="target riffle-target"></div><div class="kayak"></div><div class="scene-label">'+cap+'</div>';
+  return '<div class="tail-bank left"></div><div class="tail-bank right"></div><div class="flow tail1">↓</div><div class="flow tail2">↓</div><div class="target tail-target"></div><div class="kayak"></div><div class="scene-label">'+cap+'</div>';
 }
 function stopLesson(){state.lessonPlaying=false;clearInterval(state.lessonTimer);$("#motionOverlay").classList.remove("playing");$("#playLesson").textContent="▶ Play"}
 $("#prevLesson").onclick=()=>{state.lessonStep=Math.max(0,state.lessonStep-1);stopLesson();renderLesson(state.lessonKey||"eddy")};
