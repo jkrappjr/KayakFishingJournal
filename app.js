@@ -1,7 +1,9 @@
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const state={trip:load("kfj2_trip",null),journal:load("kfj2_journal",[]),profile:load("kfj2_profile",{name:"Guest Angler",home:"",about:"",kayak:"",electronics:"",teams:"",sponsors:"",photo:""}),account:load("kfj2_account",null),lessonStep:0,lessonPlaying:false,lessonTimer:null,knotKey:"palomar",knotStep:0,knotPlaying:false,knotTimer:null,anglerKey:"austin-lilly"};
+const state={trip:load("kfj2_trip",null),journal:load("kfj2_journal",[]),profile:load("kfj2_profile",{name:"Guest Angler",home:"",about:"",kayak:"",electronics:"",teams:"",sponsors:"",photo:""}),account:load("kfj2_account",null),lessonStep:0,lessonPlaying:false,lessonTimer:null,knotKey:"palomar",knotStep:0,knotPlaying:false,knotTimer:null,anglerKey:"austin-lilly",baitKey:"ned",baitTab:"quick",baitPlaying:false,baitRAF:null};
 
 const SITE_DATA=window.WVKA_LEARN_DATA||{water:{},techniques:{},science:{},knots:{}};
+const BAIT_DATA=window.KFJ_BAITS||{source:{anglers:80,selections:240},families:[]};
+const BAITS=BAIT_DATA.families||[];
 const WATER_SCENES={seam:"seam",boulder:"boulder",ledge:"ledge",eddy:"eddy",shoal:"riffle",tailout:"tailout",pool:"tailout"};
 function siteLesson(key){
   const d=SITE_DATA.water[key]||SITE_DATA.water.eddy||{};
@@ -27,7 +29,8 @@ function route(){
   if(name==="directory")renderDirectory();
   if(name==="journal")renderJournal();
   if(name==="on-trip")renderTrip();
-  if(name==="techniques")renderLearningLibrary("techniques","#techniqueList");
+  if(name==="techniques")renderBaitLibrary();
+  if(name==="technique")renderBaitTutorial(parts[1]||"ned");
   if(name==="science")renderLearningLibrary("science","#scienceList");
   if(name==="knots")renderKnots();
   scrollTo(0,0);
@@ -319,6 +322,91 @@ function wireKnotControls(){
  $("#knotReplayBtn").onclick=()=>renderKnotStep();
  $("#knotPlayBtn").onclick=()=>{if(state.knotPlaying){stopKnot();return}playCurrentKnotStep()};
 }
+
+function getBait(key){return BAITS.find(b=>b.key===key)||BAITS[0]||null}
+
+function lureSvg(type,mini=false){
+ const w=mini?140:260,h=mini?72:130,stroke="#191c19",body="#f3d665",accent="#63d2ec";
+ const common='viewBox="0 0 '+w+' '+h+'" aria-hidden="true"';
+ const hook='<path d="M188 72 q18 18 2 32 q-14 11-24-1" fill="none" stroke="#ddd7c8" stroke-width="4"/>';
+ let inner="";
+ switch(type){
+  case"ned":inner='<rect x="56" y="51" width="88" height="24" rx="12" fill="#6d7d41"/><circle cx="49" cy="63" r="15" fill="#403f33"/><path d="M49 78 q0 28 20 27" fill="none" stroke="#ddd7c8" stroke-width="4"/>';break;
+  case"jerkbait":inner='<path d="M36 65 Q82 35 156 57 Q190 65 205 52 Q195 77 155 79 Q80 89 36 65Z" fill="#e9e5cf" stroke="'+stroke+'" stroke-width="3"/><circle cx="172" cy="60" r="5" fill="#e44738"/>'+hook+'<path d="M78 78 q0 23-15 25" fill="none" stroke="#ddd7c8" stroke-width="4"/>';break;
+  case"worm":inner='<path d="M35 63 C65 35 95 88 126 59 C155 32 186 82 218 55" fill="none" stroke="#7a6d42" stroke-width="17" stroke-linecap="round"/>';break;
+  case"chatter":inner='<polygon points="72,43 104,57 88,82 55,68" fill="#d7d1ba" stroke="'+stroke+'" stroke-width="3"/><circle cx="110" cy="66" r="14" fill="#5e6843"/><g stroke="#e6c94f" stroke-width="5"><path d="M119 72 l48 35"/><path d="M113 78 l26 43"/><path d="M126 65 l57 20"/></g>'+hook;break;
+  case"crank":inner='<ellipse cx="118" cy="62" rx="55" ry="32" fill="#6eb5c6" stroke="'+stroke+'" stroke-width="3"/><circle cx="154" cy="55" r="5" fill="#ec493d"/><polygon points="70,70 34,91 75,79" fill="#ddd7c8" stroke="'+stroke+'" stroke-width="3"/>'+hook;break;
+  case"spinner":inner='<path d="M56 45 L132 78 L182 36" fill="none" stroke="#ddd7c8" stroke-width="4"/><ellipse cx="192" cy="31" rx="23" ry="11" fill="#e4d06f" stroke="'+stroke+'" stroke-width="3"/><circle cx="130" cy="79" r="15" fill="#6c7148"/><g stroke="#f2d44f" stroke-width="5"><path d="M133 90 l38 27"/><path d="M124 91 l8 34"/><path d="M142 85 l48 15"/></g>'+hook;break;
+  case"fluke":inner='<path d="M34 66 Q75 42 146 51 Q176 55 206 42 L188 65 L208 88 Q176 76 145 80 Q75 89 34 66Z" fill="#f3f0dc" stroke="'+stroke+'" stroke-width="3"/>';break;
+  case"topwater":inner='<path d="M38 67 Q85 43 160 56 Q191 60 207 48 Q196 80 158 81 Q86 88 38 67Z" fill="#f0e4c2" stroke="'+stroke+'" stroke-width="3"/><circle cx="174" cy="58" r="5" fill="#e2453e"/><path d="M206 65 l25 -10 l-10 15 l12 12 l-27-4" fill="#ddd7c8" stroke="'+stroke+'" stroke-width="2"/>'+hook;break;
+  case"jig":inner='<circle cx="95" cy="62" r="18" fill="#504b3c"/><g stroke="#6f7a42" stroke-width="6"><path d="M106 70 l62 42"/><path d="M101 75 l37 52"/><path d="M112 66 l76 25"/></g><path d="M94 45 q25 -22 42 0" fill="none" stroke="#ddd7c8" stroke-width="4"/>';break;
+  case"swim":inner='<path d="M38 67 Q80 42 144 52 Q172 56 190 48 L211 65 L190 82 Q170 74 144 79 Q80 89 38 67Z" fill="#9ab2aa" stroke="'+stroke+'" stroke-width="3"/><circle cx="156" cy="58" r="4" fill="#e0473d"/>';break;
+  case"tube":inner='<rect x="56" y="49" width="94" height="31" rx="15" fill="#6a7042"/><g stroke="#6a7042" stroke-width="7"><path d="M143 54 l55-27"/><path d="M144 61 l66-3"/><path d="M143 69 l59 25"/><path d="M139 76 l42 42"/></g>';break;
+  case"buzz":inner='<path d="M58 43 L124 76 L177 37" fill="none" stroke="#ddd7c8" stroke-width="4"/><polygon points="181,26 211,37 182,49 165,38" fill="#d8d1bc" stroke="'+stroke+'" stroke-width="3"/><circle cx="124" cy="78" r="14" fill="#30322c"/><g stroke="#eee7cd" stroke-width="5"><path d="M132 87 l44 30"/><path d="M123 92 l15 34"/></g>'+hook;break;
+  default:inner='<ellipse cx="106" cy="65" rx="46" ry="25" fill="#7a6d42"/><path d="M145 64 l50-27 l-16 30 l20 30 l-54-23" fill="#7a6d42"/><path d="M80 77 q25 25 55 5" fill="none" stroke="#ddd7c8" stroke-width="4"/>';
+ }
+ return '<svg '+common+'><g transform="'+(mini?'scale(.53) translate(5 0)':'')+'">'+inner+'</g></svg>';
+}
+
+function renderBaitLibrary(){
+ const root=$("#techniqueList"); if(!root)return;
+ root.innerHTML=BAITS.map(b=>{
+   const stat=b.count!=null?'<span class="bait-stat-badge">'+b.count+' picks · '+b.pct+'%</span>':'<span class="bait-stat-badge secondary">Community bait</span>';
+   return '<a class="bait-card" href="#/technique/'+b.key+'"><div class="bait-thumb">'+lureSvg(b.icon,true)+'</div><div class="bait-card-copy"><b>'+b.title+'</b>'+stat+'<small>'+b.examples.slice(0,2).join(" • ")+'</small></div><strong>›</strong></a>';
+ }).join("");
+}
+
+function renderBaitTutorial(key){
+ const b=getBait(key); if(!b)return;
+ state.baitKey=b.key;
+ $("#baitTitle").textContent=b.title.toUpperCase();
+ $("#baitCategoryKicker").textContent=b.count!=null?b.count+" OF 240 COMMUNITY PICKS · "+b.pct+"%":"COMMUNITY BAIT TUTORIAL";
+ $("#baitArt").innerHTML=lureSvg(b.icon,false);
+ $("#baitCommunityStat").innerHTML='<b>'+b.title+'</b><span>'+b.examples.join(" • ")+'</span>';
+ $$(".bait-tab").forEach(btn=>{btn.classList.toggle("active",btn.dataset.baitTab===state.baitTab);btn.onclick=()=>{state.baitTab=btn.dataset.baitTab;renderBaitTutorial(b.key)}});
+ renderBaitLesson(b);
+ drawBaitMotion(b,0);
+ if($("#playBaitMotion"))$("#playBaitMotion").onclick=()=>state.baitPlaying?stopBaitMotion():playBaitMotion();
+}
+
+function renderBaitLesson(b){
+ const root=$("#baitLessonContent");if(!root)return;
+ if(state.baitTab==="quick"){
+  root.innerHTML='<article class="bait-info-panel"><h3>HOW TO FISH IT</h3><p>'+b.retrieve+'</p><div class="bait-chip-row">'+b.colors.map(x=>'<span>'+x+'</span>').join("")+'</div></article>';
+ }else if(state.baitTab==="learn"){
+  root.innerHTML='<article class="bait-info-panel"><h3>WHERE IT SHINES</h3><div class="bait-water-grid">'+b.water.map(x=>'<span>✓ '+x+'</span>').join("")+'</div><h3>WHY IT WORKS</h3><p>'+b.why+'</p></article>';
+ }else{
+  const stat=b.count!=null?'<div class="community-proof"><b>'+b.count+'</b><span>of 240 WV angler selections<br>'+b.pct+'% of the dataset</span></div>':'';
+  root.innerHTML='<article class="bait-info-panel">'+stat+'<h3>COMMUNITY EXAMPLES</h3><ul>'+b.examples.map(x=>'<li>'+x+'</li>').join("")+'</ul><h3>APPLICATION</h3><p>'+b.retrieve+' Match the presentation to the current speed, depth, cover and fish activity shown in the River Tutorials and Science sections.</p></article>';
+ }
+}
+
+function baitMotionShape(b){
+ return lureSvg(b.icon,false).replace('<svg viewBox="0 0 260 130" aria-hidden="true">','<g id="movingBait" transform="translate(0 0)">').replace('</svg>','</g>');
+}
+function drawBaitMotion(b,t){
+ const svg=$("#baitMotion");if(!svg)return;
+ const progress=Math.max(0,Math.min(1,t));
+ let x=70+progress*470,y=145,rot=0;
+ if(b.key==="ned"||b.key==="jig"||b.key==="craw"){y=230-Math.abs(Math.sin(progress*Math.PI*5))*70;rot=-8+Math.sin(progress*Math.PI*5)*10}
+ else if(b.key==="jerkbait"){x=70+progress*470+Math.sin(progress*Math.PI*10)*22;y=120+Math.sin(progress*Math.PI*6)*8;rot=Math.sin(progress*Math.PI*10)*5}
+ else if(b.key==="softplastic"||b.key==="tube"){y=75+progress*155+Math.sin(progress*Math.PI*6)*10;rot=progress*210}
+ else if(b.key==="crankbait"){y=80+Math.sin(progress*Math.PI)*125;rot=8}
+ else if(b.key==="topwater"||b.key==="buzzbait"){y=72+Math.sin(progress*Math.PI*10)*7;rot=Math.sin(progress*Math.PI*8)*3}
+ else if(b.key==="fluke"){y=100+Math.sin(progress*Math.PI*4)*36;rot=Math.sin(progress*Math.PI*5)*10}
+ else if(b.key==="chatterbait"||b.key==="spinnerbait"){y=145+Math.sin(progress*Math.PI*18)*6;rot=Math.sin(progress*Math.PI*18)*5}
+ else if(b.key==="swimbait"){y=145+Math.sin(progress*Math.PI*8)*13;rot=Math.sin(progress*Math.PI*8)*4}
+ svg.innerHTML='<defs><linearGradient id="water" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3d91a4"/><stop offset="1" stop-color="#123f4a"/></linearGradient></defs><rect width="640" height="300" fill="url(#water)"/><path d="M0 245 Q90 225 170 244 T340 242 T510 246 T680 238 V300 H0Z" fill="#6b644a"/><path d="M0 252 Q110 235 210 252 T420 249 T650 248" fill="none" stroke="#91866b" stroke-width="8"/><path d="M32 55 C150 36 250 64 360 48 S545 45 620 58" fill="none" stroke="#b8edf4" stroke-width="5" stroke-dasharray="18 15" opacity=".8"/><g transform="translate('+x+' '+y+') rotate('+rot+') scale(.62) translate(-130 -65)">'+baitMotionShape(b)+'</g><text x="20" y="28" fill="#f8db75" font-size="18" font-weight="800">'+b.title+'</text>';
+}
+function stopBaitMotion(){state.baitPlaying=false;if(state.baitRAF)cancelAnimationFrame(state.baitRAF);if($("#playBaitMotion"))$("#playBaitMotion").textContent="▶ Play Presentation"}
+function playBaitMotion(){
+ const b=getBait(state.baitKey);if(!b)return;
+ state.baitPlaying=true;$("#playBaitMotion").textContent="❚❚ Pause";
+ const start=performance.now(),duration=6500;
+ const tick=now=>{if(!state.baitPlaying)return;const t=(now-start)/duration;if(t>=1){drawBaitMotion(b,1);stopBaitMotion();return}drawBaitMotion(b,t);state.baitRAF=requestAnimationFrame(tick)};
+ state.baitRAF=requestAnimationFrame(tick);
+}
+
 function renderLearningLibrary(group,selector){
   const root=$(selector); if(!root)return;
   const source=SITE_DATA[group]||{};
