@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#062f22">
 <title>Kayak Fishing Journal</title>
-<link rel="manifest" href="manifest.json?v=30">
-<link rel="stylesheet" href="styles.css?v=30">
+<link rel="manifest" href="manifest.json?v=31">
+<link rel="stylesheet" href="styles.css?v=31">
 </head>
 <body>
 <header class="topbar">
@@ -131,7 +131,33 @@
 
   <section class="page" data-route="clubs"><div class="section-head"><div><small>MY CLUBS</small><h2>Club Journal</h2></div></div><article class="card"><b>WV Kayak Anglers</b><span>Club tools, tournaments, AOY and sponsor cards will live here.</span></article></section>
   <section class="page" data-route="settings"><div class="section-head"><div><small>SETTINGS</small><h2>Privacy & Sharing</h2></div></div><article class="card"><b>Directory Visibility</b><span>Public by default with opt-out.</span></article></section>
-  <section class="page" data-route="techniques"><div class="section-head"><div><small>Baits • Presentations • Applications</small><h2>FISHING TECHNIQUES</h2></div></div><div id="techniqueList" class="stack"></div></section>
+  <section class="page" data-route="techniques">
+  <div class="section-head"><div><small>80 Anglers • 240 Bait Selections</small><h2>BAITS & TECHNIQUES</h2></div></div>
+  <div class="bait-intro"><b>Community Driven</b><span>Built from real WV kayak angler bait selections and our learning library.</span></div>
+  <div id="techniqueList" class="bait-grid"></div>
+</section>
+<section class="page" data-route="technique">
+  <div class="section-head"><div><small id="baitCategoryKicker">BAIT TUTORIAL</small><h2 id="baitTitle">NED RIG / TRD</h2></div></div>
+  <div class="bait-hero">
+    <div id="baitArt" class="bait-art"></div>
+    <div id="baitCommunityStat" class="bait-community-stat"></div>
+  </div>
+  <div class="bait-tabs">
+    <button class="bait-tab active" data-bait-tab="quick">Quick</button>
+    <button class="bait-tab" data-bait-tab="learn">Learn</button>
+    <button class="bait-tab" data-bait-tab="deep">Deep Dive</button>
+  </div>
+  <div class="bait-animation">
+    <svg id="baitMotion" viewBox="0 0 640 300" aria-label="Animated bait presentation"></svg>
+    <button id="playBaitMotion" class="primary">▶ Play Presentation</button>
+  </div>
+  <div id="baitLessonContent" class="bait-lesson-content"></div>
+  <div class="bait-actions">
+    <a class="button-link" href="#/see-water">River Examples</a>
+    <a class="button-link" href="#/science">Science & Conditions</a>
+    <a class="button-link" href="#/techniques">All Baits</a>
+  </div>
+</section>
   <section class="page" data-route="science"><div class="section-head"><div><small>Conditions • Patterns • Timing</small><h2>SCIENCE OF FISHING</h2></div></div><div id="scienceList" class="stack"></div></section>
   <section class="page" data-route="knots">
   <div class="section-head"><div><small>Essential Knots for Kayak Anglers</small><h2>KNOT TYING</h2></div></div>
@@ -158,11 +184,12 @@
 </main>
 
 <nav class="bottom-nav"><a href="#/home">Home</a><a href="#/on-trip">On Trip</a><a href="#/learn-hub">Learn</a><a href="#/journal">Journal</a><a href="#/community">Community</a></nav>
-<div class="build">Mobile Build v3.0</div>
-<script src="learn-data.js?v=30"></script>
-<script src="db.js?v=30"></script>
-<script src="journal-bridge.js?v=30"></script>
-<script src="anglers-data.js?v=30"></script>
-<script src="app.js?v=30" defer></script>
+<div class="build">Mobile Build v3.1</div>
+<script src="learn-data.js?v=31"></script>
+<script src="db.js?v=31"></script>
+<script src="journal-bridge.js?v=31"></script>
+<script src="anglers-data.js?v=31"></script>
+<script src="bait-data.js?v=31"></script>
+<script src="app.js?v=31" defer></script>
 </body>
 </html>
