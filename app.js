@@ -23,10 +23,11 @@ function route(){
   $$(".page").forEach(p=>p.classList.remove("active"));
   let page=$('[data-route="'+(name==="lesson"?"lesson":name)+'"]')||$('[data-route="home"]');
   page.classList.add("active");
-  $$(".bottom-nav a").forEach(a=>a.classList.toggle("active",a.getAttribute("href")===("#/"+name)));
+  const navGroup=(["learn-hub","see-water","lesson","techniques","technique","science","knots"].includes(name)?"learn-hub":(["directory","community"].includes(name)?"community":(["on-trip","journal","home"].includes(name)?name:"home")));
+  $(".bottom-nav a").forEach(a=>a.classList.toggle("active",a.getAttribute("href")===("#/"+navGroup)));
   if(name==="lesson")renderLesson(parts[1]||"eddy");
   if(name==="profile")renderProfile();
-  if(name==="directory")renderDirectory();
+  if(name==="directory")ensureAnglers().then(()=>renderDirectory());
   if(name==="journal")renderJournal();
   if(name==="on-trip")renderTrip();
   if(name==="techniques")renderBaitLibrary();
@@ -135,7 +136,21 @@ $("#nextLesson").onclick=()=>{state.lessonStep=Math.min(3,state.lessonStep+1);st
 $("#playLesson").onclick=playLesson;
 
 
-const ANGLERS=window.KFJ_ANGLERS||[];
+let ANGLERS=window.KFJ_ANGLERS||[];
+let anglersLoadPromise=null;
+
+function ensureAnglers(){
+  if(ANGLERS.length)return Promise.resolve(ANGLERS);
+  if(anglersLoadPromise)return anglersLoadPromise;
+  anglersLoadPromise=new Promise((resolve,reject)=>{
+    const s=document.createElement("script");
+    s.src="./anglers-data.js?v=32";
+    s.onload=()=>{ANGLERS=window.KFJ_ANGLERS||[];resolve(ANGLERS)};
+    s.onerror=()=>{anglersLoadPromise=null;reject(new Error("Directory data unavailable"))};
+    document.head.appendChild(s);
+  }).catch(()=>[]);
+  return anglersLoadPromise;
+}
 
 function initials(name){return name.split(/\s+/).map(x=>x[0]).join("").slice(0,2).toUpperCase()}
 function renderDirectory(filter=""){
