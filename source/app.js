@@ -436,8 +436,8 @@ setInterval(()=>{if(state.trip?.active&&state.trip.start){const s=Math.floor((Da
 function renderJournal(){
  const el=$("#journalList");
  el.innerHTML=state.journal.length?state.journal.map((t,i)=>{
- const where=window.KFJLocations.output(t.locations,'card'),report=window.KFJLocations.output(t.locations,'report');
- return '<article class="card"><b>'+baitEscape(t.location||"Saved Trip")+'</b><span>'+new Date(t.start).toLocaleDateString()+' • '+(t.catches?.length||0)+' catches</span>'+where+'<details class="journal-report"><summary>Open journal report</summary><h3>Trip report</h3><p>'+new Date(t.start).toLocaleString()+(t.end?' → '+new Date(t.end).toLocaleString():'')+'</p><p>'+(t.catches?.length||0)+' catches</p>'+report+(t.notes?'<p>'+baitEscape(t.notes)+'</p>':'')+'</details></article>';
+ const where=window.KFJLocations.output(t.locations,'card')+window.KFJScienceData.output(t.locations,'card'),report=window.KFJLocations.output(t.locations,'report')+window.KFJScienceData.output(t.locations,'report');
+ return '<article class="card"><b>'+baitEscape(t.location||t.locations?.[0]?.name||"Saved Trip")+'</b><span>'+new Date(t.start).toLocaleDateString()+' • '+(t.catches?.length||0)+' catches</span>'+where+'<details class="journal-report"><summary>Open journal report</summary><h3>Trip report</h3><p>'+new Date(t.start).toLocaleString()+(t.end?' → '+new Date(t.end).toLocaleString():'')+'</p><p>'+(t.catches?.length||0)+' catches</p>'+report+(t.notes?'<p>'+baitEscape(t.notes)+'</p>':'')+'</details></article>';
  }).join(''):'<article class="card"><b>No saved trips yet.</b><span>Start a trip and your journal will build here.</span></article>';
 }
 window.KFJTripLocations={
