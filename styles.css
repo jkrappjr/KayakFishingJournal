@@ -12,3 +12,5 @@
 .tail-bank{position:absolute;top:0;bottom:0;width:24%;background:#2d4933aa}.tail-bank.left{left:0;clip-path:polygon(0 0,100% 18%,64% 100%,0 100%)}.tail-bank.right{right:0;clip-path:polygon(0 18%,100% 0,100% 100%,36% 100%)}.tail1{left:40%;top:22%;right:auto}.tail2{left:55%;top:38%;right:auto}.tail-target{left:47%;right:auto;bottom:18%}
 .motion-overlay.playing.scene-seam .seam-line{animation:seamGlow 1.4s ease-in-out infinite}.motion-overlay.playing.scene-boulder .soft-pocket{animation:pulse 1.5s ease-in-out infinite}.motion-overlay.playing.scene-ledge .ledge-edge{animation:ledgeGlow 1.3s ease-in-out infinite}.motion-overlay.playing.scene-riffle .riffle-rock{animation:rockPulse 1.8s ease-in-out infinite}.motion-overlay.playing.scene-tailout .tail1,.motion-overlay.playing.scene-tailout .tail2{animation:tailFlow 1.4s linear infinite}
 @keyframes seamGlow{50%{box-shadow:0 0 16px #ffe780}}@keyframes ledgeGlow{50%{filter:brightness(1.6)}}@keyframes rockPulse{50%{transform:translateY(3px)}}@keyframes tailFlow{to{transform:translateY(34px);opacity:.2}}
+
+#lessonCanvas{display:block;width:100%;height:100%;object-fit:cover;background:#214f5b}
