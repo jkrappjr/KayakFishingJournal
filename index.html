@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#062f22">
 <title>Kayak Fishing Journal</title>
-<link rel="manifest" href="manifest.json?v=23">
+<link rel="manifest" href="manifest.json?v=24">
 <link rel="stylesheet" href="styles.css?v=2">
 </head>
 <body>
@@ -92,16 +92,19 @@
   </section>
 
   <section class="page" data-route="directory">
-    <div class="section-head"><div><small>ANGLER DIRECTORY</small><h2>Community Profiles</h2></div></div>
-    <div class="stack">
-      <a class="card link-card" href="#/profile"><b>My Profile</b><span>Edit photo, bio, kayak, electronics, teams and sponsors.</span></a>
-      <article class="card"><b>Jody Queen</b><span>West Virginia</span></article>
-      <article class="card"><b>Buddy Vance</b><span>West Virginia</span></article>
-    </div>
-  </section>
+  <div class="section-head"><div><small>COMMUNITY</small><h2>Anglers Directory</h2><p class="dir-count">11 public angler profiles</p></div></div>
+  <div class="directory-tools">
+    <input id="anglerSearch" type="search" placeholder="Search angler names" autocomplete="off">
+    <button id="findAnglersBtn" class="primary">Find anglers</button>
+  </div>
+  <div id="featuredAngler" class="featured-angler"></div>
+  <div id="anglerGrid" class="angler-grid"></div>
+</section>
 
-  <section class="page" data-route="community">
-    <div class="section-head"><div><small>COMMUNITY</small><h2>Shared Trip Cards</h2></div></div>
+<section class="page" data-route="community">
+    <div class="section-head"><div><small>COMMUNITY</small><h2>Community Hub</h2></div></div>
+    <div class="stack"><a class="card link-card community-directory-link" href="#/directory"><b>Anglers Directory</b><span>Browse our 11 public angler profiles.</span></a></div>
+    <div class="section-head community-subhead"><div><small>REPORTS</small><h2>Shared Trip Cards</h2></div></div>
     <div id="communityList" class="stack"><article class="card"><b>No shared cards yet.</b><span>Trips remain private until shared.</span></article></div>
   </section>
 
@@ -130,14 +133,35 @@
   <section class="page" data-route="settings"><div class="section-head"><div><small>SETTINGS</small><h2>Privacy & Sharing</h2></div></div><article class="card"><b>Directory Visibility</b><span>Public by default with opt-out.</span></article></section>
   <section class="page" data-route="techniques"><div class="section-head"><div><small>LEARN & IMPROVE</small><h2>Fishing Techniques</h2></div></div><div id="techniqueList" class="stack"></div></section>
   <section class="page" data-route="science"><div class="section-head"><div><small>SCIENCE OF FISHING</small><h2>Conditions</h2></div></div><div id="scienceList" class="stack"></div></section>
-  <section class="page" data-route="knots"><div class="section-head"><div><small>LEARN</small><h2>Knot Tying</h2></div></div><div id="knotList" class="stack"></div></section>
+  <section class="page" data-route="knots">
+  <div class="section-head"><div><small>LEARN</small><h2>Knot Tying</h2></div></div>
+  <div id="knotList" class="knot-grid"></div>
+  <section class="knot-guide">
+    <small>KFJ ANIMATED STEP GUIDE</small>
+    <h3 id="knotGuideTitle">Palomar · Double and thread</h3>
+    <div class="knot-stage">
+      <svg id="knotSvg" viewBox="0 0 360 240" role="img" aria-label="Animated knot step diagram"></svg>
+      <div class="knot-step-copy">
+        <b id="knotStepCount">Step 1 of 4</b>
+        <p id="knotStepText">Feed the doubled loop through the eye.</p>
+      </div>
+    </div>
+    <div class="knot-dots" id="knotDots"></div>
+    <div class="knot-controls">
+      <button id="knotPrevBtn">Previous</button>
+      <button id="knotPlayBtn" class="primary">▶ Play steps</button>
+      <button id="knotReplayBtn">↻ Replay step</button>
+      <button id="knotNextBtn">Next</button>
+    </div>
+  </section>
+</section>
 </main>
 
 <nav class="bottom-nav"><a href="#/home">Home</a><a href="#/on-trip">On Trip</a><a href="#/learn-hub">Learn</a><a href="#/journal">Journal</a><a href="#/community">Community</a></nav>
-<div class="build">Mobile Build v2.3</div>
-<script src="learn-data.js?v=23"></script>
-<script src="db.js?v=23"></script>
-<script src="journal-bridge.js?v=23"></script>
-<script src="app.js?v=23" defer></script>
+<div class="build">Mobile Build v2.4</div>
+<script src="learn-data.js?v=24"></script>
+<script src="db.js?v=24"></script>
+<script src="journal-bridge.js?v=24"></script>
+<script src="app.js?v=24" defer></script>
 </body>
 </html>
