@@ -5,32 +5,32 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#062f22">
 <title>Kayak Fishing Journal</title>
-<link rel="manifest" href="manifest.json?v=27">
-<link rel="stylesheet" href="styles.css?v=27">
+<link rel="manifest" href="manifest.json?v=30">
+<link rel="stylesheet" href="styles.css?v=30">
 </head>
 <body>
 <header class="topbar">
   <a class="brand" href="#/home" aria-label="Kayak Fishing Journal Home">
-    <strong>Kayak Fishing Journal</strong><span>Kayak Fishing Hits Different</span>
+    <strong>KayakFishingJournal.com</strong><span>LEARN • FISH • LOG • SHARE</span>
   </a>
   <a class="profile-link" href="#/profile" aria-label="My Profile">👤</a>
 </header>
 
 <main id="app">
   <section class="page" data-route="home">
-    <div class="hero"><div class="hero-copy"><small>KayakFishingJournal.com</small><h1>Learn the water. Fish smarter. Remember every trip.</h1><p>A mobile-first kayak fishing journal, learning center and community.</p></div></div>
+    <div class="hero"><div class="hero-copy"><small>WELCOME TO</small><h1>KayakFishingJournal.com</h1><p>Learn • Fish • Log • Share</p></div></div>
     <div class="tile-grid">
-      <a class="tile" href="#/see-water"><b>See the River</b><span>Current, seams, ledges, eddies & structure.</span></a>
-      <a class="tile" href="#/learn-hub"><b>Learn & Improve</b><span>Techniques, science, knots & tutorials.</span></a>
-      <a class="tile accent" href="#/on-trip"><b>Log a Trip</b><span>Start an offline-first trip session.</span></a>
-      <a class="tile" href="#/tournaments"><b>Find a Tourney</b><span>Regional in-person events.</span></a>
-      <a class="tile" href="#/directory"><b>Angler Directory</b><span>Profiles, stats, teams & shared trips.</span></a>
-      <a class="tile" href="#/community"><b>Community Reports</b><span>Shared Trip Cards and full reports.</span></a>
+      <a class="tile" data-icon="book" href="#/see-water"><b>SEE THE RIVER</b><span>Current, seams, ledges, eddies & structure.</span></a>
+      <a class="tile" data-icon="learn" href="#/learn-hub"><b>LEARN & IMPROVE</b><span>Techniques, science, knots & tutorials.</span></a>
+      <a class="tile accent" data-icon="log" href="#/on-trip"><b>LOG A TRIP</b><span>Start an offline-first trip session.</span></a>
+      <a class="tile" data-icon="trophy" href="#/tournaments"><b>FIND A TOURNEY</b><span>Regional in-person events.</span></a>
+      <a class="tile" data-icon="anglers" href="#/directory"><b>ANGLER DIRECTORY</b><span>Profiles, stats, teams & shared trips.</span></a>
+      <a class="tile" data-icon="community" href="#/community"><b>COMMUNITY REPORTS</b><span>Shared Trip Cards and full reports.</span></a>
     </div>
   </section>
 
   <section class="page" data-route="see-water">
-    <div class="section-head"><div><small>LEARN & IMPROVE</small><h2>See the Water</h2></div></div>
+    <div class="section-head"><div><small>River Structure & Location Tutorials</small><h2>SEE THE WATER</h2></div></div>
     <div class="lesson-grid">
       <a class="lesson-card" href="#/lesson/eddy"><div class="lesson-img"></div><b>Eddies & Backwater</b><span>See It • Understand It • Fish It • Try It</span></a>
       <a class="lesson-card" href="#/lesson/seam"><div class="lesson-img"></div><b>Current Seam</b><span>Fast water meets soft water.</span></a>
@@ -48,7 +48,7 @@
   </section>
 
   <section class="page" data-route="learn-hub">
-  <div class="section-head"><div><small>LEARN & IMPROVE</small><h2>Skills Library</h2></div></div>
+  <div class="section-head"><div><small>Skills • Science • Knots • River Reading</small><h2>LEARN & IMPROVE</h2></div></div>
   <div class="tile-grid">
     <a class="tile" href="#/techniques"><b>Fishing Techniques</b><span>Ned Rig, Fluke, Topwater, Jig, Crankbait and more.</span></a>
     <a class="tile" href="#/science"><b>Science of Fishing</b><span>Wind, pressure, flow, rainfall, temperature and bite windows.</span></a>
@@ -66,7 +66,7 @@
   </section>
 
   <section class="page" data-route="on-trip">
-    <div class="section-head"><div><small>ON TRIP</small><h2>Live Trip</h2></div></div>
+    <div class="section-head"><div><small>Track • Log • Catch • Improve</small><h2>ON TRIP</h2></div></div>
     <div class="trip-hud"><b id="tripTimer">00:00:00</b><span>Current Session</span></div>
     <div class="stats"><div><small>Catches</small><b id="catchCount">0</b></div><div><small>Largest</small><b id="largestCatch">—</b></div><div><small>Min/Catch</small><b id="minCatch">—</b></div></div>
     <div class="action-grid">
@@ -76,12 +76,12 @@
   </section>
 
   <section class="page" data-route="journal">
-    <div class="section-head"><div><small>MY JOURNAL</small><h2>Saved Trips</h2></div><a class="small-btn" href="#/on-trip">+ Trip</a></div>
+    <div class="section-head"><div><small>Trips • Catches • Conditions • Patterns</small><h2>MY JOURNAL</h2></div><a class="small-btn" href="#/on-trip">+ Trip</a></div>
     <div id="journalList" class="stack"></div>
   </section>
 
   <section class="page" data-route="tournaments">
-    <div class="section-head"><div><small>FIND A TOURNEY</small><h2>Upcoming Events</h2></div></div>
+    <div class="section-head"><div><small>Events • Trails • Clubs</small><h2>FIND A TOURNEY</h2></div></div>
     <div class="stack">
       <article class="card"><b>WVKA Big Cash Event</b><span>May 22, 2027 • Summersville / Gauley</span></article>
       <article class="card"><b>WVKA Big Cash Event</b><span>June 26, 2027 • Bluestone / New / Greenbrier</span></article>
@@ -92,7 +92,7 @@
   </section>
 
   <section class="page" data-route="directory">
-  <div class="section-head"><div><small>COMMUNITY</small><h2>Anglers Directory</h2><p class="dir-count">11 public angler profiles</p></div></div>
+  <div class="section-head"><div><small>Connect • Follow • Learn • Share</small><h2>ANGLERS DIRECTORY</h2><p class="dir-count">11 public angler profiles</p></div></div>
   <div class="directory-tools">
     <input id="anglerSearch" type="search" placeholder="Search angler names" autocomplete="off">
     <button id="findAnglersBtn" class="primary">Find anglers</button>
@@ -131,10 +131,10 @@
 
   <section class="page" data-route="clubs"><div class="section-head"><div><small>MY CLUBS</small><h2>Club Journal</h2></div></div><article class="card"><b>WV Kayak Anglers</b><span>Club tools, tournaments, AOY and sponsor cards will live here.</span></article></section>
   <section class="page" data-route="settings"><div class="section-head"><div><small>SETTINGS</small><h2>Privacy & Sharing</h2></div></div><article class="card"><b>Directory Visibility</b><span>Public by default with opt-out.</span></article></section>
-  <section class="page" data-route="techniques"><div class="section-head"><div><small>LEARN & IMPROVE</small><h2>Fishing Techniques</h2></div></div><div id="techniqueList" class="stack"></div></section>
-  <section class="page" data-route="science"><div class="section-head"><div><small>SCIENCE OF FISHING</small><h2>Conditions</h2></div></div><div id="scienceList" class="stack"></div></section>
+  <section class="page" data-route="techniques"><div class="section-head"><div><small>Baits • Presentations • Applications</small><h2>FISHING TECHNIQUES</h2></div></div><div id="techniqueList" class="stack"></div></section>
+  <section class="page" data-route="science"><div class="section-head"><div><small>Conditions • Patterns • Timing</small><h2>SCIENCE OF FISHING</h2></div></div><div id="scienceList" class="stack"></div></section>
   <section class="page" data-route="knots">
-  <div class="section-head"><div><small>LEARN</small><h2>Knot Tying</h2></div></div>
+  <div class="section-head"><div><small>Essential Knots for Kayak Anglers</small><h2>KNOT TYING</h2></div></div>
   <div id="knotList" class="knot-grid"></div>
   <section class="knot-guide">
     
@@ -158,11 +158,11 @@
 </main>
 
 <nav class="bottom-nav"><a href="#/home">Home</a><a href="#/on-trip">On Trip</a><a href="#/learn-hub">Learn</a><a href="#/journal">Journal</a><a href="#/community">Community</a></nav>
-<div class="build">Mobile Build v2.7</div>
-<script src="learn-data.js?v=27"></script>
-<script src="db.js?v=27"></script>
-<script src="journal-bridge.js?v=27"></script>
-<script src="anglers-data.js?v=27"></script>
-<script src="app.js?v=27" defer></script>
+<div class="build">Mobile Build v3.0</div>
+<script src="learn-data.js?v=30"></script>
+<script src="db.js?v=30"></script>
+<script src="journal-bridge.js?v=30"></script>
+<script src="anglers-data.js?v=30"></script>
+<script src="app.js?v=30" defer></script>
 </body>
 </html>
