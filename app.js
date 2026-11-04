@@ -40,29 +40,96 @@ function renderLesson(key){
   $("#lessonTitle").textContent=l.title;
   $("#lessonSteps").innerHTML=l.steps.map((s,i)=>'<button data-step="'+i+'" class="'+(i===state.lessonStep?"active":"")+'">'+(i+1)+" "+s[0]+'</button>').join("");
   $("#lessonCopy").innerHTML="<h3>"+l.steps[state.lessonStep][0]+"</h3><p>"+l.steps[state.lessonStep][1]+"</p>";
-  $("#lessonPhoto").className="lesson-photo scene-"+l.scene+" step-"+state.lessonStep;
-  $("#motionOverlay").className="motion-overlay scene-"+l.scene+(state.lessonPlaying?" playing":"")+" step-"+state.lessonStep;
-  $("#motionOverlay").innerHTML=sceneMarkup(l.scene,state.lessonStep);
+  drawLessonFrame(l.scene,state.lessonStep*1.5+.55);
   $$(".steps button").forEach(b=>b.onclick=()=>{state.lessonStep=+b.dataset.step;stopLesson();renderLesson(key)});
 }
-function sceneMarkup(scene,step){
-  const cap=[
-    "SEE IT — identify the feature.",
-    "UNDERSTAND IT — see how current and fish position relate.",
-    "FISH IT — visualize kayak position and cast path.",
-    "TRY IT — focus on the highest-percentage target."
-  ][step];
-  if(scene==="eddy")return '<div class="flow a">➜</div><div class="flow b">➜</div><div class="eddy-ring"></div><div class="target"></div><div class="kayak"></div><div class="scene-label">'+cap+'</div>';
-  if(scene==="seam")return '<div class="lane fast"></div><div class="lane slow"></div><div class="seam-line"></div><div class="flow a">➜</div><div class="flow b">➜</div><div class="target seam-target"></div><div class="kayak seam-kayak"></div><div class="scene-label">'+cap+'</div>';
-  if(scene==="boulder")return '<div class="rock-shape"></div><div class="flow a">➜</div><div class="flow b">➜</div><div class="soft-pocket"></div><div class="target boulder-target"></div><div class="kayak"></div><div class="scene-label">'+cap+'</div>';
-  if(scene==="ledge")return '<div class="ledge-shallow"></div><div class="ledge-deep"></div><div class="ledge-edge"></div><div class="target ledge-target"></div><div class="kayak"></div><div class="scene-label">'+cap+'</div>';
-  if(scene==="riffle")return '<div class="riffle-rock r1"></div><div class="riffle-rock r2"></div><div class="riffle-rock r3"></div><div class="flow a">➜</div><div class="flow b">➜</div><div class="target riffle-target"></div><div class="kayak"></div><div class="scene-label">'+cap+'</div>';
-  return '<div class="tail-bank left"></div><div class="tail-bank right"></div><div class="flow tail1">↓</div><div class="flow tail2">↓</div><div class="target tail-target"></div><div class="kayak"></div><div class="scene-label">'+cap+'</div>';
+function stopLesson(){
+  state.lessonPlaying=false;
+  if(state.lessonRAF)cancelAnimationFrame(state.lessonRAF);
+  $("#playLesson").textContent="▶ Play";
 }
-function stopLesson(){state.lessonPlaying=false;clearInterval(state.lessonTimer);$("#motionOverlay").classList.remove("playing");$("#playLesson").textContent="▶ Play"}
+function drawArrow(ctx,x1,y1,x2,y2,color,width=5){
+  ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=width;ctx.lineCap="round";
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+  const a=Math.atan2(y2-y1,x2-x1),s=13;
+  ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-s*Math.cos(a-.55),y2-s*Math.sin(a-.55));ctx.lineTo(x2-s*Math.cos(a+.55),y2-s*Math.sin(a+.55));ctx.closePath();ctx.fill();
+}
+function drawKayak(ctx,x,y,ang=0){
+  ctx.save();ctx.translate(x,y);ctx.rotate(ang);
+  ctx.fillStyle="#d98327";ctx.strokeStyle="#17251f";ctx.lineWidth=3;
+  ctx.beginPath();ctx.ellipse(0,0,34,10,0,0,Math.PI*2);ctx.fill();ctx.stroke();
+  ctx.fillStyle="#17251f";ctx.beginPath();ctx.arc(0,-17,5,0,Math.PI*2);ctx.fill();ctx.restore();
+}
+function drawTarget(ctx,x,y,p){
+  ctx.strokeStyle="#ffdc3b";ctx.lineWidth=6;ctx.beginPath();ctx.arc(x,y,21+6*p,0,Math.PI*2);ctx.stroke();
+  ctx.fillStyle="#ffdc3b";ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill();
+}
+function drawDashedEllipse(ctx,x,y,rx,ry,phase){
+  ctx.save();ctx.strokeStyle="#ffdc3b";ctx.lineWidth=6;ctx.setLineDash([18,14]);ctx.lineDashOffset=-phase;ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.stroke();ctx.restore();
+}
+function drawCast(ctx,x1,y1,x2,y2,phase){
+  ctx.save();ctx.strokeStyle="#ffdc3b";ctx.lineWidth=5;ctx.setLineDash([14,10]);ctx.lineDashOffset=-phase;ctx.beginPath();ctx.moveTo(x1,y1);ctx.quadraticCurveTo((x1+x2)/2,y1-55,x2,y2);ctx.stroke();ctx.restore();
+}
+function drawLessonFrame(scene,t){
+  const c=$("#lessonCanvas"); if(!c)return;
+  const ctx=c.getContext("2d"),W=c.width,H=c.height;
+  const step=Math.min(3,Math.floor(t/1.5)),p=(Math.sin(t*5)+1)/2,move=(t*75)%180;
+  const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,"#77b9c7");g.addColorStop(.55,"#2f7584");g.addColorStop(1,"#214f5b");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  ctx.fillStyle="#31533a";ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(W,0);ctx.lineTo(W,70);ctx.lineTo(520,56);ctx.lineTo(440,80);ctx.lineTo(330,60);ctx.lineTo(220,85);ctx.lineTo(110,64);ctx.lineTo(0,88);ctx.closePath();ctx.fill();
+  const cyan="#63e6ff",gold="#ffdc3b";
+  if(scene==="eddy"){
+    for(let j=0;j<3;j++)drawArrow(ctx,590-move+j*70,120+j*34,520-move+j*70,120+j*34,cyan,5);
+    drawDashedEllipse(ctx,350,205,95,52,t*45); drawKayak(ctx,220,306,-.12); drawTarget(ctx,470,225,p);
+    if(step>=2)drawCast(ctx,245,295,470,225,t*32);
+    ctx.fillStyle=gold;ctx.font="bold 22px sans-serif";ctx.fillText("EDDY",315,205);
+  }else if(scene==="seam"){
+    ctx.fillStyle="rgba(92,205,230,.23)";ctx.fillRect(345,75,295,285);ctx.fillStyle="rgba(31,87,68,.22)";ctx.fillRect(0,75,345,285);
+    ctx.strokeStyle="rgba(255,255,255,.9)";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(345,78);ctx.lineTo(345,350);ctx.stroke();
+    for(const y of [125,190,255])drawArrow(ctx,620-move,y,520-move,y,cyan,5);
+    drawKayak(ctx,185,305,-.05);drawTarget(ctx,358,210,p);if(step>=2)drawCast(ctx,215,295,358,210,t*32);
+    ctx.fillStyle="#fff";ctx.font="bold 20px sans-serif";ctx.fillText("CURRENT SEAM",365,105);
+  }else if(scene==="boulder"){
+    ctx.fillStyle="#65675b";ctx.beginPath();ctx.ellipse(350,196,66,50,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#9c9b84";ctx.beginPath();ctx.ellipse(333,180,40,28,0,0,Math.PI*2);ctx.fill();
+    for(const y of [120,158,248])drawArrow(ctx,620-move,y,520-move,y,cyan,5);
+    drawDashedEllipse(ctx,405,265,78,34,t*45);drawKayak(ctx,180,305,-.1);drawTarget(ctx,465,265,p);if(step>=2)drawCast(ctx,210,295,465,265,t*32);
+    ctx.fillStyle="#fff";ctx.font="bold 20px sans-serif";ctx.fillText("CURRENT BREAK",275,115);
+  }else if(scene==="ledge"){
+    ctx.fillStyle="rgba(121,155,109,.35)";ctx.fillRect(0,75,340,285);ctx.fillStyle="rgba(16,54,95,.5)";ctx.fillRect(340,75,300,285);
+    ctx.strokeStyle=gold;ctx.lineWidth=8;ctx.beginPath();ctx.moveTo(340,78);ctx.lineTo(340,360);ctx.stroke();
+    drawKayak(ctx,175,305,-.05);drawTarget(ctx,395,210,p);if(step>=2)drawCast(ctx,205,295,395,210,t*32);
+    ctx.fillStyle=gold;ctx.font="bold 20px sans-serif";ctx.fillText("DROP EDGE",275,110);
+  }else if(scene==="riffle"){
+    [[250,175,28],[355,138,34],[455,205,27],[525,155,22]].forEach(([x,y,r])=>{ctx.fillStyle="#5f6258";ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();ctx.fillStyle="#929488";ctx.beginPath();ctx.arc(x-7,y-7,r*.55,0,Math.PI*2);ctx.fill()});
+    for(const y of [120,185,250])drawArrow(ctx,620-move,y,520-move,y,cyan,5);
+    drawKayak(ctx,165,305,-.05);drawTarget(ctx,505,260,p);if(step>=2)drawCast(ctx,195,295,505,260,t*32);
+    ctx.fillStyle=gold;ctx.font="bold 18px sans-serif";ctx.fillText("FIRST DROP",465,230);
+  }else{
+    ctx.fillStyle="rgba(44,74,49,.85)";ctx.beginPath();ctx.moveTo(0,75);ctx.lineTo(190,105);ctx.lineTo(245,360);ctx.lineTo(0,360);ctx.closePath();ctx.fill();ctx.beginPath();ctx.moveTo(640,75);ctx.lineTo(450,105);ctx.lineTo(395,360);ctx.lineTo(640,360);ctx.closePath();ctx.fill();
+    drawArrow(ctx,305,130+move*.25,305,215+move*.25,cyan,5);drawArrow(ctx,365,165+move*.25,365,250+move*.25,cyan,5);
+    drawKayak(ctx,320,310,0);drawTarget(ctx,345,250,p);if(step>=2)drawCast(ctx,320,295,345,250,t*32);
+    ctx.fillStyle=gold;ctx.font="bold 20px sans-serif";ctx.fillText("TAILOUT FUNNEL",248,110);
+  }
+  ctx.fillStyle="rgba(4,47,34,.9)";ctx.fillRect(0,0,W,48);ctx.fillStyle="#ffe184";ctx.font="bold 22px sans-serif";ctx.fillText((lessons[state.lessonKey]||lessons.eddy).title.toUpperCase(),18,31);
+  const labels=["SEE IT","UNDERSTAND IT","FISH IT","TRY IT"];ctx.fillStyle="rgba(4,47,34,.92)";ctx.fillRect(15,H-43,230,30);ctx.fillStyle="#fff";ctx.font="bold 18px sans-serif";ctx.fillText(labels[step],28,H-22);
+}
+function playLesson(){
+  if(state.lessonPlaying){stopLesson();return}
+  state.lessonPlaying=true;$("#playLesson").textContent="❚❚ Pause";
+  const startT=state.lessonStep*1.5, started=performance.now()-startT*1000;
+  const tick=now=>{
+    if(!state.lessonPlaying)return;
+    let t=(now-started)/1000;
+    if(t>=6){state.lessonStep=3;drawLessonFrame((lessons[state.lessonKey]||lessons.eddy).scene,5.9);stopLesson();renderLesson(state.lessonKey||"eddy");return}
+    const newStep=Math.min(3,Math.floor(t/1.5));
+    if(newStep!==state.lessonStep){state.lessonStep=newStep;const l=lessons[state.lessonKey]||lessons.eddy;$("#lessonSteps").querySelectorAll("button").forEach((b,i)=>b.classList.toggle("active",i===newStep));$("#lessonCopy").innerHTML="<h3>"+l.steps[newStep][0]+"</h3><p>"+l.steps[newStep][1]+"</p>"}
+    drawLessonFrame((lessons[state.lessonKey]||lessons.eddy).scene,t);
+    state.lessonRAF=requestAnimationFrame(tick);
+  };
+  state.lessonRAF=requestAnimationFrame(tick);
+}
 $("#prevLesson").onclick=()=>{state.lessonStep=Math.max(0,state.lessonStep-1);stopLesson();renderLesson(state.lessonKey||"eddy")};
 $("#nextLesson").onclick=()=>{state.lessonStep=Math.min(3,state.lessonStep+1);stopLesson();renderLesson(state.lessonKey||"eddy")};
-$("#playLesson").onclick=()=>{if(state.lessonPlaying){stopLesson();return}state.lessonPlaying=true;$("#motionOverlay").classList.add("playing");$("#playLesson").textContent="❚❚ Pause";state.lessonTimer=setInterval(()=>{if(state.lessonStep>=3){stopLesson();return}state.lessonStep++;renderLesson(state.lessonKey||"eddy");$("#motionOverlay").classList.add("playing")},2600)};
+$("#playLesson").onclick=playLesson;
 
 function renderProfile(){
   const p=state.profile,a=state.account;
