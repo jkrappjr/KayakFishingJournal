@@ -1,5 +1,5 @@
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const state={trip:load("kfj2_trip",null),journal:load("kfj2_journal",[]),profile:load("kfj2_profile",{name:"Guest Angler",home:"",about:"",kayak:"",electronics:"",teams:"",sponsors:"",photo:""}),account:load("kfj2_account",null),lessonStep:0,lessonPlaying:false,lessonTimer:null};
+const state={trip:load("kfj2_trip",null),journal:load("kfj2_journal",[]),profile:load("kfj2_profile",{name:"Guest Angler",home:"",about:"",kayak:"",electronics:"",teams:"",sponsors:"",photo:""}),account:load("kfj2_account",null),lessonStep:0,lessonPlaying:false,lessonTimer:null,knotKey:"palomar",knotStep:0,knotPlaying:false,knotTimer:null,anglerKey:"austin-lilly"};
 
 const SITE_DATA=window.WVKA_LEARN_DATA||{water:{},techniques:{},science:{},knots:{}};
 const WATER_SCENES={seam:"seam",boulder:"boulder",ledge:"ledge",eddy:"eddy",shoal:"riffle",tailout:"tailout",pool:"tailout"};
@@ -24,11 +24,12 @@ function route(){
   $$(".bottom-nav a").forEach(a=>a.classList.toggle("active",a.getAttribute("href")===("#/"+name)));
   if(name==="lesson")renderLesson(parts[1]||"eddy");
   if(name==="profile")renderProfile();
+  if(name==="directory")renderDirectory();
   if(name==="journal")renderJournal();
   if(name==="on-trip")renderTrip();
   if(name==="techniques")renderLearningLibrary("techniques","#techniqueList");
   if(name==="science")renderLearningLibrary("science","#scienceList");
-  if(name==="knots")renderLearningLibrary("knots","#knotList");
+  if(name==="knots")renderKnots();
   scrollTo(0,0);
 }
 addEventListener("hashchange",route);
@@ -130,6 +131,117 @@ $("#prevLesson").onclick=()=>{state.lessonStep=Math.max(0,state.lessonStep-1);st
 $("#nextLesson").onclick=()=>{state.lessonStep=Math.min(3,state.lessonStep+1);stopLesson();renderLesson(state.lessonKey||"eddy")};
 $("#playLesson").onclick=playLesson;
 
+
+const ANGLERS=[
+ {key:"austin-lilly",name:"Austin Lilly",home:"Hinton WV",trips:3,catches:109,hours:15,largest:"17.25 in",about:"Public Kayak Fishing Journal angler profile."},
+ {key:"john-rapp",name:"John Rapp",home:"Mount Nebo, West Virginia",about:"Public Kayak Fishing Journal angler profile."},
+ {key:"greg-harper",name:"Greg Harper",home:"West Virginia",about:"Public Kayak Fishing Journal angler profile."},
+ {key:"alex-worley",name:"Alex Worley",home:"West Virginia",about:"Public Kayak Fishing Journal angler profile."},
+ {key:"jared-terry",name:"Jared Terry",home:"West Virginia",about:"Public Kayak Fishing Journal angler profile."},
+ {key:"clint-kissner",name:"Clint Kissner",home:"West Virginia",about:"Public Kayak Fishing Journal angler profile."},
+ {key:"jason-arthur",name:"Jason Arthur",home:"West Virginia",about:"Public Kayak Fishing Journal angler profile."},
+ {key:"eric-shuman",name:"Eric Shuman",home:"West Virginia",about:"Public Kayak Fishing Journal angler profile."},
+ {key:"lj-ashcraft",name:"L.J. Ashcraft",home:"West Virginia",about:"Public Kayak Fishing Journal angler profile."},
+ {key:"rick-garavaglia",name:"Rick Garavaglia",home:"West Virginia",about:"Public Kayak Fishing Journal angler profile."},
+ {key:"beth-rapp",name:"Beth Rapp",home:"West Virginia",about:"Public Kayak Fishing Journal angler profile."}
+];
+
+function initials(name){return name.split(/\s+/).map(x=>x[0]).join("").slice(0,2).toUpperCase()}
+function renderDirectory(filter=""){
+  const grid=$("#anglerGrid"),feature=$("#featuredAngler"); if(!grid||!feature)return;
+  const q=(filter||"").trim().toLowerCase();
+  const list=ANGLERS.filter(a=>!q||a.name.toLowerCase().includes(q));
+  grid.innerHTML=list.map(a=>'<button class="angler-row" data-angler="'+a.key+'"><span class="angler-avatar">'+initials(a.name)+'</span><span><b>'+a.name+'</b><small>'+a.home+'</small></span><strong>›</strong></button>').join("") || '<div class="card"><b>No matching anglers.</b></div>';
+  $$(".angler-row").forEach(b=>b.onclick=()=>{state.anglerKey=b.dataset.angler;renderDirectory($("#anglerSearch")?.value||"")});
+  const a=ANGLERS.find(x=>x.key===state.anglerKey)||ANGLERS[0];
+  const hasStats=Number.isFinite(a.trips);
+  feature.innerHTML='<div class="featured-avatar">'+initials(a.name)+'</div><div class="featured-copy"><small>FEATURED ANGLER</small><h3>'+a.name+'</h3><p>📍 '+a.home+'</p></div>'+
+    (hasStats?'<div class="angler-stats"><div><small>Total Trips</small><b>'+a.trips+'</b></div><div><small>Total Catches</small><b>'+a.catches+'</b></div><div><small>Hours Fished</small><b>'+a.hours+'</b></div><div><small>Largest Recorded</small><b>'+a.largest+'</b></div></div>':'<div class="profile-pending">Public profile available. Detailed journal statistics will appear as verified profile data is synced.</div>');
+  if($("#anglerSearch")&&!$("#anglerSearch").dataset.wired){
+    $("#anglerSearch").dataset.wired="1";
+    $("#anglerSearch").addEventListener("input",e=>renderDirectory(e.target.value));
+    $("#findAnglersBtn").onclick=()=>renderDirectory($("#anglerSearch").value);
+  }
+}
+
+const KNOTS={
+ palomar:{title:"Palomar Knot",subtitle:"Mono / fluoro / braid",steps:[
+  {title:"Double and thread",text:"Feed the doubled loop through the eye.",draw:"palomar1"},
+  {title:"Tie loose overhand",text:"Tie an overhand knot in the doubled line, leaving a large loop.",draw:"palomar2"},
+  {title:"Pass lure through",text:"Pass the hook or lure completely through the doubled loop.",draw:"palomar3"},
+  {title:"Wet and cinch",text:"Moisten the line and pull both standing line and tag until the knot seats.",draw:"palomar4"}
+ ]},
+ alberto:{title:"Alberto Knot",subtitle:"Leader connection",steps:[
+  {title:"Form leader loop",text:"Fold the leader into a loop and pass the braid through it.",draw:"alberto1"},
+  {title:"Wrap away",text:"Wrap the braid around both leader legs several times away from the loop.",draw:"alberto2"},
+  {title:"Wrap back",text:"Reverse direction and wrap back toward the leader loop.",draw:"alberto3"},
+  {title:"Exit and cinch",text:"Exit through the same side of the loop, wet, and pull all lines tight.",draw:"alberto4"}
+ ]},
+ doubleuni:{title:"Double Uni Knot",subtitle:"Mono-to-braid connection",steps:[
+  {title:"Overlap lines",text:"Overlap the two lines with tag ends pointing in opposite directions.",draw:"double1"},
+  {title:"Tie first uni",text:"Form a loop with the first tag and make wraps around both lines.",draw:"double2"},
+  {title:"Tie second uni",text:"Repeat the uni knot on the second line.",draw:"double3"},
+  {title:"Pull together",text:"Pull the standing lines so both knots slide together firmly.",draw:"double4"}
+ ]},
+ fg:{title:"FG Knot",subtitle:"Slim braid-to-leader",steps:[
+  {title:"Cross under tension",text:"Keep the leader under tension and cross the braid over it.",draw:"fg1"},
+  {title:"Alternate wraps",text:"Alternate braid wraps over and under the leader to build the grip.",draw:"fg2"},
+  {title:"Lock the weave",text:"Finish the weave with locking half hitches around both lines.",draw:"fg3"},
+  {title:"Trim and finish",text:"Trim the leader closely and add final half hitches on the braid.",draw:"fg4"}
+ ]}
+};
+
+function knotSvg(kind){
+ const eye='<path class="hook" d="M180 180 q0 28 22 28 q20 0 20-22 q0-18-17-18" />';
+ const blue='stroke="#65dff6"', gold='stroke="#f5cf58"';
+ const path=(d,c=blue,w=8)=>'<path class="knot-line" d="'+d+'" fill="none" '+c+' stroke-width="'+w+'" stroke-linecap="round" stroke-linejoin="round"/>';
+ const circle=(cx,cy,r)=>'<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="#e7e2d0" stroke-width="7"/>';
+ switch(kind){
+  case"palomar1":return circle(180,180,20)+path("M105 42 L105 135 Q105 176 150 176 L178 176")+path("M125 42 L125 130 Q125 155 154 155 L178 155",gold);
+  case"palomar2":return circle(180,180,20)+path("M92 48 C92 100 120 110 150 88 C180 66 210 84 218 112 C225 140 205 155 180 154 C145 152 126 132 112 112")+path("M118 50 C118 92 140 103 160 92",gold);
+  case"palomar3":return circle(180,180,20)+path("M82 54 C120 68 140 96 135 125 C132 150 150 164 180 164 C212 164 235 143 238 112")+path("M110 55 C152 72 175 105 170 136 C168 153 183 166 204 166",gold);
+  case"palomar4":return circle(180,180,20)+path("M115 45 L154 142 Q160 158 180 160 L214 45")+path("M140 45 L166 140 Q170 151 183 153 L197 45",gold);
+  case"alberto1":return path("M72 110 Q130 62 194 110 Q130 158 72 110",gold)+path("M110 42 L110 110 L286 110");
+  case"alberto2":return path("M72 110 Q130 62 194 110 Q130 158 72 110",gold)+path("M112 42 L112 110 C142 75 162 146 188 82 C210 136 232 82 258 112");
+  case"alberto3":return path("M72 110 Q130 62 194 110 Q130 158 72 110",gold)+path("M112 42 L112 110 C142 75 162 146 188 82 C210 136 232 82 258 112 C230 148 205 76 180 142 C155 84 135 140 112 110");
+  case"alberto4":return path("M62 110 L290 110",gold)+path("M76 96 C110 70 132 146 158 82 C182 144 208 78 236 112 C250 126 265 118 288 110");
+  case"double1":return path("M60 100 L300 100")+path("M60 132 L300 132",gold);
+  case"double2":return path("M60 100 L300 100")+path("M60 132 L300 132",gold)+path("M110 132 C86 160 112 178 142 154 C160 140 145 116 125 116",gold,6);
+  case"double3":return path("M60 100 L300 100")+path("M60 132 L300 132",gold)+path("M110 132 C86 160 112 178 142 154 C160 140 145 116 125 116",gold,6)+path("M250 100 C278 72 252 54 222 76 C204 90 220 114 242 114",blue,6);
+  case"double4":return path("M60 116 L145 116 C155 92 169 140 180 116 C192 92 205 140 218 116 L300 116")+path("M145 116 C155 92 169 140 180 116",gold,7);
+  case"fg1":return path("M65 118 L295 118",gold,10)+path("M110 55 C120 88 135 92 150 118 C164 145 177 150 190 180");
+  case"fg2":return path("M65 118 L295 118",gold,10)+path("M105 55 C118 88 132 92 145 118 C157 145 169 148 181 118 C193 88 205 92 217 118 C230 145 242 148 255 118");
+  case"fg3":return path("M65 118 L295 118",gold,10)+path("M105 55 C118 88 132 92 145 118 C157 145 169 148 181 118 C193 88 205 92 217 118 C230 145 242 148 255 118")+path("M252 118 q18 -28 34 0 q-18 28-34 0");
+  default:return path("M65 118 L295 118",gold,10)+path("M120 55 C132 88 145 92 157 118 C169 145 181 148 193 118 C205 88 217 92 229 118 C241 145 253 148 265 118")+path("M258 118 q18 -26 32 0 q-18 26-32 0");
+ }
+}
+
+function renderKnots(){
+ const root=$("#knotList"); if(!root)return;
+ root.innerHTML=Object.entries(KNOTS).map(([key,k])=>'<button class="knot-card '+(key===state.knotKey?"active":"")+'" data-knot="'+key+'"><div class="knot-mini">'+knotSvg(k.steps[3].draw)+'</div><b>'+k.title+'</b><span>'+k.subtitle+'</span><strong>Practice · 4 steps</strong></button>').join("");
+ $$(".knot-card").forEach(b=>b.onclick=()=>{state.knotKey=b.dataset.knot;state.knotStep=0;stopKnot();renderKnots()});
+ renderKnotStep();
+ wireKnotControls();
+}
+function stopKnot(){state.knotPlaying=false;clearInterval(state.knotTimer);if($("#knotPlayBtn"))$("#knotPlayBtn").textContent="▶ Play steps"}
+function renderKnotStep(){
+ const k=KNOTS[state.knotKey],s=k.steps[state.knotStep]; if(!k||!$("#knotSvg"))return;
+ $("#knotGuideTitle").textContent=k.title+" · "+s.title;
+ $("#knotStepCount").textContent="Step "+(state.knotStep+1)+" of 4";
+ $("#knotStepText").textContent=s.text;
+ $("#knotSvg").innerHTML=knotSvg(s.draw);
+ $("#knotSvg").classList.remove("animate");void $("#knotSvg").offsetWidth;$("#knotSvg").classList.add("animate");
+ $("#knotDots").innerHTML=k.steps.map((_,i)=>'<button class="knot-dot '+(i===state.knotStep?"active":"")+'" data-knot-step="'+i+'" aria-label="Step '+(i+1)+'"></button>').join("");
+ $$(".knot-dot").forEach(b=>b.onclick=()=>{state.knotStep=+b.dataset.knotStep;stopKnot();renderKnotStep()});
+}
+function wireKnotControls(){
+ if(!$("#knotPlayBtn")||$("#knotPlayBtn").dataset.wired)return;
+ $("#knotPlayBtn").dataset.wired="1";
+ $("#knotPrevBtn").onclick=()=>{state.knotStep=Math.max(0,state.knotStep-1);stopKnot();renderKnotStep()};
+ $("#knotNextBtn").onclick=()=>{state.knotStep=Math.min(3,state.knotStep+1);stopKnot();renderKnotStep()};
+ $("#knotReplayBtn").onclick=()=>renderKnotStep();
+ $("#knotPlayBtn").onclick=()=>{if(state.knotPlaying){stopKnot();return}state.knotPlaying=true;$("#knotPlayBtn").textContent="❚❚ Pause";state.knotTimer=setInterval(()=>{if(state.knotStep>=3){stopKnot();return}state.knotStep++;renderKnotStep()},1700)};
+}
 function renderLearningLibrary(group,selector){
   const root=$(selector); if(!root)return;
   const source=SITE_DATA[group]||{};
