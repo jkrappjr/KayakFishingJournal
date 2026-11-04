@@ -1,0 +1,39 @@
+window.KFJLocations=(()=>{
+const key='kfj_saved_locations_v1',pendingKey='kfj_next_trip_locations_v1';
+const topics=['River Flow & Trend','Wind','Barometric Trend','Rainfall / Runoff','Sun / Moon Windows'];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const read=(k,f)=>{try{const x=JSON.parse(localStorage.getItem(k)||'null');return x??f}catch{return f}};
+let spots=read(key,[]);if(!Array.isArray(spots))spots=[];
+const put=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+function takePending(){const p=read(pendingKey,[]);try{put(pendingKey,[])}catch{}return Array.isArray(p)?p:[]}
+function output(list,kind){return (Array.isArray(list)?list:[]).filter(x=>x[kind]).map(x=>'<div class="trip-location"><b>📍 '+esc(x.name)+'</b>'+(x.town?'<span>'+esc(x.town)+'</span>':'')+(x.lat!==null&&x.lat!==undefined?'<span>'+Number(x.lat).toFixed(5)+', '+Number(x.lon).toFixed(5)+'</span>':'')+(x.notes?'<p>'+esc(x.notes)+'</p>':'')+(kind==='report'&&x.topics?.length?'<small>Science topics: '+x.topics.map(esc).join(' · ')+'</small>':'')+'</div>').join('')}
+function mount(){
+ const host=document.querySelector('#scienceLocation');if(!host)return;
+ const trips=window.KFJTripLocations,active=trips.active(),saved=trips.saved();
+ host.innerHTML='<details class="card location-panel"><summary>📍 Mark a location for a trip</summary><p>Save a waterway or fishing spot and attach it to a trip card, journal report, or both.</p><label>Saved locations<select id="locSaved"><option value="">Choose a location or add a new one</option>'+spots.map(s=>'<option value="'+esc(s.id)+'">'+esc(s.name)+(s.town?' · '+esc(s.town):'')+'</option>').join('')+'</select></label><form id="locForm"><label>Waterway / spot name<input id="locName" required maxlength="120" placeholder="New River · Brooks Falls"></label><label>Town / state / stretch<input id="locTown" maxlength="180" placeholder="Brooks, WV → Sandstone"></label><div class="location-coordinates"><label>Latitude (optional)<input id="locLat" type="number" min="-90" max="90" step="any" inputmode="decimal"></label><label>Longitude (optional)<input id="locLon" type="number" min="-180" max="180" step="any" inputmode="decimal"></label></div><button id="locGPS" type="button">Use my current GPS location</button><label>Location notes<textarea id="locNotes" maxlength="1000" rows="3" placeholder="Gauge to check, launch, stretch or conditions to compare"></textarea></label><button class="primary" type="submit">Save location on this device</button></form><fieldset><legend>Add location to</legend><label class="location-check"><input id="locCard" type="checkbox" checked> Trip card</label><label class="location-check"><input id="locReport" type="checkbox" checked> Journal report</label></fieldset><fieldset><legend>Science sections for this location</legend>'+topics.map((t,i)=>'<label class="location-check"><input type="checkbox" class="loc-topic" value="'+i+'" checked>'+t+'</label>').join('')+'</fieldset><label>Attach to<select id="locTarget"><option value="next">Next trip I start</option>'+(active?'<option value="active">Current active trip</option>':'')+saved.map((t,i)=>'<option value="saved:'+i+'">'+esc(new Date(t.start).toLocaleDateString())+' · '+esc(t.location||'Saved trip')+' ('+(t.catches?.length||0)+' catches)</option>').join('')+'</select></label><button id="locAttach" class="primary">Attach marked location</button><p id="locStatus" role="status" aria-live="polite"></p><div id="locAttached"></div></details>';
+ const $=s=>document.querySelector(s);let selected=null;
+ function status(t){$('#locStatus').textContent=t}
+ function fill(s){selected=s?.id||null;$('#locName').value=s?.name||'';$('#locTown').value=s?.town||'';$('#locLat').value=s?.lat??'';$('#locLon').value=s?.lon??'';$('#locNotes').value=s?.notes||''}
+ $('#locSaved').onchange=e=>fill(spots.find(s=>s.id===e.target.value));
+ function draft(){const name=$('#locName').value.trim(),town=$('#locTown').value.trim(),latText=$('#locLat').value,lonText=$('#locLon').value;const lat=latText===''?null:Number(latText),lon=lonText===''?null:Number(lonText);
+ if(!name)throw Error('Enter a waterway or spot name.');
+ if((lat===null)!==(lon===null))throw Error('Enter both latitude and longitude, or leave both blank.');
+ if(lat!==null&&(!Number.isFinite(lat)||!Number.isFinite(lon)||Math.abs(lat)>90||Math.abs(lon)>180))throw Error('Use latitude −90 to 90 and longitude −180 to 180.');
+ return {id:selected||('spot_'+Date.now()+'_'+Math.random().toString(36).slice(2,7)),name,town,lat,lon,notes:$('#locNotes').value.trim()};}
+ function saveSpot(){const s=draft(),next=spots.filter(x=>x.id!==s.id);next.push(s);put(key,next);spots=next;selected=s.id;if(![...$('#locSaved').options].some(o=>o.value===s.id)){const o=document.createElement('option');o.value=s.id;$('#locSaved').append(o)}[...$('#locSaved').options].find(o=>o.value===s.id).textContent=s.name+(s.town?' · '+s.town:'');$('#locSaved').value=s.id;return s}
+ $('#locForm').onsubmit=e=>{e.preventDefault();try{saveSpot();status('Location saved. Choose a trip below, then attach it.')}catch(e){status(e.message||'Location could not be saved.')}};
+ $('#locGPS').onclick=()=>{if(!navigator.geolocation)return status('GPS is unavailable here. Enter a name, town or coordinates manually.');status('Waiting for GPS…');navigator.geolocation.getCurrentPosition(p=>{$('#locLat').value=p.coords.latitude.toFixed(6);$('#locLon').value=p.coords.longitude.toFixed(6);status('GPS marked. Check the spot name, then save or attach it.')},()=>status('GPS could not be read. You can still mark a location manually.'),{enableHighAccuracy:true,timeout:15000,maximumAge:0})};
+ function targetList(){const t=$('#locTarget').value;return t==='next'?read(pendingKey,[]):t==='active'?(trips.active()?.locations||[]):(trips.saved()[Number(t.split(':')[1])]?.locations||[])}
+ function showAttached(){const list=targetList();$('#locAttached').innerHTML=list.length?'<h4>Locations attached to this trip</h4>'+list.map(s=>'<div class="trip-location"><b>'+esc(s.name)+'</b><small>'+(s.card?'Trip card':'')+(s.card&&s.report?' · ':'')+(s.report?'Journal report':'')+'</small><button type="button" class="loc-remove" data-location="'+esc(s.id)+'">Remove from this trip</button></div>').join(''):'<p>No locations attached to this trip yet.</p>';
+ document.querySelectorAll('.loc-remove').forEach(b=>b.onclick=()=>{try{writeTarget(targetList().filter(s=>s.id!==b.dataset.location));showAttached();status('Location removed from this trip. The saved spot is still available.')}catch(e){status(e.message)}})}
+ function writeTarget(list){const target=$('#locTarget').value;if(target==='next')put(pendingKey,list);else trips.attach(target,list)}
+ $('#locAttach').onclick=()=>{try{
+ if(!$('#locCard').checked&&!$('#locReport').checked)throw Error('Check Trip card, Journal report, or both.');
+ const checked=[...document.querySelectorAll('.loc-topic')].filter(x=>x.checked).map(x=>topics[+x.value]);
+ const spot=saveSpot();const record={...spot,card:$('#locCard').checked,report:$('#locReport').checked,topics:checked,attachedAt:new Date().toISOString()};
+ writeTarget([...targetList().filter(s=>s.id!==spot.id),record]);showAttached();status('Location attached. '+($('#locTarget').value==='next'?'It will be included when you start your next trip.':'Your trip has been updated.'));
+ }catch(e){status(e.message||'The location could not be attached. Try again.')}};
+ $('#locTarget').onchange=showAttached;if(active)$('#locTarget').value='active';showAttached();
+}
+return {mount,takePending,output};
+})();

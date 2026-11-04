@@ -35,7 +35,7 @@ function route(){
   if(name==="on-trip")renderTrip();
   if(name==="techniques")renderBaitLibrary();
   if(name==="technique")renderBaitTutorial(parts[1]||"ned");
-  if(name==="science")window.KFJScience.render(parts[1]);
+  if(name==="science"){window.KFJScience.render(parts[1]);window.KFJLocations.mount();}
   if(name==="knots")renderKnots();
   scrollTo(0,0);
 }
@@ -428,14 +428,30 @@ function renderTrip(){
   $("#largestCatch").textContent=vals.length?Math.max(...vals).toFixed(2)+'″':"—";
   if(t?.active&&t.start){const mins=Math.max(1,Math.round((Date.now()-t.start)/60000));$("#minCatch").textContent=t.catches.length?(mins/t.catches.length).toFixed(1):"—"}else $("#minCatch").textContent="—";
 }
-$("#startTripBtn").onclick=()=>{state.trip={active:true,start:Date.now(),catches:[],photos:[],notes:""};save("kfj2_trip",state.trip);renderTrip()};
+$("#startTripBtn").onclick=()=>{state.trip={active:true,start:Date.now(),catches:[],photos:[],notes:"",locations:window.KFJLocations.takePending()};save("kfj2_trip",state.trip);renderTrip()};
 $("#logCatchBtn").onclick=()=>{if(!state.trip?.active)return alert("Start a trip first.");const len=prompt("Fish length in inches (optional):","");state.trip.catches.push({length:len||""});save("kfj2_trip",state.trip);renderTrip()};
 $("#tripPhotoBtn").onclick=()=>alert("Trip photo capture is the next module in the clean rebuild.");
 $("#endTripBtn").onclick=()=>{if(!state.trip?.active)return;state.trip.active=false;state.trip.end=Date.now();state.journal.unshift(state.trip);save("kfj2_journal",state.journal);save("kfj2_trip",null);state.trip=null;renderTrip();location.hash="#/journal"};
 setInterval(()=>{if(state.trip?.active&&state.trip.start){const s=Math.floor((Date.now()-state.trip.start)/1000),h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60;$("#tripTimer").textContent=[h,m,sec].map(v=>String(v).padStart(2,"0")).join(":")}},1000);
 function renderJournal(){
-  const el=$("#journalList");
-  el.innerHTML=state.journal.length?state.journal.map((t,i)=>'<article class="card"><b>'+(t.location||"Saved Trip")+'</b><span>'+new Date(t.start).toLocaleDateString()+' • '+(t.catches?.length||0)+' catches</span></article>').join(""):'<article class="card"><b>No saved trips yet.</b><span>Start a trip and your journal will build here.</span></article>';
+ const el=$("#journalList");
+ el.innerHTML=state.journal.length?state.journal.map((t,i)=>{
+ const where=window.KFJLocations.output(t.locations,'card'),report=window.KFJLocations.output(t.locations,'report');
+ return '<article class="card"><b>'+baitEscape(t.location||"Saved Trip")+'</b><span>'+new Date(t.start).toLocaleDateString()+' • '+(t.catches?.length||0)+' catches</span>'+where+'<details class="journal-report"><summary>Open journal report</summary><h3>Trip report</h3><p>'+new Date(t.start).toLocaleString()+(t.end?' → '+new Date(t.end).toLocaleString():'')+'</p><p>'+(t.catches?.length||0)+' catches</p>'+report+(t.notes?'<p>'+baitEscape(t.notes)+'</p>':'')+'</details></article>';
+ }).join(''):'<article class="card"><b>No saved trips yet.</b><span>Start a trip and your journal will build here.</span></article>';
 }
+window.KFJTripLocations={
+ active:()=>state.trip?.active?state.trip:null,
+ saved:()=>state.journal,
+ attach:(target,list)=>{
+  if(target==='active'){
+   if(!state.trip?.active)throw Error('That trip is no longer active. Select a saved trip or the next trip.');
+   const updated={...state.trip,locations:list};localStorage.setItem('kfj2_trip',JSON.stringify(updated));state.trip=updated;
+  }else{
+   const index=Number(target.split(':')[1]);if(!Number.isInteger(index)||!state.journal[index])throw Error('Select a saved trip.');
+   const updated=state.journal.map((t,i)=>i===index?{...t,locations:list}:t);localStorage.setItem('kfj2_journal',JSON.stringify(updated));state.journal=updated;
+  }
+ }
+};
 route(); renderProfile(); renderTrip(); renderJournal();
 if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
