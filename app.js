@@ -367,6 +367,7 @@ function renderBaitLibrary(){
 
 function renderBaitTutorial(key){
  const b=getBait(key); if(!b)return;
+ if(state.baitKey!==b.key)stopBaitMotion();
  state.baitKey=b.key;
  $("#baitTitle").textContent=b.title.toUpperCase();
  $("#baitCategoryKicker").textContent=b.count!=null?b.count+" OF 240 COMMUNITY PICKS · "+b.pct+"%":"COMMUNITY BAIT TUTORIAL";
@@ -375,7 +376,7 @@ function renderBaitTutorial(key){
  $$(".bait-tab").forEach(btn=>{btn.classList.toggle("active",btn.dataset.baitTab===state.baitTab);btn.onclick=()=>{state.baitTab=btn.dataset.baitTab;renderBaitTutorial(b.key)}});
  renderBaitLesson(b);
  drawBaitMotion(b,0);
- if($("#playBaitMotion"))$("#playBaitMotion").onclick=()=>state.baitPlaying?stopBaitMotion():playBaitMotion();
+ if($("#playBaitMotion"))$("#playBaitMotion").onclick=()=>window.KFJSide.toggle(b);
 }
 
 function renderBaitLesson(b){
@@ -393,28 +394,9 @@ function renderBaitLesson(b){
 function baitMotionShape(b){
  return lureSvg(b.icon,false).replace('<svg viewBox="0 0 260 130" aria-hidden="true">','<g id="movingBait" transform="translate(0 0)">').replace('</svg>','</g>');
 }
-function drawBaitMotion(b,t){
- const svg=$("#baitMotion");if(!svg)return;
- const progress=Math.max(0,Math.min(1,t));
- let x=70+progress*470,y=145,rot=0;
- if(b.key==="ned"||b.key==="jig"||b.key==="craw"){y=230-Math.abs(Math.sin(progress*Math.PI*5))*70;rot=-8+Math.sin(progress*Math.PI*5)*10}
- else if(b.key==="jerkbait"){x=70+progress*470+Math.sin(progress*Math.PI*10)*22;y=120+Math.sin(progress*Math.PI*6)*8;rot=Math.sin(progress*Math.PI*10)*5}
- else if(b.key==="softplastic"||b.key==="tube"){y=75+progress*155+Math.sin(progress*Math.PI*6)*10;rot=progress*210}
- else if(b.key==="crankbait"){y=80+Math.sin(progress*Math.PI)*125;rot=8}
- else if(b.key==="topwater"||b.key==="buzzbait"){y=72+Math.sin(progress*Math.PI*10)*7;rot=Math.sin(progress*Math.PI*8)*3}
- else if(b.key==="fluke"){y=100+Math.sin(progress*Math.PI*4)*36;rot=Math.sin(progress*Math.PI*5)*10}
- else if(b.key==="chatterbait"||b.key==="spinnerbait"){y=145+Math.sin(progress*Math.PI*18)*6;rot=Math.sin(progress*Math.PI*18)*5}
- else if(b.key==="swimbait"){y=145+Math.sin(progress*Math.PI*8)*13;rot=Math.sin(progress*Math.PI*8)*4}
- svg.innerHTML='<defs><linearGradient id="water" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3d91a4"/><stop offset="1" stop-color="#123f4a"/></linearGradient></defs><rect width="640" height="300" fill="url(#water)"/><path d="M0 245 Q90 225 170 244 T340 242 T510 246 T680 238 V300 H0Z" fill="#6b644a"/><path d="M0 252 Q110 235 210 252 T420 249 T650 248" fill="none" stroke="#91866b" stroke-width="8"/><path d="M32 55 C150 36 250 64 360 48 S545 45 620 58" fill="none" stroke="#b8edf4" stroke-width="5" stroke-dasharray="18 15" opacity=".8"/><g transform="translate('+x+' '+y+') rotate('+rot+') scale(.62) translate(-130 -65)">'+baitMotionShape(b)+'</g><text x="20" y="28" fill="#f8db75" font-size="18" font-weight="800">'+b.title+'</text>';
-}
-function stopBaitMotion(){state.baitPlaying=false;if(state.baitRAF)cancelAnimationFrame(state.baitRAF);if($("#playBaitMotion"))$("#playBaitMotion").textContent="▶ Play Presentation"}
-function playBaitMotion(){
- const b=getBait(state.baitKey);if(!b)return;
- state.baitPlaying=true;$("#playBaitMotion").textContent="❚❚ Pause";
- const start=performance.now(),duration=6500;
- const tick=now=>{if(!state.baitPlaying)return;const t=(now-start)/duration;if(t>=1){drawBaitMotion(b,1);stopBaitMotion();return}drawBaitMotion(b,t);state.baitRAF=requestAnimationFrame(tick)};
- state.baitRAF=requestAnimationFrame(tick);
-}
+function drawBaitMotion(b,t){window.KFJSide.draw(b,t)}
+function stopBaitMotion(){window.KFJSide?.stop();state.baitPlaying=false}
+function playBaitMotion(){window.KFJSide.play(getBait(state.baitKey))}
 
 function renderLearningLibrary(group,selector){
   const root=$(selector); if(!root)return;

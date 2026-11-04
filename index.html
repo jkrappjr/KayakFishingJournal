@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#062f22">
 <title>Kayak Fishing Journal</title>
-<link rel="manifest" href="manifest.json?v=33">
-<link rel="stylesheet" href="styles.css?v=33">
+<link rel="manifest" href="manifest.json?v=34">
+<link rel="stylesheet" href="styles.css?v=34">
 </head>
 <body>
 <header class="topbar">
@@ -148,8 +148,13 @@
     <button class="bait-tab" data-bait-tab="deep">Deep Dive</button>
   </div>
   <div class="bait-animation">
-    <svg id="baitMotion" viewBox="0 0 640 300" aria-label="Animated bait presentation"></svg>
-    <button id="playBaitMotion" class="primary">▶ Play Presentation</button>
+    <svg id="baitMotion" viewBox="0 0 760 430" role="img" aria-label="Side view of bait action and retrieve"></svg>
+    <p class="side-legend">Gold: cast · Coral: retrieve · Blue arrows: current</p>
+    <p id="sideStatus" aria-live="polite">Side view · Cast → Settle → Retrieve</p>
+    <div class="side-controls"><button id="sidePrevious">Previous</button><button id="playBaitMotion" class="primary">▶ Play Presentation</button><button id="sideNext">Next</button></div>
+    <label class="side-scrub">Presentation progress<input id="sideProgress" type="range" min="0" max="100" value="0" step="0.1"></label>
+    <button id="sideZoom" aria-pressed="false">Action close-up</button>
+    <small class="side-note">Animated side view; depths and timing are illustrative. Lure photos are examples of each bait family.</small>
   </div>
   <div id="baitLessonContent" class="bait-lesson-content"></div>
   <div class="bait-actions">
@@ -184,11 +189,14 @@
 </main>
 
 <nav class="bottom-nav"><a href="#/home">Home</a><a href="#/on-trip">On Trip</a><a href="#/learn-hub">Learn</a><a href="#/journal">Journal</a><a href="#/community">Community</a></nav>
-<div class="build">Mobile Build v3.3</div>
-<script src="learn-data.js?v=33" defer></script>
-<script src="db.js?v=33" defer></script>
-<script src="journal-bridge.js?v=33" defer></script>
-<script src="bait-data.js?v=33" defer></script>
-<script src="app.js?v=33" defer></script>
+<div class="build">Mobile Build v3.4</div>
+<script src="learn-data.js?v=34" defer></script>
+<script src="db.js?v=34" defer></script>
+<script src="journal-bridge.js?v=34" defer></script>
+<script src="bait-data.js?v=34" defer></script>
+<script src="lure-images.js?v=34" defer></script>
+<script src="lure-orientation.js?v=34" defer></script>
+<script src="bait-side.js?v=34" defer></script>
+<script src="app.js?v=34" defer></script>
 </body>
 </html>
