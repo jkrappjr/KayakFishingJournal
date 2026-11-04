@@ -637,3 +637,26 @@ input,textarea,select{
  .section-head h2{font-size:30px!important}
  .bottom-nav a{font-size:10px!important}
 }
+
+/* v3.1 bait & technique learning system */
+.bait-intro{margin:10px;padding:12px 14px;border:2px solid var(--kfj-gold);border-radius:14px;background:linear-gradient(#0c4a35,#061f17);box-shadow:var(--kfj-shadow);display:flex;flex-direction:column;gap:3px}
+.bait-intro b{color:var(--kfj-gold2);font-size:18px}.bait-intro span{color:#eee4c8;font-size:12px}
+.bait-grid{display:grid;grid-template-columns:1fr;gap:8px;padding:10px}
+.bait-card{display:grid;grid-template-columns:92px minmax(0,1fr) 20px;gap:10px;align-items:center;min-height:94px;padding:8px 10px;text-decoration:none;background:linear-gradient(180deg,#14231b,#070d0a);border:2px solid var(--kfj-gold);border-radius:13px;box-shadow:var(--kfj-shadow);color:#fff}
+.bait-thumb{height:72px;display:grid;place-items:center;background:#073324;border:1px solid #d5a52d88;border-radius:10px;overflow:hidden}
+.bait-thumb svg{width:100%;height:100%}
+.bait-card-copy{min-width:0;display:flex;flex-direction:column;gap:4px}.bait-card-copy b{font-size:17px;color:#fff;line-height:1.05}.bait-card-copy small{font-size:11px;color:#dcd3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.bait-card>strong{font-size:28px;color:#f3e6b5}
+.bait-stat-badge{align-self:flex-start;padding:3px 7px;border-radius:999px;background:linear-gradient(#f7db72,#c99a25);color:#08261b;font-size:10px;font-weight:950}.bait-stat-badge.secondary{background:#0b4d36;color:#f7e7a6;border:1px solid #d5a52d}
+.bait-hero{margin:10px;display:grid;grid-template-columns:1.15fr .85fr;gap:8px;min-height:150px}
+.bait-art,.bait-community-stat{border:2px solid var(--kfj-gold);border-radius:14px;background:linear-gradient(#0c4a35,#061f17);box-shadow:var(--kfj-shadow)}
+.bait-art{display:grid;place-items:center;padding:10px}.bait-art svg{width:100%;height:125px}
+.bait-community-stat{padding:12px;display:flex;flex-direction:column;justify-content:center;gap:6px}.bait-community-stat b{color:var(--kfj-gold2);font-size:18px}.bait-community-stat span{color:#fff;font-size:12px;line-height:1.3}
+.bait-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:0 10px 10px}.bait-tab{min-height:46px;background:linear-gradient(#0d5038,#071d15);color:#fff}.bait-tab.active{background:linear-gradient(#ffe995,#d5a52d);color:#06261b}
+.bait-animation{margin:0 10px 10px;border:2px solid var(--kfj-gold);border-radius:14px;overflow:hidden;background:#062b20;box-shadow:var(--kfj-shadow)}#baitMotion{display:block;width:100%;aspect-ratio:640/300;background:#123f4a}.bait-animation button{width:calc(100% - 20px);margin:10px;min-height:52px}
+.bait-lesson-content{margin:0 10px 10px}.bait-info-panel{padding:14px;border:2px solid var(--kfj-gold);border-radius:14px;background:linear-gradient(#102119,#070e0b);box-shadow:var(--kfj-shadow)}.bait-info-panel h3{margin:0 0 8px;color:var(--kfj-gold2);font-size:17px}.bait-info-panel h3:not(:first-child){margin-top:14px}.bait-info-panel p{margin:0;color:#fff;line-height:1.45}.bait-info-panel ul{margin:6px 0 0;padding-left:20px;color:#fff}
+.bait-chip-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}.bait-chip-row span{padding:5px 8px;border-radius:999px;background:#0b4d36;border:1px solid var(--kfj-gold);color:#fff;font-size:11px;font-weight:800}
+.bait-water-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.bait-water-grid span{padding:8px;border:1px solid #c9a541;border-radius:9px;background:#092b1f;color:#fff;font-size:12px}
+.community-proof{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding:10px;border-radius:11px;background:linear-gradient(#f5dc7b,#d3a42d);color:#08261b}.community-proof b{font-size:34px}.community-proof span{font-size:11px;font-weight:900;line-height:1.2}
+.bait-actions{display:grid;grid-template-columns:1fr;gap:7px;padding:0 10px 14px}
+@media(min-width:520px){.bait-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:390px){.bait-card{grid-template-columns:78px minmax(0,1fr) 18px}.bait-thumb{height:62px}.bait-hero{grid-template-columns:1fr}.bait-water-grid{grid-template-columns:1fr}}
