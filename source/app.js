@@ -19,6 +19,7 @@ function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
 function route(){
   stopLesson();
   stopBaitMotion();
+  stopKnot();
   let hash=location.hash||"#/home";
   let parts=hash.replace(/^#\//,"").split("/");
   let name=parts[0]||"home";
@@ -138,7 +139,7 @@ function ensureAnglers(){
   if(anglersLoadPromise)return anglersLoadPromise;
   anglersLoadPromise=new Promise((resolve,reject)=>{
     const s=document.createElement("script");
-    s.src="./anglers-data.js?v=32";
+    s.src="./anglers-data.js";
     s.onload=()=>{ANGLERS=window.KFJ_ANGLERS||[];resolve(ANGLERS)};
     s.onerror=()=>{anglersLoadPromise=null;reject(new Error("Directory data unavailable"))};
     document.head.appendChild(s);
@@ -154,6 +155,7 @@ function renderDirectory(filter=""){
   grid.innerHTML=list.map(a=>'<button class="angler-row" data-angler="'+a.key+'"><img class="angler-thumb" src="'+a.photo+'" alt=""><span><b>'+a.name+'</b></span><strong>›</strong></button>').join("") || '<div class="card"><b>No matching anglers.</b></div>';
   $$(".angler-row").forEach(b=>b.onclick=()=>{state.anglerKey=b.dataset.angler;renderDirectory($("#anglerSearch")?.value||"")});
   const a=ANGLERS.find(x=>x.key===state.anglerKey)||ANGLERS[0];
+  if(!a){feature.innerHTML='<div class="card">Directory unavailable. Reconnect and try again.</div>';return;}
   const stat=(v)=>v==null?"—":v;
   feature.innerHTML='<div class="featured-photo-wrap"><img class="featured-photo" src="'+a.photo+'" alt="'+a.name+'"></div>'+
     '<div class="featured-copy"><small>FEATURED ANGLER</small><h3>'+a.name+'</h3>'+(a.home?'<p>📍 '+a.home+'</p>':'')+'</div>'+

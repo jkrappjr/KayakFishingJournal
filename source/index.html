@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#062f22">
+<title>Kayak Fishing Journal</title>
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#/home" aria-label="Kayak Fishing Journal Home">
+    <strong>KayakFishingJournal.com</strong><span>LEARN • FISH • LOG • SHARE</span>
+  </a>
+  <a class="profile-link" href="#/profile" aria-label="My Profile">👤</a>
+</header>
+
+<main id="app">
+  <section class="page" data-route="home">
+    <div class="hero"><div class="hero-copy"><small>WELCOME TO</small><h1>KayakFishingJournal.com</h1><p>Learn • Fish • Log • Share</p></div></div>
+    <div class="tile-grid">
+      <a class="tile" data-icon="book" href="#/see-water"><b>SEE THE RIVER</b><span>Current, seams, ledges, eddies & structure.</span></a>
+      <a class="tile" data-icon="learn" href="#/learn-hub"><b>LEARN & IMPROVE</b><span>Techniques, science, knots & tutorials.</span></a>
+      <a class="tile accent" data-icon="log" href="#/on-trip"><b>LOG A TRIP</b><span>Start an offline-first trip session.</span></a>
+      <a class="tile" data-icon="trophy" href="#/tournaments"><b>FIND A TOURNEY</b><span>Regional in-person events.</span></a>
+      <a class="tile" data-icon="anglers" href="#/directory"><b>ANGLER DIRECTORY</b><span>Profiles, stats, teams & shared trips.</span></a>
+      <a class="tile" data-icon="community" href="#/community"><b>COMMUNITY REPORTS</b><span>Shared Trip Cards and full reports.</span></a>
+    </div>
+  </section>
+
+  <section class="page" data-route="see-water">
+    <div class="section-head"><div><small>River Structure & Location Tutorials</small><h2>SEE THE WATER</h2></div></div>
+    <div class="lesson-grid">
+      <a class="lesson-card" href="#/lesson/eddy"><div class="lesson-img"><img src="assets/river/eddy.webp" alt="" loading="lazy"></div><b>Eddies & Backwater</b><span>See It • Understand It • Fish It • Try It</span></a>
+      <a class="lesson-card" href="#/lesson/seam"><div class="lesson-img"><img src="assets/river/seam.webp" alt="" loading="lazy"></div><b>Current Seam</b><span>Fast water meets soft water.</span></a>
+      <a class="lesson-card" href="#/lesson/boulder"><div class="lesson-img"><img src="assets/river/boulder.webp" alt="" loading="lazy"></div><b>Boulder Break</b><span>Protected water around rock.</span></a>
+      <a class="lesson-card" href="#/lesson/ledge"><div class="lesson-img"><img src="assets/river/ledge.webp" alt="" loading="lazy"></div><b>Ledge / Drop</b><span>Shallow-to-deep transition.</span></a>
+      <a class="lesson-card" href="#/lesson/riffle"><div class="lesson-img"><img src="assets/river/riffle.webp" alt="" loading="lazy"></div><b>Shoal / Riffle</b><span>Broken water and first drop.</span></a>
+      <a class="lesson-card" href="#/lesson/tailout"><div class="lesson-img"><img src="assets/river/tailout.webp" alt="" loading="lazy"></div><b>Pool Tailout</b><span>Exit current and feeding lanes.</span></a>
+      <a class="lesson-card" href="#/lesson/pool"><div class="lesson-img"><img src="assets/river/pool.webp" alt="" loading="lazy"></div><b>Deep Pool / Pocket</b><span>Recovery, staging and cold-front water.</span></a>
+<a class="lesson-card" href="#/lesson/wood"><div class="lesson-img"><img src="assets/river/wood.webp" alt="" loading="lazy"></div><b>Laydowns & Wood Cover</b><span>Shade, branches and current breaks.</span></a><a class="lesson-card" href="#/lesson/bank"><div class="lesson-img"><img src="assets/river/bank.webp" alt="" loading="lazy"></div><b>Undercut Banks</b><span>Overhead cover beside feeding lanes.</span></a>    </div>
+    <div class="link-list">
+      <a href="#/techniques">Techniques <span>›</span></a>
+      <a href="#/science">Science of Fishing <span>›</span></a>
+      <a href="#/knots">Knot Tying <span>›</span></a>
+    </div>
+  </section>
+
+  <section class="page" data-route="learn-hub">
+  <div class="section-head"><div><small>Skills • Science • Knots • River Reading</small><h2>LEARN & IMPROVE</h2></div></div>
+  <div class="tile-grid">
+    <a class="tile" href="#/techniques"><b>Fishing Techniques</b><span>Ned Rig, Fluke, Topwater, Jig, Crankbait and more.</span></a>
+    <a class="tile" href="#/science"><b>Science of Fishing</b><span>Wind, pressure, flow, rainfall, temperature and bite windows.</span></a>
+    <a class="tile" href="#/knots"><b>Knot Tying</b><span>Palomar, Alberto, Double Uni and FG.</span></a>
+    <a class="tile" href="#/see-water"><b>Read the River</b><span>Current, seams, ledges, eddies, riffles and tailouts.</span></a>
+  </div>
+</section>
+
+<section class="page" data-route="lesson">
+    <div class="lesson-hero"><canvas id="lessonCanvas" width="640" height="360" aria-label="Animated river lesson"></canvas></div>
+    <div class="section-head"><div><small>TUTORIAL</small><h2 id="lessonTitle">Eddies & Backwater</h2></div></div>
+    <div class="steps" id="lessonSteps"></div>
+    <div class="control-row"><button id="prevLesson">Previous</button><button id="playLesson" class="primary">▶ Play</button><button id="nextLesson">Next</button></div>
+    <article class="lesson-copy" id="lessonCopy"></article>
+  </section>
+
+  <section class="page" data-route="on-trip">
+    <div class="section-head"><div><small>Track • Log • Catch • Improve</small><h2>ON TRIP</h2></div></div>
+    <div class="trip-hud"><b id="tripTimer">00:00:00</b><span>Current Session</span></div>
+    <div class="stats"><div><small>Catches</small><b id="catchCount">0</b></div><div><small>Largest</small><b id="largestCatch">—</b></div><div><small>Min/Catch</small><b id="minCatch">—</b></div></div>
+    <div class="action-grid">
+      <button id="startTripBtn" class="primary">Start Trip</button><button id="logCatchBtn">Log Catch</button><button id="tripPhotoBtn">Add Photo</button>
+      <a class="button-link" href="#/science">Science</a><a class="button-link" href="#/journal">Journal</a><button id="endTripBtn">End & Save</button>
+    </div>
+  </section>
+
+  <section class="page" data-route="journal">
+    <div class="section-head"><div><small>Trips • Catches • Conditions • Patterns</small><h2>MY JOURNAL</h2></div><a class="small-btn" href="#/on-trip">+ Trip</a></div>
+    <div id="journalList" class="stack"></div>
+  </section>
+
+  <section class="page" data-route="tournaments">
+    <div class="section-head"><div><small>Events • Trails • Clubs</small><h2>FIND A TOURNEY</h2></div></div>
+    <div class="stack">
+      <article class="card"><b>WVKA Big Cash Event</b><span>May 22, 2027 • Summersville / Gauley</span></article>
+      <article class="card"><b>WVKA Big Cash Event</b><span>June 26, 2027 • Bluestone / New / Greenbrier</span></article>
+      <article class="card"><b>WVKA Big Cash Event</b><span>July 17, 2027 • Jackson County Shootout</span></article>
+      <article class="card"><b>WVKA Big Cash Event</b><span>August 21, 2027 • Stonewall / Stonecoal / West Fork</span></article>
+      <article class="card"><b>WVKA Big Cash Event</b><span>September 18, 2027 • Cheat Lake / River</span></article>
+    </div>
+  </section>
+
+  <section class="page" data-route="directory">
+  <div class="section-head"><div><small>Connect • Follow • Learn • Share</small><h2>ANGLERS DIRECTORY</h2><p class="dir-count">11 public angler profiles</p></div></div>
+  <div class="directory-tools">
+    <input id="anglerSearch" type="search" placeholder="Search angler names" autocomplete="off">
+    <button id="findAnglersBtn" class="primary">Find anglers</button>
+  </div>
+  <div id="featuredAngler" class="featured-angler"></div>
+  <div id="anglerGrid" class="angler-grid"></div>
+</section>
+
+<section class="page" data-route="community">
+    <div class="section-head"><div><small>COMMUNITY</small><h2>Community Hub</h2></div></div>
+    <div class="stack"><a class="card link-card community-directory-link" href="#/directory"><b>Anglers Directory</b><span>Browse our 11 public angler profiles.</span></a></div>
+    <div class="section-head community-subhead"><div><small>REPORTS</small><h2>Shared Trip Cards</h2></div></div>
+    <div id="communityList" class="stack"><article class="card"><b>No shared cards yet.</b><span>Trips remain private until shared.</span></article></div>
+  </section>
+
+  <section class="page" data-route="profile">
+    <div class="profile-hero"><div class="profile-frame"><img id="profileImage" alt="" hidden><span id="profileFallback">👤</span></div><h2 id="profileName">Guest Angler</h2><span id="profileHome">Not signed in</span></div>
+    <div class="stack">
+      <article class="card" id="signinCard">
+        <b>Sign In / Create Account</b>
+        <label>Email<input id="emailInput" type="email" autocomplete="email"></label>
+        <label>Display Name<input id="nameInput" autocomplete="name"></label>
+        <label>Password<div class="password-row"><input id="passwordInput" type="password" autocomplete="current-password"><button id="showPasswordBtn" type="button">Show</button></div></label>
+        <button id="signinBtn" class="primary">Sign In / Create Account</button><small id="signinStatus"></small>
+      </article>
+      <article class="card" id="profileCard" hidden>
+        <b>My Profile</b>
+        <label>Profile Photo<input id="profilePhotoInput" type="file" accept="image/*"></label>
+        <label>Hometown / State<input id="homeInput"></label>
+        <label>About Me<textarea id="aboutInput" rows="4"></textarea></label>
+        <label>Kayak<input id="kayakInput"></label><label>Electronics<input id="electronicsInput"></label><label>Teams<input id="teamsInput"></label><label>Sponsors<input id="sponsorsInput"></label>
+        <button id="saveProfileBtn" class="primary">Save Profile</button><a class="button-link" href="#/home">Done — Go to Home</a><button id="signoutBtn">Sign Out</button>
+      </article>
+    </div>
+  </section>
+
+  <section class="page" data-route="clubs"><div class="section-head"><div><small>MY CLUBS</small><h2>Club Journal</h2></div></div><article class="card"><b>WV Kayak Anglers</b><span>Club tools, tournaments, AOY and sponsor cards will live here.</span></article></section>
+  <section class="page" data-route="settings"><div class="section-head"><div><small>SETTINGS</small><h2>Privacy & Sharing</h2></div></div><article class="card"><b>Directory Visibility</b><span>Public by default with opt-out.</span></article></section>
+  <section class="page" data-route="techniques">
+  <div class="section-head"><div><small>80 Anglers • 240 Bait Selections</small><h2>BAITS & TECHNIQUES</h2></div></div>
+  <div class="bait-intro"><b>Community Driven</b><span>Built from real WV kayak angler bait selections and our learning library.</span></div>
+  <div id="techniqueList" class="bait-grid"></div>
+</section>
+<section class="page" data-route="technique">
+  <div class="section-head"><div><small id="baitCategoryKicker">BAIT TUTORIAL</small><h2 id="baitTitle">NED RIG / TRD</h2></div></div>
+  <div class="bait-hero">
+    <div id="baitArt" class="bait-art"></div>
+    <div id="baitCommunityStat" class="bait-community-stat"></div>
+  </div>
+  <div class="bait-tabs">
+    <button class="bait-tab active" data-bait-tab="quick">Quick</button>
+    <button class="bait-tab" data-bait-tab="learn">Learn</button>
+    <button class="bait-tab" data-bait-tab="deep">Deep Dive</button>
+  </div>
+  <div class="bait-animation">
+    <svg id="baitMotion" viewBox="0 0 760 430" role="img" aria-label="Side view of bait action and retrieve"></svg>
+    <p class="side-legend">Gold: cast · Coral: retrieve · Blue arrows: current</p>
+    <p id="sideStatus" aria-live="polite">Side view · Cast → Settle → Retrieve</p>
+    <div class="side-controls"><button id="sidePrevious">Previous</button><button id="playBaitMotion" class="primary">▶ Play Presentation</button><button id="sideNext">Next</button></div>
+    <label class="side-scrub">Presentation progress<input id="sideProgress" type="range" min="0" max="100" value="0" step="0.1"></label>
+    <button id="sideZoom" aria-pressed="false">Action close-up</button>
+    <small class="side-note">Animated side view; depths and timing are illustrative. Lure photos are examples of each bait family.</small>
+  </div>
+  <div id="baitLessonContent" class="bait-lesson-content"></div>
+  <div class="bait-actions">
+    <a class="button-link" href="#/see-water">River Examples</a>
+    <a class="button-link" href="#/science">Science & Conditions</a>
+    <a class="button-link" href="#/techniques">All Baits</a>
+  </div>
+</section>
+  <section class="page" data-route="science"><div class="section-head"><div><small>Conditions • Patterns • Timing</small><h2>SCIENCE OF FISHING</h2></div></div><div id="scienceList" class="stack"></div></section>
+  <section class="page" data-route="knots">
+  <div class="section-head"><div><small>Essential Knots for Kayak Anglers</small><h2>KNOT TYING</h2></div></div>
+  <div id="knotList" class="knot-grid"></div>
+  <section class="knot-guide">
+    
+    <h3 id="knotGuideTitle" class="knot-guide-title">Palomar</h3>
+    <div class="knot-stage">
+      <svg id="knotSvg" viewBox="0 0 360 240" role="img" aria-label="Animated knot step diagram"></svg>
+      <div class="knot-step-copy">
+        <b id="knotStepCount">Step 1 of 4</b>
+        <p id="knotStepText">Feed the doubled loop through the eye.</p>
+      </div>
+    </div>
+    <div class="knot-dots" id="knotDots"></div>
+    <div class="knot-controls">
+      <button id="knotPrevBtn">Previous</button>
+      <button id="knotPlayBtn" class="primary">▶ Play step</button>
+      <button id="knotReplayBtn">↻ Replay step</button>
+      <button id="knotNextBtn">Next</button>
+    </div>
+  </section>
+</section>
+</main>
+
+<nav class="bottom-nav"><a href="#/home">Home</a><a href="#/on-trip">On Trip</a><a href="#/learn-hub">Learn</a><a href="#/journal">Journal</a><a href="#/community">Community</a></nav>
+<div class="build">Mobile Build v3.9 · OPTIMIZED</div>
+<script src="learn-data.js" defer></script>
+<script src="db.js" defer></script>
+<script src="journal-bridge.js" defer></script>
+<script src="bait-data.js" defer></script>
+<script src="lure-images.js" defer></script>
+<script src="lure-orientation.js" defer></script>
+<script src="bait-side.js" defer></script>
+<script src="science.js" defer></script>
+<script src="app.js" defer></script>
+</body>
+</html>

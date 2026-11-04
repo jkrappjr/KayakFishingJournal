@@ -1,0 +1,10 @@
+{
+  "pageRoutes": 16,
+  "lessonRoutes": 27,
+  "internalLinks": 39,
+  "localAssetsChecked": 33,
+  "tripPersistence": "passed",
+  "sourceRuntimeBytes": 133299,
+  "optimizedRuntimeBytes": 127490,
+  "errors": []
+}
