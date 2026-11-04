@@ -173,3 +173,28 @@
   [data-route="directory"] .angler-thumb{width:42px!important;height:42px!important}
   [data-route="directory"] .angler-row b{font-size:13px!important}
 }
+
+/* v2.6.1 single-row angler directory */
+[data-route="directory"] .angler-grid{
+  grid-template-columns:1fr!important;
+  gap:8px!important;
+}
+[data-route="directory"] .angler-row{
+  grid-template-columns:52px minmax(0,1fr) 22px!important;
+  min-height:64px!important;
+  padding:8px 12px!important;
+}
+[data-route="directory"] .angler-thumb{
+  width:50px!important;
+  height:50px!important;
+  border-radius:10px!important;
+}
+[data-route="directory"] .angler-row b{
+  font-size:17px!important;
+}
+@media(max-width:430px){
+  [data-route="directory"] .angler-grid{grid-template-columns:1fr!important}
+  [data-route="directory"] .angler-row{grid-template-columns:48px minmax(0,1fr) 20px!important}
+  [data-route="directory"] .angler-thumb{width:46px!important;height:46px!important}
+  [data-route="directory"] .angler-row b{font-size:16px!important}
+}
