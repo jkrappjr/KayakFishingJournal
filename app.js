@@ -1,19 +1,15 @@
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const state={trip:load("kfj2_trip",null),journal:load("kfj2_journal",[]),profile:load("kfj2_profile",{name:"Guest Angler",home:"",about:"",kayak:"",electronics:"",teams:"",sponsors:"",photo:""}),account:load("kfj2_account",null),lessonStep:0,lessonPlaying:false,lessonTimer:null};
 
-const lessons={
-eddy:{title:"Eddies & Backwater",scene:"eddy",steps:[
-["SEE IT","Find the slow or rotating water and the seam where it meets the main current."],
-["UNDERSTAND IT","Bass can hold with less effort while forage is delivered beside them."],
-["FISH IT","Keep the kayak outside the prime holding water. Fish seam, center, then exit."],
-["TRY IT","Repeat the same angle before changing bait, depth or speed."]
-]},
-seam:{title:"Current Seam",scene:"seam",steps:[["SEE IT","Find the visible speed or surface-texture line."],["UNDERSTAND IT","Fast water delivers food beside soft holding water."],["FISH IT","Cast across or beyond the seam and let the bait enter naturally."],["TRY IT","Compare upstream, perpendicular and downstream angles."]]},
-boulder:{title:"Boulder / Current Break",scene:"boulder",steps:[["SEE IT","Identify the rock and protected pocket."],["UNDERSTAND IT","The obstruction creates current relief."],["FISH IT","Fish upstream edge, pocket and downstream seam."],["TRY IT","Test a natural drift before changing lure."]]},
-ledge:{title:"Ledge / Drop",scene:"ledge",steps:[["SEE IT","Find the shallow-to-deep transition."],["UNDERSTAND IT","Fish use the depth break as travel and feeding cover."],["FISH IT","Present along the edge, not only across it."],["TRY IT","Work shallow lip, face and base."]]},
-riffle:{title:"Shoal / Riffle",scene:"riffle",steps:[["SEE IT","Locate broken shallow current and the first drop."],["UNDERSTAND IT","Oxygen, forage and current concentrate fish."],["FISH IT","Target pockets and the first deeper water."],["TRY IT","Compare fast pocket vs first drop."]]},
-tailout:{title:"Pool Tailout",scene:"tailout",steps:[["SEE IT","Find where the pool narrows and accelerates."],["UNDERSTAND IT","The exit funnels forage and moving fish."],["FISH IT","Work both seams and the center tongue."],["TRY IT","Compare upstream drift with cross-current presentation."]]}
-};
+const SITE_DATA=window.WVKA_LEARN_DATA||{water:{},techniques:{},science:{},knots:{}};
+const WATER_SCENES={seam:"seam",boulder:"boulder",ledge:"ledge",eddy:"eddy",shoal:"riffle",tailout:"tailout",pool:"tailout"};
+function siteLesson(key){
+  const d=SITE_DATA.water[key]||SITE_DATA.water.eddy||{};
+  return {title:d.title||key,scene:WATER_SCENES[key]||"eddy",steps:[
+    ["SEE IT",d.see||""],["UNDERSTAND IT",d.understand||""],["FISH IT",d.fish||""],["TRY IT",d.try||""]
+  ],summary:d.summary||"",deep:d.deep||""};
+}
+const lessons={seam:siteLesson("seam"),boulder:siteLesson("boulder"),ledge:siteLesson("ledge"),eddy:siteLesson("eddy"),riffle:siteLesson("shoal"),tailout:siteLesson("tailout"),pool:siteLesson("pool")};
 
 function load(k,f){try{const v=localStorage.getItem(k);return v?JSON.parse(v):f}catch{return f}}
 function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
@@ -166,3 +162,4 @@ function renderJournal(){
   el.innerHTML=state.journal.length?state.journal.map((t,i)=>'<article class="card"><b>'+(t.location||"Saved Trip")+'</b><span>'+new Date(t.start).toLocaleDateString()+' • '+(t.catches?.length||0)+' catches</span></article>').join(""):'<article class="card"><b>No saved trips yet.</b><span>Start a trip and your journal will build here.</span></article>';
 }
 route(); renderProfile(); renderTrip(); renderJournal();
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
