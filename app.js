@@ -26,6 +26,9 @@ function route(){
   if(name==="profile")renderProfile();
   if(name==="journal")renderJournal();
   if(name==="on-trip")renderTrip();
+  if(name==="techniques")renderLearningLibrary("techniques","#techniqueList");
+  if(name==="science")renderLearningLibrary("science","#scienceList");
+  if(name==="knots")renderLearningLibrary("knots","#knotList");
   scrollTo(0,0);
 }
 addEventListener("hashchange",route);
@@ -127,6 +130,20 @@ $("#prevLesson").onclick=()=>{state.lessonStep=Math.max(0,state.lessonStep-1);st
 $("#nextLesson").onclick=()=>{state.lessonStep=Math.min(3,state.lessonStep+1);stopLesson();renderLesson(state.lessonKey||"eddy")};
 $("#playLesson").onclick=playLesson;
 
+function renderLearningLibrary(group,selector){
+  const root=$(selector); if(!root)return;
+  const source=SITE_DATA[group]||{};
+  const entries=Object.entries(source);
+  root.innerHTML=entries.map(([key,d])=>{
+    const title=d.title||key;
+    const summary=d.summary||(
+      group==="techniques"?"Technique lesson from the Kayak Fishing Journal learning library.":
+      group==="science"?"Fishing-condition lesson from the Kayak Fishing Journal learning library.":
+      "Knot lesson from the Kayak Fishing Journal learning library."
+    );
+    return '<article class="card learn-library-card"><b>'+title+'</b><span>'+summary+'</span></article>';
+  }).join("")||'<article class="card"><b>Library unavailable offline.</b><span>Reconnect once to cache the learning dataset.</span></article>';
+}
 function renderProfile(){
   const p=state.profile,a=state.account;
   $("#profileName").textContent=p.name||"Guest Angler";
