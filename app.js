@@ -181,30 +181,118 @@ const KNOTS={
 };
 
 function knotSvg(kind){
- const eye='<path class="hook" d="M180 180 q0 28 22 28 q20 0 20-22 q0-18-17-18" />';
- const blue='stroke="#65dff6"', gold='stroke="#f5cf58"';
- const path=(d,c=blue,w=8)=>'<path class="knot-line" d="'+d+'" fill="none" '+c+' stroke-width="'+w+'" stroke-linecap="round" stroke-linejoin="round"/>';
- const circle=(cx,cy,r)=>'<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="#e7e2d0" stroke-width="7"/>';
+ const blue="#65dff6",gold="#f5cf58",white="#f3efe2";
+ const line=(id,d,color=blue,w=8,cls="")=>'<path id="'+id+'" class="knot-line '+cls+'" d="'+d+'" fill="none" stroke="'+color+'" stroke-width="'+w+'" stroke-linecap="round" stroke-linejoin="round"/>';
+ const dot=(x,y,color=gold)=>'<circle class="guide-dot" cx="'+x+'" cy="'+y+'" r="7" fill="'+color+'"/>';
+ const eye='<circle cx="180" cy="180" r="20" fill="none" stroke="'+white+'" stroke-width="7"/>';
  switch(kind){
-  case"palomar1":return circle(180,180,20)+path("M105 42 L105 135 Q105 176 150 176 L178 176")+path("M125 42 L125 130 Q125 155 154 155 L178 155",gold);
-  case"palomar2":return circle(180,180,20)+path("M92 48 C92 100 120 110 150 88 C180 66 210 84 218 112 C225 140 205 155 180 154 C145 152 126 132 112 112")+path("M118 50 C118 92 140 103 160 92",gold);
-  case"palomar3":return circle(180,180,20)+path("M82 54 C120 68 140 96 135 125 C132 150 150 164 180 164 C212 164 235 143 238 112")+path("M110 55 C152 72 175 105 170 136 C168 153 183 166 204 166",gold);
-  case"palomar4":return circle(180,180,20)+path("M115 45 L154 142 Q160 158 180 160 L214 45")+path("M140 45 L166 140 Q170 151 183 153 L197 45",gold);
-  case"alberto1":return path("M72 110 Q130 62 194 110 Q130 158 72 110",gold)+path("M110 42 L110 110 L286 110");
-  case"alberto2":return path("M72 110 Q130 62 194 110 Q130 158 72 110",gold)+path("M112 42 L112 110 C142 75 162 146 188 82 C210 136 232 82 258 112");
-  case"alberto3":return path("M72 110 Q130 62 194 110 Q130 158 72 110",gold)+path("M112 42 L112 110 C142 75 162 146 188 82 C210 136 232 82 258 112 C230 148 205 76 180 142 C155 84 135 140 112 110");
-  case"alberto4":return path("M62 110 L290 110",gold)+path("M76 96 C110 70 132 146 158 82 C182 144 208 78 236 112 C250 126 265 118 288 110");
-  case"double1":return path("M60 100 L300 100")+path("M60 132 L300 132",gold);
-  case"double2":return path("M60 100 L300 100")+path("M60 132 L300 132",gold)+path("M110 132 C86 160 112 178 142 154 C160 140 145 116 125 116",gold,6);
-  case"double3":return path("M60 100 L300 100")+path("M60 132 L300 132",gold)+path("M110 132 C86 160 112 178 142 154 C160 140 145 116 125 116",gold,6)+path("M250 100 C278 72 252 54 222 76 C204 90 220 114 242 114",blue,6);
-  case"double4":return path("M60 116 L145 116 C155 92 169 140 180 116 C192 92 205 140 218 116 L300 116")+path("M145 116 C155 92 169 140 180 116",gold,7);
-  case"fg1":return path("M65 118 L295 118",gold,10)+path("M110 55 C120 88 135 92 150 118 C164 145 177 150 190 180");
-  case"fg2":return path("M65 118 L295 118",gold,10)+path("M105 55 C118 88 132 92 145 118 C157 145 169 148 181 118 C193 88 205 92 217 118 C230 145 242 148 255 118");
-  case"fg3":return path("M65 118 L295 118",gold,10)+path("M105 55 C118 88 132 92 145 118 C157 145 169 148 181 118 C193 88 205 92 217 118 C230 145 242 148 255 118")+path("M252 118 q18 -28 34 0 q-18 28-34 0");
-  default:return path("M65 118 L295 118",gold,10)+path("M120 55 C132 88 145 92 157 118 C169 145 181 148 193 118 C205 88 217 92 229 118 C241 145 253 148 265 118")+path("M258 118 q18 -26 32 0 q-18 26-32 0");
+  case"palomar1":
+   return eye+
+    line("p1a","M105 42 L105 118 Q105 155 145 165 L178 176",blue,9,"base-line")+
+    line("p1b","M125 42 L125 116 Q125 145 151 154 L178 160",gold,9,"moving-line")+
+    dot(125,42);
+  case"palomar2":
+   return eye+
+    line("p2base","M105 45 L105 150 Q105 168 128 168 L180 168",blue,9,"base-line")+
+    line("p2move","M125 45 C125 95 155 105 185 82 C215 60 248 82 248 116 C248 150 216 164 184 154 C155 146 140 127 126 110",gold,9,"moving-line")+
+    dot(125,45);
+  case"palomar3":
+   return eye+
+    line("p3loop","M90 50 C112 65 132 92 130 120 C127 153 151 170 183 170 C220 170 246 145 245 106",blue,9,"base-line")+
+    line("p3move","M115 53 C154 73 176 106 170 137 C167 158 186 174 208 168",gold,9,"moving-line")+
+    '<path class="hook-shape" d="M180 200 q0 35 25 35 q25 0 25-25 q0-18-18-18" fill="none" stroke="'+white+'" stroke-width="9" stroke-linecap="round"/>'+
+    dot(115,53);
+  case"palomar4":
+   return eye+
+    line("p4a","M110 44 L154 140 Q163 158 180 160",blue,9,"cinch-left")+
+    line("p4b","M220 44 L198 140 Q193 154 181 160",gold,9,"cinch-right")+
+    line("p4wrap","M156 156 C165 142 178 140 188 147 C196 153 196 164 184 170",gold,7,"wrap-line");
+  case"alberto1":
+   return line("a1leader","M70 110 Q130 62 195 110 Q130 158 70 110",gold,10,"base-line")+
+    line("a1braid","M110 42 L110 110 L288 110",blue,8,"moving-line")+dot(110,42);
+  case"alberto2":
+   return line("a2leader","M70 110 Q130 62 195 110 Q130 158 70 110",gold,10,"base-line")+
+    line("a2braid","M112 42 L112 110 C140 78 160 146 186 82 C210 136 232 82 260 112",blue,8,"moving-line")+dot(112,42);
+  case"alberto3":
+   return line("a3leader","M70 110 Q130 62 195 110 Q130 158 70 110",gold,10,"base-line")+
+    line("a3braid","M112 42 L112 110 C140 78 160 146 186 82 C210 136 232 82 260 112 C232 146 208 78 182 142 C156 86 135 140 112 110",blue,8,"moving-line")+dot(260,112);
+  case"alberto4":
+   return line("a4leader","M62 110 L292 110",gold,10,"cinch-right")+
+    line("a4braid","M76 96 C110 72 132 144 158 82 C182 144 208 80 236 112 C252 128 268 118 290 110",blue,8,"cinch-left");
+  case"double1":
+   return line("d1a","M60 100 L300 100",blue,9,"base-line")+line("d1b","M60 132 L300 132",gold,9,"base-line");
+  case"double2":
+   return line("d2a","M60 100 L300 100",blue,9,"base-line")+line("d2b","M60 132 L300 132",gold,9,"base-line")+
+    line("d2move","M110 132 C86 160 112 178 142 154 C160 140 145 116 125 116",gold,7,"moving-line")+dot(110,132);
+  case"double3":
+   return line("d3a","M60 100 L300 100",blue,9,"base-line")+line("d3b","M60 132 L300 132",gold,9,"base-line")+
+    line("d3left","M110 132 C86 160 112 178 142 154 C160 140 145 116 125 116",gold,7,"base-line")+
+    line("d3move","M250 100 C278 72 252 54 222 76 C204 90 220 114 242 114",blue,7,"moving-line")+dot(250,100,blue);
+  case"double4":
+   return line("d4a","M60 116 L145 116 C155 92 169 140 180 116 C192 92 205 140 218 116 L300 116",blue,9,"cinch-left")+
+    line("d4b","M145 116 C155 92 169 140 180 116",gold,7,"cinch-right");
+  case"fg1":
+   return line("f1leader","M65 118 L295 118",gold,11,"base-line")+line("f1braid","M110 55 C120 88 135 92 150 118 C164 145 177 150 190 180",blue,7,"moving-line")+dot(110,55,blue);
+  case"fg2":
+   return line("f2leader","M65 118 L295 118",gold,11,"base-line")+line("f2braid","M105 55 C118 88 132 92 145 118 C157 145 169 148 181 118 C193 88 205 92 217 118 C230 145 242 148 255 118",blue,7,"moving-line")+dot(105,55,blue);
+  case"fg3":
+   return line("f3leader","M65 118 L295 118",gold,11,"base-line")+line("f3braid","M105 55 C118 88 132 92 145 118 C157 145 169 148 181 118 C193 88 205 92 217 118 C230 145 242 148 255 118 M252 118 q18 -28 34 0 q-18 28-34 0",blue,7,"moving-line")+dot(252,118,blue);
+  default:
+   return line("f4leader","M65 118 L295 118",gold,11,"cinch-right")+line("f4braid","M120 55 C132 88 145 92 157 118 C169 145 181 148 193 118 C205 88 217 92 229 118 C241 145 253 148 265 118 M258 118 q18 -26 32 0 q-18 26-32 0",blue,7,"cinch-left");
  }
 }
 
+function prepareKnotMotion(){
+ const svg=$("#knotSvg"); if(!svg)return;
+ svg.classList.remove("animate","slow-demo");
+ void svg.offsetWidth;
+ svg.classList.add("slow-demo");
+ const movers=[...svg.querySelectorAll(".moving-line")];
+ movers.forEach(p=>{
+   const len=p.getTotalLength();
+   p.style.strokeDasharray=len;
+   p.style.strokeDashoffset=len;
+ });
+}
+
+function playCurrentKnotStep(){
+ stopKnot();
+ const svg=$("#knotSvg"); if(!svg)return;
+ state.knotPlaying=true;
+ $("#knotPlayBtn").textContent="❚❚ Pause";
+ prepareKnotMotion();
+ const movers=[...svg.querySelectorAll(".moving-line")];
+ const dots=[...svg.querySelectorAll(".guide-dot")];
+ const cinch=[...svg.querySelectorAll(".cinch-left,.cinch-right")];
+ const duration=9000, hold=1400, start=performance.now();
+ function frame(now){
+   if(!state.knotPlaying)return;
+   const elapsed=now-start;
+   const t=Math.max(0,Math.min(1,elapsed/duration));
+   const eased=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+   movers.forEach(p=>{const len=p.getTotalLength();p.style.strokeDashoffset=len*(1-eased)});
+   dots.forEach(d=>{
+     const p=movers[0];
+     if(p){
+       const len=p.getTotalLength(),pt=p.getPointAtLength(len*eased);
+       d.setAttribute("cx",pt.x);d.setAttribute("cy",pt.y);
+     }
+   });
+   cinch.forEach((p,i)=>{
+     const amt=Math.max(0,(t-.45)/.55);
+     const dir=p.classList.contains("cinch-left")?-1:1;
+     p.style.transformOrigin="180px 160px";
+     p.style.transform="translateX("+(dir*22*amt)+"px)";
+   });
+   if(t<1){state.knotRAF=requestAnimationFrame(frame)}
+   else{
+     state.knotHold=setTimeout(()=>{
+       if(state.knotPlaying){state.knotPlaying=false;$("#knotPlayBtn").textContent="▶ Play step"}
+     },hold);
+   }
+ }
+ state.knotRAF=requestAnimationFrame(frame);
+}
 function renderKnots(){
  const root=$("#knotList"); if(!root)return;
  root.innerHTML=Object.entries(KNOTS).map(([key,k])=>'<button class="knot-card '+(key===state.knotKey?"active":"")+'" data-knot="'+key+'"><div class="knot-mini">'+knotSvg(k.steps[3].draw)+'</div><b>'+k.title+'</b><span>'+k.subtitle+'</span><strong>Practice · 4 steps</strong></button>').join("");
@@ -212,14 +300,14 @@ function renderKnots(){
  renderKnotStep();
  wireKnotControls();
 }
-function stopKnot(){state.knotPlaying=false;clearInterval(state.knotTimer);if($("#knotPlayBtn"))$("#knotPlayBtn").textContent="▶ Play steps"}
+function stopKnot(){state.knotPlaying=false;clearInterval(state.knotTimer);clearTimeout(state.knotHold);if(state.knotRAF)cancelAnimationFrame(state.knotRAF);if($("#knotPlayBtn"))$("#knotPlayBtn").textContent="▶ Play step"}
 function renderKnotStep(){
  const k=KNOTS[state.knotKey],s=k.steps[state.knotStep]; if(!k||!$("#knotSvg"))return;
  $("#knotGuideTitle").textContent=k.title+" · "+s.title;
  $("#knotStepCount").textContent="Step "+(state.knotStep+1)+" of 4";
  $("#knotStepText").textContent=s.text;
  $("#knotSvg").innerHTML=knotSvg(s.draw);
- $("#knotSvg").classList.remove("animate");void $("#knotSvg").offsetWidth;$("#knotSvg").classList.add("animate");
+ prepareKnotMotion();
  $("#knotDots").innerHTML=k.steps.map((_,i)=>'<button class="knot-dot '+(i===state.knotStep?"active":"")+'" data-knot-step="'+i+'" aria-label="Step '+(i+1)+'"></button>').join("");
  $$(".knot-dot").forEach(b=>b.onclick=()=>{state.knotStep=+b.dataset.knotStep;stopKnot();renderKnotStep()});
 }
@@ -229,7 +317,7 @@ function wireKnotControls(){
  $("#knotPrevBtn").onclick=()=>{state.knotStep=Math.max(0,state.knotStep-1);stopKnot();renderKnotStep()};
  $("#knotNextBtn").onclick=()=>{state.knotStep=Math.min(3,state.knotStep+1);stopKnot();renderKnotStep()};
  $("#knotReplayBtn").onclick=()=>renderKnotStep();
- $("#knotPlayBtn").onclick=()=>{if(state.knotPlaying){stopKnot();return}state.knotPlaying=true;$("#knotPlayBtn").textContent="❚❚ Pause";state.knotTimer=setInterval(()=>{if(state.knotStep>=3){stopKnot();return}state.knotStep++;renderKnotStep()},1700)};
+ $("#knotPlayBtn").onclick=()=>{if(state.knotPlaying){stopKnot();return}playCurrentKnotStep()};
 }
 function renderLearningLibrary(group,selector){
   const root=$(selector); if(!root)return;
