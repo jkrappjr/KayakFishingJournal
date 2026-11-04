@@ -133,17 +133,7 @@ $("#playLesson").onclick=playLesson;
 
 
 const ANGLERS=[
- {key:"austin-lilly",name:"Austin Lilly",home:"Hinton WV",trips:3,catches:109,hours:15,largest:"17.25 in",about:"Public Kayak Fishing Journal angler profile."},
- {key:"john-rapp",name:"John Rapp",home:"Mount Nebo, West Virginia",about:"Public Kayak Fishing Journal angler profile."},
- {key:"greg-harper",name:"Greg Harper",home:"West Virginia",about:"Public Kayak Fishing Journal angler profile."},
- {key:"alex-worley",name:"Alex Worley",home:"West Virginia",about:"Public Kayak Fishing Journal angler profile."},
- {key:"jared-terry",name:"Jared Terry",home:"West Virginia",about:"Public Kayak Fishing Journal angler profile."},
- {key:"clint-kissner",name:"Clint Kissner",home:"West Virginia",about:"Public Kayak Fishing Journal angler profile."},
- {key:"jason-arthur",name:"Jason Arthur",home:"West Virginia",about:"Public Kayak Fishing Journal angler profile."},
- {key:"eric-shuman",name:"Eric Shuman",home:"West Virginia",about:"Public Kayak Fishing Journal angler profile."},
- {key:"lj-ashcraft",name:"L.J. Ashcraft",home:"West Virginia",about:"Public Kayak Fishing Journal angler profile."},
- {key:"rick-garavaglia",name:"Rick Garavaglia",home:"West Virginia",about:"Public Kayak Fishing Journal angler profile."},
- {key:"beth-rapp",name:"Beth Rapp",home:"West Virginia",about:"Public Kayak Fishing Journal angler profile."}
+ {key:"austin-lilly",name:"Austin Lilly",home:"Hinton WV",trips:3,catches:109,hours:15,largest:"17.25 in",about:"Verified from KayakFishingJournal.com directory capture."}
 ];
 
 function initials(name){return name.split(/\s+/).map(x=>x[0]).join("").slice(0,2).toUpperCase()}
