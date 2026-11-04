@@ -209,3 +209,431 @@
 .knot-line{transition:none!important}
 #knotSvg.slow-demo .guide-dot{filter:drop-shadow(0 0 5px #fff)}
 .knot-controls{grid-template-columns:1fr 1fr!important}
+
+/* v3.0 master visual system — based on approved reference screens */
+:root{
+ --kfj-green:#031f17;
+ --kfj-green2:#063d2b;
+ --kfj-green3:#0a5a3b;
+ --kfj-black:#09100d;
+ --kfj-gold:#d5a52d;
+ --kfj-gold2:#f8db75;
+ --kfj-gold3:#fff0a9;
+ --kfj-ivory:#fff7df;
+ --kfj-muted:#d5d0bd;
+ --kfj-edge:#f4c74b;
+ --kfj-shadow:0 8px 22px rgba(0,0,0,.42);
+}
+html,body{background:#020d09!important;color:#fff!important}
+body{
+ background:
+  radial-gradient(circle at 50% -15%,rgba(42,121,77,.36),transparent 34%),
+  linear-gradient(180deg,#041b13,#021009 70%,#020b07)!important;
+}
+.topbar{
+ min-height:106px!important;
+ padding:10px 58px 8px!important;
+ display:grid!important;
+ grid-template-columns:1fr!important;
+ align-items:center!important;
+ justify-items:center!important;
+ background:
+  linear-gradient(rgba(2,31,22,.88),rgba(2,31,22,.95)),
+  url("https://npgallery.nps.gov/GetAsset/E1354DBB-155D-451F-67B7D2564D66FBDA/proxyhires.jpg") center/cover!important;
+ border-bottom:3px solid var(--kfj-gold)!important;
+ box-shadow:0 5px 18px rgba(0,0,0,.45)!important;
+}
+.brand{
+ position:relative!important;
+ width:100%!important;
+ max-width:420px!important;
+ align-items:center!important;
+ text-align:center!important;
+ line-height:1!important;
+ color:#fff!important;
+ text-shadow:0 3px 2px #000,0 0 8px rgba(0,0,0,.8)!important;
+}
+.brand:before{
+ content:"";
+ width:180px;
+ height:30px;
+ display:block;
+ margin:0 auto -4px;
+ background:
+  linear-gradient(135deg,transparent 16%,#f5c937 17% 21%,transparent 22% 26%,#f5c937 27% 32%,transparent 33%) left 47%/65px 18px no-repeat,
+  radial-gradient(circle at 50% 65%,#f7c936 0 24%,transparent 25%) center/40px 40px no-repeat;
+ opacity:.95;
+}
+.brand strong{
+ font-style:italic!important;
+ font-weight:950!important;
+ font-size:clamp(23px,6vw,35px)!important;
+ letter-spacing:-1.3px!important;
+}
+.brand span{
+ margin-top:5px!important;
+ color:var(--kfj-gold2)!important;
+ font-size:12px!important;
+ font-weight:950!important;
+ letter-spacing:.12em!important;
+}
+.profile-link{
+ position:absolute!important;
+ right:14px!important;
+ top:27px!important;
+ width:48px!important;height:48px!important;
+ border:2px solid var(--kfj-gold2)!important;
+ background:linear-gradient(#0b5439,#063323)!important;
+ color:white!important;
+ box-shadow:0 3px 10px #0008!important;
+}
+.page{
+ background:
+  linear-gradient(rgba(3,31,23,.97),rgba(2,20,14,.98)),
+  url("https://npgallery.nps.gov/GetAsset/E1354DBB-155D-451F-67B7D2564D66FBDA/proxyhires.jpg") center top/cover fixed!important;
+ color:#fff!important;
+}
+.section-head{
+ margin:0!important;
+ padding:15px 16px 12px!important;
+ background:
+  linear-gradient(180deg,rgba(9,76,52,.94),rgba(2,41,29,.98))!important;
+ border-top:1px solid #f4d66a55!important;
+ border-bottom:3px solid var(--kfj-gold)!important;
+ box-shadow:inset 0 -1px 0 #ffe99266,0 5px 12px #0005!important;
+}
+.section-head small{
+ display:block!important;
+ color:#fff!important;
+ font-size:12px!important;
+ font-weight:800!important;
+ letter-spacing:.04em!important;
+ text-transform:none!important;
+}
+.section-head h2{
+ margin:2px 0 0!important;
+ font-size:clamp(26px,8vw,42px)!important;
+ line-height:.95!important;
+ font-weight:1000!important;
+ font-style:italic!important;
+ letter-spacing:-.04em!important;
+ text-transform:uppercase!important;
+ text-shadow:0 3px 2px #000!important;
+}
+.card,.lesson-copy,.trip-hud,.stats,.profile-hero,.knot-guide{
+ background:linear-gradient(180deg,#102019,#080e0b)!important;
+ color:#fff!important;
+ border:2px solid var(--kfj-gold)!important;
+ box-shadow:inset 0 0 0 1px #ffe58b33,var(--kfj-shadow)!important;
+}
+.card b,.lesson-copy h3{color:#fff!important}
+.card span{color:#e7dec1!important}
+button,.button-link,.small-btn{
+ border:2px solid var(--kfj-gold)!important;
+ border-radius:11px!important;
+ font-weight:950!important;
+ box-shadow:inset 0 1px 0 #fff5a855,0 4px 8px #0007!important;
+}
+button.primary,.primary,.small-btn,.tile.accent{
+ color:#0b281c!important;
+ background:
+  linear-gradient(180deg,#fff0a0 0%,#f3cf58 23%,#d9a92e 75%,#b78413 100%)!important;
+ border-color:#f5d66c!important;
+}
+.button-link{
+ background:linear-gradient(#0c5037,#062f22)!important;
+ color:#fff!important;
+}
+.tile-grid{padding:12px!important;gap:10px!important}
+.tile{
+ position:relative!important;
+ min-height:128px!important;
+ padding:54px 12px 14px!important;
+ display:flex!important;
+ align-items:center!important;
+ justify-content:center!important;
+ text-align:center!important;
+ background:
+  linear-gradient(180deg,rgba(9,42,31,.92),rgba(5,20,15,.98))!important;
+ color:#fff!important;
+ border:2px solid var(--kfj-gold)!important;
+ border-radius:14px!important;
+ box-shadow:inset 0 0 0 1px #fff3a52b,var(--kfj-shadow)!important;
+}
+.tile:before{
+ position:absolute;top:10px;left:50%;transform:translateX(-50%);
+ color:#ffd94c;font-size:34px;line-height:1;text-shadow:0 2px 2px #000;
+}
+.tile[data-icon="book"]:before{content:"▤"}
+.tile[data-icon="learn"]:before{content:"✦"}
+.tile[data-icon="log"]:before{content:"✓"}
+.tile[data-icon="trophy"]:before{content:"♛"}
+.tile[data-icon="anglers"]:before{content:"●●●";font-size:23px;letter-spacing:-4px}
+.tile[data-icon="community"]:before{content:"◯◯";font-size:28px;letter-spacing:-7px}
+.tile b{
+ color:#fff!important;
+ font-size:18px!important;
+ line-height:1.05!important;
+ font-weight:1000!important;
+ text-shadow:0 2px 2px #000!important;
+}
+.tile span{
+ display:block!important;
+ color:#e4dbc2!important;
+ font-size:11px!important;
+ line-height:1.2!important;
+ margin-top:5px!important;
+}
+[data-route="home"] .hero{
+ min-height:225px!important;
+ padding:18px!important;
+ align-items:flex-end!important;
+ background:
+  linear-gradient(rgba(0,25,18,.05),rgba(0,27,20,.85)),
+  url("https://npgallery.nps.gov/GetAsset/E1354DBB-155D-451F-67B7D2564D66FBDA/proxyhires.jpg") center/cover!important;
+ border-bottom:3px solid var(--kfj-gold)!important;
+}
+[data-route="home"] .hero-copy{
+ width:100%!important;
+ text-align:center!important;
+ padding:12px 10px!important;
+ background:linear-gradient(90deg,transparent,#061e16dd 15%,#061e16ee 85%,transparent)!important;
+}
+[data-route="home"] .hero-copy small{font-size:13px!important;color:var(--kfj-gold2)!important;font-weight:950!important}
+[data-route="home"] .hero-copy h1{
+ margin:3px 0!important;
+ font-size:28px!important;
+ font-style:italic!important;
+ font-weight:1000!important;
+ color:#fff!important;text-shadow:0 3px 2px #000!important;
+}
+[data-route="home"] .hero-copy p{color:var(--kfj-gold2)!important;font-weight:900!important}
+[data-route="see-water"] .lesson-grid{
+ display:grid!important;
+ grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ gap:8px!important;
+ padding:10px!important;
+}
+.lesson-card{
+ min-height:150px!important;
+ padding:0!important;
+ overflow:hidden!important;
+ background:#07130e!important;
+ border:2px solid var(--kfj-gold)!important;
+ border-radius:13px!important;
+ box-shadow:inset 0 0 0 1px #fff29b22,0 5px 12px #0009!important;
+}
+.lesson-img{
+ height:105px!important;
+ filter:saturate(1.18) contrast(1.05)!important;
+ border-bottom:1px solid #f2cc59!important;
+}
+.lesson-card b{
+ color:#fff!important;
+ font-size:13px!important;
+ font-style:italic!important;
+ font-weight:1000!important;
+ line-height:1!important;
+ text-transform:uppercase!important;
+ text-shadow:0 2px 2px #000!important;
+ padding:8px 6px 3px!important;
+}
+.lesson-card span{
+ color:#d8cfb5!important;
+ font-size:9px!important;
+ padding:0 6px 8px!important;
+}
+.link-list a{
+ background:linear-gradient(#0d5038,#082a20)!important;
+ color:#fff!important;
+ border:2px solid var(--kfj-gold)!important;
+ box-shadow:var(--kfj-shadow)!important;
+}
+[data-route="lesson"] .lesson-hero{
+ margin:10px!important;
+ height:auto!important;
+ aspect-ratio:16/9!important;
+ border:2px solid var(--kfj-gold)!important;
+ border-radius:14px!important;
+ overflow:hidden!important;
+ box-shadow:var(--kfj-shadow)!important;
+}
+#lessonCanvas{width:100%!important;height:100%!important}
+.steps{
+ margin:0 8px!important;
+ grid-template-columns:repeat(4,minmax(0,1fr))!important;
+ gap:5px!important;
+ padding:8px 0!important;
+}
+.steps button{
+ min-height:56px!important;
+ padding:7px 3px!important;
+ border:2px solid var(--kfj-gold)!important;
+ background:linear-gradient(#0c4b35,#071b14)!important;
+ color:#fff!important;
+ font-size:11px!important;
+}
+.steps button.active{
+ background:linear-gradient(#ffe889,#d7a82c)!important;
+ color:#08271c!important;
+}
+.control-row{padding:0 10px 10px!important}
+.control-row button{background:linear-gradient(#0d4b35,#081b14)!important;color:#fff!important}
+.control-row button.primary{background:linear-gradient(#ffe889,#d7a82c)!important;color:#08271c!important}
+.lesson-copy{margin:0 10px 12px!important}
+[data-route="on-trip"] .trip-hud{
+ margin:12px!important;
+ min-height:165px!important;
+ display:grid!important;
+ place-items:center!important;
+ background:
+  linear-gradient(rgba(4,35,25,.42),rgba(4,25,18,.78)),
+  url("https://npgallery.nps.gov/GetAsset/E1354DBB-155D-451F-67B7D2564D66FBDA/proxyhires.jpg") center/cover!important;
+}
+[data-route="on-trip"] .trip-hud b{
+ font-size:44px!important;
+ color:#fff!important;
+ text-shadow:0 3px 2px #000!important;
+}
+[data-route="on-trip"] .trip-hud span{
+ color:var(--kfj-gold2)!important;
+ font-weight:900!important;
+ text-transform:uppercase!important;
+}
+[data-route="on-trip"] .stats{
+ display:grid!important;
+ grid-template-columns:repeat(3,1fr)!important;
+ gap:7px!important;
+ padding:8px!important;
+ background:transparent!important;
+ border:0!important;
+ box-shadow:none!important;
+}
+[data-route="on-trip"] .stats div{
+ background:linear-gradient(#102119,#070e0b)!important;
+ border:2px solid var(--kfj-gold)!important;
+ border-radius:12px!important;
+ padding:10px 4px!important;
+}
+[data-route="on-trip"] .stats small{color:var(--kfj-gold2)!important;text-transform:uppercase!important;font-weight:900!important}
+[data-route="on-trip"] .stats b{color:#fff!important}
+.action-grid{gap:8px!important;padding:10px!important}
+.action-grid>*{min-height:58px!important;background:linear-gradient(#0d4d36,#071b14)!important;color:#fff!important}
+[data-route="on-trip"] #startTripBtn{background:linear-gradient(#ffe889,#d5a52d)!important;color:#08271c!important}
+[data-route="journal"] .stack,
+[data-route="tournaments"] .stack,
+[data-route="techniques"] .stack,
+[data-route="science"] .stack{
+ padding:10px!important;
+ gap:8px!important;
+}
+[data-route="journal"] .card,
+[data-route="tournaments"] .card,
+[data-route="techniques"] .card,
+[data-route="science"] .card{
+ min-height:72px!important;
+ justify-content:center!important;
+}
+[data-route="directory"] .directory-tools{
+ background:transparent!important;
+ padding:12px!important;
+}
+[data-route="directory"] .directory-tools input{
+ background:#062d21!important;
+ border:2px solid var(--kfj-gold)!important;
+ color:#fff!important;
+ border-radius:12px!important;
+}
+[data-route="directory"] .directory-tools input::placeholder{color:#d5ccb5!important}
+[data-route="directory"] .featured-angler{
+ background:linear-gradient(180deg,#0b4b35,#061f17)!important;
+ border:2px solid var(--kfj-gold)!important;
+}
+[data-route="directory"] .angler-row{
+ background:linear-gradient(180deg,#111c16,#060b08)!important;
+ border:2px solid var(--kfj-gold)!important;
+}
+[data-route="directory"] .angler-row b{font-size:17px!important}
+[data-route="community"] .community-directory-link{
+ background:linear-gradient(#0b4e36,#061f17)!important;
+ border:2px solid var(--kfj-gold)!important;
+}
+.profile-hero{
+ margin:0!important;
+ border-radius:0!important;
+ border-left:0!important;border-right:0!important;
+ background:linear-gradient(#0a5138,#05251b)!important;
+}
+.profile-frame{border-color:var(--kfj-gold)!important;box-shadow:0 0 0 4px #ffe98c55,0 5px 15px #000!important}
+label{color:#fff!important}
+input,textarea,select{
+ background:#061c14!important;
+ color:#fff!important;
+ border:1px solid #b69539!important;
+}
+.knot-grid{
+ grid-template-columns:1fr!important;
+ gap:8px!important;
+ padding:10px!important;
+}
+.knot-card{
+ min-height:78px!important;
+ display:grid!important;
+ grid-template-columns:76px minmax(0,1fr) auto!important;
+ grid-template-rows:auto auto!important;
+ align-items:center!important;
+ column-gap:10px!important;
+ padding:8px!important;
+ background:linear-gradient(#14231b,#070d0a)!important;
+ border:2px solid var(--kfj-gold)!important;
+}
+.knot-mini{grid-row:1/3;width:76px;height:58px!important}
+.knot-card b{font-size:17px!important}
+.knot-card span{font-size:11px!important}
+.knot-card strong{grid-column:3;grid-row:1/3;color:var(--kfj-gold2)!important;font-size:11px!important}
+.knot-guide{
+ margin:10px!important;
+ background:linear-gradient(#0b4b35,#052319)!important;
+}
+#knotSvg{background:#052c20!important;border:1px solid #c59b2a!important}
+.bottom-nav{
+ background:linear-gradient(180deg,#073625,#03180f)!important;
+ border-top:3px solid var(--kfj-gold)!important;
+ box-shadow:0 -5px 16px #000b!important;
+}
+.bottom-nav a{
+ position:relative!important;
+ min-height:64px!important;
+ display:flex!important;
+ align-items:flex-end!important;
+ justify-content:center!important;
+ padding:28px 3px 8px!important;
+ color:#fff!important;
+ font-weight:900!important;
+ font-size:11px!important;
+}
+.bottom-nav a:before{
+ position:absolute;top:7px;left:50%;transform:translateX(-50%);
+ color:#fff;font-size:18px;
+}
+.bottom-nav a[href="#/home"]:before{content:"⌂"}
+.bottom-nav a[href="#/on-trip"]:before{content:"◷"}
+.bottom-nav a[href="#/learn-hub"]:before{content:"▤"}
+.bottom-nav a[href="#/journal"]:before{content:"▥"}
+.bottom-nav a[href="#/community"]:before{content:"●●";font-size:13px;letter-spacing:-3px}
+.bottom-nav a.active{
+ color:#09271c!important;
+ background:linear-gradient(#ffe998,#d5a52d)!important;
+ border-radius:10px 10px 0 0!important;
+}
+.bottom-nav a.active:before{color:#09271c!important}
+.build{opacity:.35!important}
+@media(max-width:420px){
+ .topbar{min-height:96px!important;padding-left:52px!important;padding-right:52px!important}
+ .brand strong{font-size:22px!important}
+ .brand span{font-size:10px!important}
+ [data-route="see-water"] .lesson-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .tile{min-height:118px!important}
+ .section-head h2{font-size:30px!important}
+ .bottom-nav a{font-size:10px!important}
+}
