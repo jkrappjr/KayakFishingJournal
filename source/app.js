@@ -26,11 +26,13 @@ function route(){
   $$(".page").forEach(p=>p.classList.remove("active"));
   let page=$('[data-route="'+(name==="lesson"?"lesson":name)+'"]')||$('[data-route="home"]');
   page.classList.add("active");
-  const navGroup=(["learn-hub","see-water","lesson","techniques","technique","science","knots"].includes(name)?"learn-hub":(["directory","community"].includes(name)?"community":(["on-trip","journal","home"].includes(name)?name:"home")));
+  const navGroup=(["learn-hub","see-water","lesson","techniques","technique","science","knots"].includes(name)?"learn-hub":(["directory","community","reports","website"].includes(name)?"community":(["on-trip","journal","home"].includes(name)?name:"home")));
   $$(".bottom-nav a").forEach(a=>a.classList.toggle("active",a.getAttribute("href")===("#/"+navGroup)));
   if(name==="lesson")renderLesson(parts[1]||"eddy");
   if(name==="profile")renderProfile();
-  if(name==="directory")ensureAnglers().then(()=>renderDirectory());
+  if(name==="directory")ensureAnglers().then(()=>{if(parts[1]){const chosen=ANGLERS.find(a=>a.sourceId===parts[1]||a.key===parts[1]);if(chosen)state.anglerKey=chosen.key;}renderDirectory();});
+  if(name==="community")window.KFJPublicReports.gallery($("#communityList"));
+  if(name==="reports")window.KFJPublicReports.page(parts[1]);
   if(name==="journal")renderJournal();
   if(name==="on-trip")renderTrip();
   if(name==="techniques")renderBaitLibrary();
@@ -139,7 +141,7 @@ function ensureAnglers(){
   if(anglersLoadPromise)return anglersLoadPromise;
   anglersLoadPromise=new Promise((resolve,reject)=>{
     const s=document.createElement("script");
-    s.src="./anglers-data.js";
+    s.src="./anglers-data-v313.js";
     s.onload=()=>{ANGLERS=window.KFJ_ANGLERS||[];resolve(ANGLERS)};
     s.onerror=()=>{anglersLoadPromise=null;reject(new Error("Directory data unavailable"))};
     document.head.appendChild(s);
@@ -156,10 +158,12 @@ function renderDirectory(filter=""){
   $$(".angler-row").forEach(b=>b.onclick=()=>{state.anglerKey=b.dataset.angler;renderDirectory($("#anglerSearch")?.value||"")});
   const a=ANGLERS.find(x=>x.key===state.anglerKey)||ANGLERS[0];
   if(!a){feature.innerHTML='<div class="card">Directory unavailable. Reconnect and try again.</div>';return;}
-  const stat=(v)=>v==null?"—":v;
-  feature.innerHTML='<div class="featured-photo-wrap"><img class="featured-photo" src="'+a.photo+'" alt="'+a.name+'"></div>'+
-    '<div class="featured-copy"><small>FEATURED ANGLER</small><h3>'+a.name+'</h3>'+(a.home?'<p>📍 '+a.home+'</p>':'')+'</div>'+
-    '<div class="angler-stats"><div><small>Total Trips</small><b>'+stat(a.trips)+'</b></div><div><small>Total Catches</small><b>'+stat(a.catches)+'</b></div><div><small>Hours Fished</small><b>'+stat(a.hours)+'</b></div><div><small>Largest Recorded</small><b>'+stat(a.largest)+'</b></div></div>';
+  const stat=v=>v==null?"—":baitEscape(v);
+  feature.innerHTML='<div class="featured-photo-wrap"><img class="featured-photo" src="'+baitEscape(a.photo)+'" alt="'+baitEscape(a.name)+'"></div>'+
+    '<div class="featured-copy"><small>PUBLIC WEBSITE PROFILE</small><h3>'+baitEscape(a.name)+'</h3>'+(a.home?'<p>📍 '+baitEscape(a.home)+'</p>':'')+(a.about?'<p>'+baitEscape(a.about)+'</p>':'')+'</div>'+
+    '<div class="angler-stats"><div><small>Total Trips</small><b>'+stat(a.trips)+'</b></div><div><small>Total Catches</small><b>'+stat(a.catches)+'</b></div><div><small>Hours Fished</small><b>'+stat(a.hours)+'</b></div><div><small>Largest Recorded</small><b>'+stat(a.largest)+'</b></div></div>'+
+    '<div class="profile-affiliations">'+(a.affiliations||[]).map(x=>'<span>'+baitEscape(x.type)+': '+baitEscape(x.name)+'</span>').join('')+'</div><div class="angler-reports"><h3>Published trip cards & reports</h3><div id="anglerReports"></div></div>';
+  window.KFJPublicReports.gallery($("#anglerReports"),{directoryId:a.sourceId});
   if($("#anglerSearch")&&!$("#anglerSearch").dataset.wired){
     $("#anglerSearch").dataset.wired="1";
     $("#anglerSearch").addEventListener("input",e=>renderDirectory(e.target.value));
@@ -455,3 +459,5 @@ window.KFJTripLocations={
 };
 route(); renderProfile(); renderTrip(); renderJournal();
 if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+
+document.querySelector("#reportSearch").addEventListener("input",e=>window.KFJPublicReports.gallery(document.querySelector("#communityList"),{query:e.target.value}));

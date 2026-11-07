@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#062f22">
 <title>Kayak Fishing Journal</title>
 <link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="styles-v312.css">
+<link rel="stylesheet" href="styles-v313.css">
 </head>
 <body>
 <header class="topbar">
@@ -15,9 +15,10 @@
 </header>
 
 <main id="app">
+<section class="page" data-route="reports"><div class="section-head"><div><small>One trip · Card · Story · Science</small><h2>TRIP CARD & REPORT</h2></div></div><div id="reportDetail" class="stack"></div></section>
   <section class="page" data-route="home">
     <div class="hero"><div class="hero-copy"><small>YOUR NEXT DAY ON THE WATER STARTS HERE</small><h1>Learn the river. Make every trip count.</h1><p>River knowledge • Skills & techniques • Trip logging • Anglers & community</p></div></div>
-    <div class="tile-grid">
+    <nav class="collection-tabs" aria-label="Quick access"><a class="button-link" href="#/community">Read website trip cards</a><a class="button-link" href="#/website">All website tools</a></nav><div class="tile-grid">
       <a class="tile" data-icon="book" href="#/see-water"><b>SEE THE RIVER</b><span>Current, seams, ledges, eddies & structure.</span></a>
       <a class="tile" data-icon="learn" href="#/learn-hub"><b>LEARN & IMPROVE</b><span>Techniques, science, knots & tutorials.</span></a>
       <a class="tile accent" data-icon="log" href="#/on-trip"><b>LOG A TRIP</b><span>Start an offline-first trip session.</span></a>
@@ -45,6 +46,7 @@
     </div>
   </section>
 
+  <section class="page" data-route="website"><div class="section-head"><div><small>Your full Kayak Fishing Journal</small><h2>EXPLORE THE WEBSITE</h2></div></div><div class="stack"><p>These tools open the established website. Their mobile migration is still in progress.</p><a class="button-link" href="https://kayakfishingjournal.com/#journal-review" target="_blank" rel="noopener">Full journal & trip posters ↗</a><a class="button-link" href="https://kayakfishingjournal.com/#river-lab" target="_blank" rel="noopener">River Lab & positioning ↗</a><a class="button-link" href="https://kayakfishingjournal.com/#river-conditions-panel" target="_blank" rel="noopener">Conditions & river forecasts ↗</a><a class="button-link" href="https://kayakfishingjournal.com/#tournaments" target="_blank" rel="noopener">Full tournament calendar ↗</a><a class="button-link" href="https://kayakfishingjournal.com/clubs.html" target="_blank" rel="noopener">Clubs & club journals ↗</a><a class="button-link" href="https://kayakfishingjournal.com/launches.html" target="_blank" rel="noopener">Public launches ↗</a><a class="button-link" href="https://kayakfishingjournal.com/fish-id.html" target="_blank" rel="noopener">Fish identification ↗</a><a class="button-link" href="https://kayakfishingjournal.com/research-faq.html" target="_blank" rel="noopener">Research & data-sharing details ↗</a><a class="button-link" href="https://kayakfishingjournal.com/policies.html" target="_blank" rel="noopener">Privacy & policies ↗</a></div></section>
   <section class="page" data-route="learn-hub">
   <div class="section-head"><img class="section-emblem" src="assets/brand/book-v312.webp" alt="" width="76" height="65"><div><small>Skills • Science • Knots • River Reading</small><h2>LEARN & IMPROVE</h2></div></div>
   <div class="tile-grid">
@@ -75,7 +77,7 @@
 
   <section class="page" data-route="journal">
     <div class="section-head"><img class="section-emblem" src="assets/brand/log-v312.webp" alt="" width="76" height="65"><div><small>Trips • Catches • Conditions • Patterns</small><h2>MY JOURNAL</h2></div><a class="small-btn" href="#/on-trip">+ Trip</a></div>
-    <div id="journalList" class="stack"></div>
+    <nav class="collection-tabs" aria-label="Journal collections"><a class="button-link primary" href="#/journal">My trips · this device</a><a class="button-link" href="#/community">Published website trips ›</a></nav><div id="journalList" class="stack"></div>
   </section>
 
   <section class="page" data-route="tournaments">
@@ -103,7 +105,7 @@
     <div class="section-head"><img class="section-emblem" src="assets/brand/community-v312.webp" alt="" width="76" height="65"><div><small>COMMUNITY</small><h2>Community Hub</h2></div></div>
     <div class="stack"><a class="card link-card community-directory-link" href="#/directory"><b>Anglers Directory</b><span>Browse our 11 public angler profiles.</span></a></div>
     <div class="section-head community-subhead"><div><small>REPORTS</small><h2>Shared Trip Cards</h2></div></div>
-    <div id="communityList" class="stack"><article class="card"><b>No shared cards yet.</b><span>Trips remain private until shared.</span></article></div>
+    <div class="report-search"><label>Find a report<input type="search" id="reportSearch" placeholder="Angler, water, bait or date"></label></div><div id="communityList" class="stack"></div><div class="stack"><a class="button-link" href="#/website">More tools from our website ›</a></div>
   </section>
 
   <section class="page" data-route="profile">
@@ -187,7 +189,7 @@
 </main>
 
 <nav class="bottom-nav"><a href="#/home">Home</a><a href="#/on-trip">On Trip</a><a href="#/learn-hub">Learn</a><a href="#/journal">Journal</a><a href="#/community">Community</a></nav>
-<div class="build">Build v3.12 · RIVER & GOLD</div>
+<div class="build">Build v3.13 · CONNECTED REPORTS</div>
 <script src="learn-data.js" defer></script>
 <script src="db.js" defer></script>
 <script src="journal-bridge.js" defer></script>
@@ -198,6 +200,7 @@
 <script src="science-v39.js" defer></script>
 <script src="trip-locations-v311.js" defer></script>
 <script src="science-data-v311.js" defer></script>
-<script src="app-v311.js" defer></script>
+<script src="public-reports-v313.js"></script>
+<script src="app-v313.js" defer></script>
 </body>
 </html>
