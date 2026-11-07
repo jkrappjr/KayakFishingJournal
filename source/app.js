@@ -46,11 +46,11 @@ addEventListener("hashchange",route);
 function renderLesson(key){
   const l=lessons[key]||lessons.eddy;
   if(state.lessonKey!==key)state.lessonStep=0;
-  state.lessonKey=key; state.lessonStep=Math.min(state.lessonStep,3);
+  state.lessonKey=key; state.lessonStep=Math.min(state.lessonStep,3); state.lessonElapsed=state.lessonStep*8;
   $("#lessonTitle").textContent=l.title;
-  $("#lessonSteps").innerHTML=l.steps.map((s,i)=>'<button data-step="'+i+'" class="'+(i===state.lessonStep?"active":"")+'">'+(i+1)+" "+s[0]+'</button>').join("");
+  $("#lessonSteps").innerHTML=l.steps.map((s,i)=>'<button data-step="'+i+'" aria-pressed="'+(i===state.lessonStep)+'" class="'+(i===state.lessonStep?"active":"")+'">'+(i+1)+" "+s[0]+'</button>').join("");
   $("#lessonCopy").innerHTML="<h3>"+l.steps[state.lessonStep][0]+"</h3><p>"+l.steps[state.lessonStep][1]+"</p>";
-  drawLessonFrame(l.scene,state.lessonStep*6+.55);
+  drawLessonFrame(l.scene,state.lessonStep*8+.55);
   $("#prevLesson").disabled=state.lessonStep===0;
   $("#nextLesson").disabled=state.lessonStep===3;
   $$(".steps button").forEach(b=>b.onclick=()=>{state.lessonStep=+b.dataset.step;stopLesson();renderLesson(key)});
@@ -87,46 +87,28 @@ function riverImage(scene){
  const key=scene==="eddy"?"eddy-lesson":scene;
  if(!riverImages[key]){
   const im=new Image();riverImages[key]=im;
-  im.onload=()=>{if(!state.lessonPlaying&&(lessons[state.lessonKey]||{}).scene===scene)drawLessonFrame(scene,state.lessonStep*6+.55)};
+  im.onload=()=>{if(!state.lessonPlaying&&(lessons[state.lessonKey]||{}).scene===scene)drawLessonFrame(scene,state.lessonStep*8+.55)};
   im.src="assets/river/"+key+".webp";
  }
  return riverImages[key];
 }
 function drawLessonFrame(scene,t){
- const c=$("#lessonCanvas");if(!c)return;
- const ctx=c.getContext("2d"),W=c.width,H=c.height;
- const step=Math.min(3,Math.floor(t/6)),im=riverImage(scene);
- ctx.fillStyle="#062f22";ctx.fillRect(0,0,W,H);
- if(im.complete&&im.naturalWidth){
-  // Preserve the complete recovered composition rather than crop its annotations.
-  const scale=Math.min(W/im.naturalWidth,(H-55)/im.naturalHeight);
-  const w=im.naturalWidth*scale,h=im.naturalHeight*scale;
-  ctx.drawImage(im,(W-w)/2,0,w,h);
- }
- const stage=step===0?"POSITION":step===1?"READ THE CURRENT":step===2?"CAST":"WORK";
- const pulse=(Math.sin(t*3)+1)/2;
- if(step===0){ctx.strokeStyle="#ffdc3b";ctx.lineWidth=4;ctx.beginPath();ctx.arc(W*.37,H*.67,15+3*pulse,0,Math.PI*2);ctx.stroke()}
- if(step>=2)drawCast(ctx,W*.37,H*.67,W*.68,H*.43,state.lessonPlaying?t*25:0);
- if(step>=2)drawTarget(ctx,W*.68,H*.43,pulse);
- ctx.fillStyle="#062f22";ctx.fillRect(0,H-55,W,55);
- ctx.fillStyle="#ffe184";ctx.font="bold 20px sans-serif";ctx.fillText(stage,18,H-30);
- ctx.fillStyle="#fff";ctx.font="16px sans-serif";
- ctx.fillText(["Keep clear of the feature and face your target.","Find the faster flow and the protected water.","Cast to the edge of the holding water.","Guide the bait through; adjust pace and depth."][step],18,H-9);
+ window.KFJRiverMotion.draw(scene,state.lessonStep,Math.min(.999,Math.max(0,(t-state.lessonStep*8)/8)),state.lessonPlaying);
 }
 function playLesson(){
-  if(state.lessonPlaying){stopLesson();return}
-  state.lessonPlaying=true;$("#playLesson").textContent="❚❚ Pause";
-  const startT=(state.lessonStep===3?0:state.lessonStep)*6, started=performance.now()-startT*1000;
-  const tick=now=>{
-    if(!state.lessonPlaying)return;
-    let t=(now-started)/1000;
-    if(t>=24){state.lessonStep=3;drawLessonFrame((lessons[state.lessonKey]||lessons.eddy).scene,23.9);stopLesson();renderLesson(state.lessonKey||"eddy");return}
-    const newStep=Math.min(3,Math.floor(t/6));
-    if(newStep!==state.lessonStep){state.lessonStep=newStep;$("#prevLesson").disabled=newStep===0;$("#nextLesson").disabled=newStep===3;const l=lessons[state.lessonKey]||lessons.eddy;$("#lessonSteps").querySelectorAll("button").forEach((b,i)=>b.classList.toggle("active",i===newStep));$("#lessonCopy").innerHTML="<h3>"+l.steps[newStep][0]+"</h3><p>"+l.steps[newStep][1]+"</p>"}
-    drawLessonFrame((lessons[state.lessonKey]||lessons.eddy).scene,t);
-    state.lessonRAF=requestAnimationFrame(tick);
-  };
+ if(state.lessonPlaying){stopLesson();drawLessonFrame((lessons[state.lessonKey]||lessons.eddy).scene,state.lessonElapsed||0);return;}
+ if((state.lessonElapsed||0)>=31.99){state.lessonStep=0;renderLesson(state.lessonKey||'eddy');}
+ state.lessonPlaying=true;$("#playLesson").textContent="❚❚ Pause";
+ const start=performance.now()-(state.lessonElapsed||state.lessonStep*8)*1000;
+ const tick=now=>{
+  if(!state.lessonPlaying)return;
+  const t=Math.min(32,(now-start)/1000);state.lessonElapsed=t;
+  const step=Math.min(3,Math.floor(t/8));
+  if(step!==state.lessonStep){state.lessonStep=step;const l=lessons[state.lessonKey]||lessons.eddy;$("#lessonSteps").querySelectorAll('button').forEach((b,i)=>{b.classList.toggle('active',i===step);b.setAttribute('aria-pressed',String(i===step));});$("#lessonCopy").innerHTML='<h3>'+l.steps[step][0]+'</h3><p>'+l.steps[step][1]+'</p>';$("#prevLesson").disabled=step===0;$("#nextLesson").disabled=step===3;}
+  drawLessonFrame((lessons[state.lessonKey]||lessons.eddy).scene,t);
+  if(t>=32){stopLesson();drawLessonFrame((lessons[state.lessonKey]||lessons.eddy).scene,31.99);return;}
   state.lessonRAF=requestAnimationFrame(tick);
+ };state.lessonRAF=requestAnimationFrame(tick);
 }
 $("#prevLesson").onclick=()=>{state.lessonStep=Math.max(0,state.lessonStep-1);stopLesson();renderLesson(state.lessonKey||"eddy")};
 $("#nextLesson").onclick=()=>{state.lessonStep=Math.min(3,state.lessonStep+1);stopLesson();renderLesson(state.lessonKey||"eddy")};
@@ -464,3 +446,7 @@ route(); renderProfile(); renderTrip(); renderJournal();
 if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
 
 document.querySelector("#reportSearch").addEventListener("input",e=>window.KFJPublicReports.gallery(document.querySelector("#communityList"),{query:e.target.value}));
+$("#riverView").addEventListener('change',e=>window.KFJRiverMotion.setView(e.target.value));
+$("#riverScrub").addEventListener('input',e=>{stopLesson();const t=Math.min(31.99,Math.max(0,Number(e.target.value)));state.lessonStep=Math.min(3,Math.floor(t/8));renderLesson(state.lessonKey||'eddy');state.lessonElapsed=t;drawLessonFrame((lessons[state.lessonKey]||lessons.eddy).scene,t);});
+$("#riverReplay").onclick=()=>{stopLesson();state.lessonStep=0;renderLesson(state.lessonKey||'eddy');playLesson();};
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&state.lessonPlaying){stopLesson();drawLessonFrame((lessons[state.lessonKey]||lessons.eddy).scene,state.lessonElapsed||0);}});

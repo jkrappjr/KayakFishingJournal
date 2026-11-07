@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#062f22">
 <title>Kayak Fishing Journal</title>
 <link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="styles-v315.css">
+<link rel="stylesheet" href="styles-v316.css">
 </head>
 <body>
 <header class="topbar">
@@ -58,7 +58,7 @@
 </section>
 
 <section class="page" data-route="lesson">
-    <div class="lesson-hero"><canvas id="lessonCanvas" width="640" height="360" aria-label="Animated river lesson"></canvas></div>
+    <div class="river-view-tools"><label>Teaching view<select id="riverView"><option value="auto">Best view for this feature</option><option value="side">Side view · depth &amp; structure</option><option value="kayak">Kayak view · cast &amp; position</option><option value="overview">River overview · current &amp; seams</option></select></label><button id="riverReplay">↻ Replay all 4 steps</button></div><div class="lesson-hero river-motion-stage"><canvas id="lessonCanvas" width="1920" height="1080" aria-label="Four-step animated river lesson" role="img"></canvas></div><p id="riverStageGuide" class="river-stage-guide"></p><div class="river-motion-legend"><span>◀ Cyan: current</span><span>┄ Gold: cast &amp; feature</span><span>┄ Coral: bait path</span><span>○ Green: comparison pass</span></div><label class="river-scrub">Lesson progress<input id="riverScrub" type="range" min="0" max="31.99" step="0.05" value="0" aria-label="Scrub the four-step river lesson"></label><p id="riverPlaybackStatus" class="river-playback-status" role="status">Step 1 of 4 · Paused</p>
     <div class="section-head"><div><small>TUTORIAL</small><h2 id="lessonTitle">Eddies & Backwater</h2></div></div>
     <div class="steps" id="lessonSteps"></div>
     <div class="control-row"><button id="prevLesson">Previous</button><button id="playLesson" class="primary">▶ Play</button><button id="nextLesson">Next</button></div>
@@ -189,7 +189,7 @@
 </main>
 
 <nav class="bottom-nav"><a href="#/home">Home</a><a href="#/on-trip">On Trip</a><a href="#/learn-hub">Learn</a><a href="#/journal">Journal</a><a href="#/community">Community</a></nav>
-<div class="build">Build v3.15 · COMPACT CARDS</div>
+<div class="build">Build v3.16 · RIVER MOTION</div>
 <script src="learn-data.js" defer></script>
 <script src="db.js" defer></script>
 <script src="journal-bridge.js" defer></script>
@@ -201,6 +201,7 @@
 <script src="trip-locations-v311.js" defer></script>
 <script src="science-data-v311.js" defer></script>
 <script src="public-reports-v314.js"></script>
-<script src="app-v314.js" defer></script>
+<script src="river-motion-v316.js" defer></script>
+<script src="app-v316.js" defer></script>
 </body>
 </html>
