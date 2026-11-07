@@ -26,7 +26,7 @@ window.KFJRiverMotion=(()=>{
  function lureImage(scene){const key=(lureChoices[scene]||lureChoices.eddy)[0];if(!lureImages[key]){const im=new Image();lureImages[key]=im;im.onload=()=>{if(last)draw(...last)};im.src='assets/lures/'+key+'.webp';}return lureImages[key];}
  function along(points,p){const lengths=points.slice(1).map((b,i)=>Math.hypot(b[0]-points[i][0],b[1]-points[i][1])),total=lengths.reduce((a,b)=>a+b,0);let distance=Math.min(1,Math.max(0,p))*total;for(let i=0;i<lengths.length;i++){if(distance<=lengths[i]||i===lengths.length-1){const a=points[i],b=points[i+1],f=lengths[i]?Math.min(1,distance/lengths[i]):0;return {point:[a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f],angle:Math.atan2(b[1]-a[1],b[0]-a[0])};}distance-=lengths[i];}return {point:points[0],angle:0};}
  function motion(scene,mode,step,phase){const cfg=scenes[scene]||scenes.eddy,pass=step===3&&phase>=.5?'B':'A',target=pass==='B'?cfg.alt:cfg.target,origin=mode==='kayak'?[480,434]:mode==='side'?[180,147]:[180,400],tip=[origin[0]+32,origin[1]-(mode==='side'?50:65)],landing=mode==='side'?[target[0],148]:mode==='kayak'?[target[0],Math.max(180,target[1]-60)]:target;
- const cast=Array.from({length:49},(_,i)=>{const p=i/48;return [tip[0]+(landing[0]-tip[0])*p,tip[1]+(landing[1]-tip[1])*p-Math.sin(p*Math.PI)*(mode==='side'?100:120)];});
+ const cast=Array.from({length:49},(_,i)=>{const p=i/48;return [tip[0]+(landing[0]-tip[0])*p,tip[1]+(landing[1]-tip[1])*p-Math.sin(p*Math.PI)*(mode==='side'?38:120)];});
  const depth=mode==='side',base=depth?[target,[target[0]+55,target[1]+20],[target[0]+110,Math.min(430,target[1]+70)],[target[0]-10,Math.max(220,target[1]-45)],[origin[0]+100,230],[origin[0],165]]:[target,[target[0]+45,target[1]+45],[target[0]-65,target[1]+75],[origin[0]+20,origin[1]-35],origin];
  // Lift over the ledge on the way back rather than send the bait through the shelf.
  if(depth&&scene==='ledge')base.splice(1,base.length-1,[500,350],[580,430],[525,310],[350,245],[origin[0],165]);
@@ -67,7 +67,7 @@ window.KFJRiverMotion=(()=>{
  path(ctx,m.cast,'#ffe17c',4,[16,10],-t*35);ring(ctx,...m.target,t,'#ffe17c');
  if(mode!=='overview')path(ctx,[m.landing,m.target],'#fff2bd',2,[5,8],-t*20);
  path(ctx,m.retrieve,'#ff9a77',4,[12,8],t*32);
- const lureStage=drawLure(ctx,scene,m);label(ctx,lureStage,30,486);
+ if(m.cycle>.25&&m.cycle<.38){const q=(m.cycle-.25)/.13;ctx.save();ctx.strokeStyle='#e8ffff';ctx.globalAlpha=1-q;ctx.lineWidth=3;for(let i=0;i<2;i++){ctx.beginPath();ctx.ellipse(m.landing[0],m.landing[1],10+q*35+i*8,3+q*8+i*3,0,0,TAU);ctx.stroke();}ctx.restore();}const lureStage=drawLure(ctx,scene,m);label(ctx,lureStage,30,486);
  c.dataset.lureStage=m.stage;c.dataset.lurePass=m.pass;
 
  }
