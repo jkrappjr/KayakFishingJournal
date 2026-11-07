@@ -25,7 +25,7 @@ window.KFJRiverMotion=(()=>{
  last=[scene,step,phase,playing];const cfg=scenes[scene]||scenes.eddy,c=document.querySelector('#lessonCanvas');if(!c)return;
  const dpr=Math.min(2,globalThis.devicePixelRatio||1);if(c.width!==960*dpr||c.height!==540*dpr){c.width=960*dpr;c.height=540*dpr;}const ctx=c.getContext('2d');if(!ctx)return;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,960,540);
  const mode=view==='auto'?cfg.view:view,t=phase*8,im=picture(mode==='overview'?'overview':'side');ctx.fillStyle='#073b37';ctx.fillRect(0,0,960,540);
- if(im.complete&&im.naturalWidth){if(mode==='kayak'){ctx.drawImage(im,0,0,im.naturalWidth,155,0,0,960,170);const g=ctx.createLinearGradient(0,170,0,540);g.addColorStop(0,'#2f7069');g.addColorStop(1,'#103c38');ctx.fillStyle=g;ctx.fillRect(0,170,960,370);}else ctx.drawImage(im,0,0,960,540);}
+ if(im.complete&&im.naturalWidth)ctx.drawImage(im,0,0,960,540);
  ctx.fillStyle='#001e2522';ctx.fillRect(0,0,960,540);
  if(mode==='side')bed(ctx,scene);
  if(mode==='kayak'){
@@ -53,7 +53,7 @@ window.KFJRiverMotion=(()=>{
  ctx.save();ctx.translate(x,y);ctx.rotate(Math.atan2(b[1]-a[1],b[0]-a[0]));ctx.fillStyle='#f4e6a0';ctx.strokeStyle='#102f22';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(0,0,16,5,0,0,TAU);ctx.fill();ctx.stroke();ctx.restore();label(ctx,'CAST → WORK THE EDGE',30,486);
  }
  if(step===3){ring(ctx,...cfg.alt,t,'#c9ffb1');path(ctx,[cfg.target,cfg.alt],'#c9ffb1',3,[8,10],-t*20);label(ctx,'A',cfg.target[0]-12,cfg.target[1]-40);label(ctx,'B',cfg.alt[0]-12,cfg.alt[1]-40,'#c9ffb1');}
- ctx.fillStyle='#02261fec';ctx.fillRect(0,0,960,64);ctx.fillStyle='#ffe184';ctx.font='800 23px system-ui,sans-serif';ctx.fillText((step+1)+' / 4  '+['SEE IT','UNDERSTAND IT','FISH IT','TRY IT'][step],22,40);ctx.fillStyle='#fff';ctx.textAlign='right';ctx.font='700 18px system-ui,sans-serif';ctx.fillText(mode==='side'?'SIDE VIEW · illustrative depth':mode==='kayak'?'KAYAK VIEW · illustrated':'RIVER OVERVIEW',937,39);ctx.textAlign='left';
+ ctx.fillStyle='#02261fec';ctx.fillRect(0,0,960,64);ctx.fillStyle='#ffe184';ctx.font='800 23px system-ui,sans-serif';ctx.fillText((step+1)+' / 4  '+['SEE IT','UNDERSTAND IT','FISH IT','TRY IT'][step],22,40);ctx.fillStyle='#fff';ctx.textAlign='right';ctx.font='700 18px system-ui,sans-serif';ctx.fillText(mode==='side'?'SIDE VIEW · illustrative depth':mode==='kayak'?'KAYAK VIEW · underwater cutaway':'RIVER OVERVIEW',937,39);ctx.textAlign='left';
  for(let i=0;i<4;i++){ctx.fillStyle=i<step?'#ffe184':i===step?'#d8ab42':'#739180';ctx.fillRect(i*240,532,i===step?240*phase:240,8);}
  c.setAttribute('aria-label',cfg.title+' — step '+(step+1)+' of 4: '+['See It','Understand It','Fish It','Try It'][step]+'. '+(step===0?cfg.feature:step===1?cfg.read:step===2?cfg.fish:cfg.try));
  const guide=document.querySelector('#riverStageGuide');if(guide){const text=[cfg.feature,cfg.read,cfg.fish,cfg.try][step];if(guide.textContent!==text)guide.textContent=text;}
