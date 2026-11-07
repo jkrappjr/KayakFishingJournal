@@ -21,6 +21,24 @@ window.KFJRiverMotion=(()=>{
  function bow(ctx){ctx.save();const g=ctx.createLinearGradient(360,450,590,540);g.addColorStop(0,'#eacb6b');g.addColorStop(.5,'#6f7e3b');g.addColorStop(1,'#bda658');ctx.fillStyle=g;ctx.strokeStyle='#1c3828';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(400,540);ctx.quadraticCurveTo(418,470,480,414);ctx.quadraticCurveTo(542,470,560,540);ctx.closePath();ctx.fill();ctx.stroke();ctx.strokeStyle='#253627';for(let i=0;i<4;i++){ctx.beginPath();ctx.moveTo(449-i*6,465+i*18);ctx.lineTo(513+i*6,485+i*14);ctx.stroke();}ctx.restore();}
  function bed(ctx,key){ctx.save();const shapes={ledge:[[0,420],[410,420],[475,350],[540,350],[545,455],[960,455]],pool:[[0,380],[280,380],[390,470],[640,470],[790,375],[960,375]],tailout:[[0,465],[320,465],[500,420],[700,380],[960,360]],bank:[[0,480],[960,480],[960,190],[825,190],[780,250],[875,260],[900,390]]};const pts=shapes[key];if(pts){ctx.beginPath();pts.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.lineTo(960,540);ctx.lineTo(0,540);ctx.closePath();const g=ctx.createLinearGradient(0,300,0,540);g.addColorStop(0,'#8c8663');g.addColorStop(1,'#333f32');ctx.fillStyle=g;ctx.fill();ctx.lineWidth=5;ctx.strokeStyle='#d6c48c';ctx.stroke();for(let i=0;i<32;i++){const x=(i*137)%960,y=500+(i%4)*9;ctx.fillStyle=i%2?'#8c8767':'#4a5945';ctx.beginPath();ctx.ellipse(x,y,7+i%9,4+i%5,.4,0,TAU);ctx.fill();}}ctx.restore();}
  function wood(ctx){ctx.save();ctx.strokeStyle='#382719';ctx.lineWidth=18;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(850,230);ctx.lineTo(570,350);ctx.stroke();ctx.lineWidth=9;for(const [x,y,X,Y]of [[700,295,680,230],[660,310,600,260],[760,275,750,340],[615,330,540,325]]){ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(X,Y);ctx.stroke();}ctx.restore();}
+
+ const lureChoices={seam:['swim','Swimbait'],boulder:['tube','Tube'],eddy:['ned-rigged','Ned rig'],ledge:['ned-rigged','Ned rig'],riffle:['swim','Swimbait'],tailout:['hardjerk','Jerkbait'],pool:['jig','Jig'],wood:['creature','Creature bait'],bank:['wacky','Stickbait']},lureImages={};
+ function lureImage(scene){const key=(lureChoices[scene]||lureChoices.eddy)[0];if(!lureImages[key]){const im=new Image();lureImages[key]=im;im.onload=()=>{if(last)draw(...last)};im.src='assets/lures/'+key+'.webp';}return lureImages[key];}
+ function along(points,p){const lengths=points.slice(1).map((b,i)=>Math.hypot(b[0]-points[i][0],b[1]-points[i][1])),total=lengths.reduce((a,b)=>a+b,0);let distance=Math.min(1,Math.max(0,p))*total;for(let i=0;i<lengths.length;i++){if(distance<=lengths[i]||i===lengths.length-1){const a=points[i],b=points[i+1],f=lengths[i]?Math.min(1,distance/lengths[i]):0;return {point:[a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f],angle:Math.atan2(b[1]-a[1],b[0]-a[0])};}distance-=lengths[i];}return {point:points[0],angle:0};}
+ function motion(scene,mode,step,phase){const cfg=scenes[scene]||scenes.eddy,pass=step===3&&phase>=.5?'B':'A',target=pass==='B'?cfg.alt:cfg.target,origin=mode==='kayak'?[480,434]:mode==='side'?[180,147]:[180,400],tip=[origin[0]+32,origin[1]-(mode==='side'?50:65)],landing=mode==='side'?[target[0],148]:mode==='kayak'?[target[0],Math.max(180,target[1]-60)]:target;
+ const cast=Array.from({length:49},(_,i)=>{const p=i/48;return [tip[0]+(landing[0]-tip[0])*p,tip[1]+(landing[1]-tip[1])*p-Math.sin(p*Math.PI)*(mode==='side'?100:120)];});
+ const depth=mode==='side',base=depth?[target,[target[0]+55,target[1]+20],[target[0]+110,Math.min(430,target[1]+70)],[target[0]-10,Math.max(220,target[1]-45)],[origin[0]+100,230],[origin[0],165]]:[target,[target[0]+45,target[1]+45],[target[0]-65,target[1]+75],[origin[0]+20,origin[1]-35],origin];
+ // Lift over the ledge on the way back rather than send the bait through the shelf.
+ if(depth&&scene==='ledge')base.splice(1,base.length-1,[500,350],[580,430],[525,310],[350,245],[origin[0],165]);
+ const cycle=step===3?Math.min(.999999,(phase*2)%1):Math.min(.999999,Math.max(0,phase));let stage,p;
+ if(cycle<.27){stage='CASTING';p=along(cast,cycle/.27);}else if(cycle<.43){stage=mode!=='overview'?'SINKING':'SETTLE / PAUSE';p=along([landing,target],(cycle-.27)/.16);}else{stage='RETRIEVING';p=along(base,(cycle-.43)/.57);}
+ return {...p,stage,cast,retrieve:base,origin,tip,landing,target,pass,cycle};
+ }
+ function drawLure(ctx,scene,m){const im=lureImage(scene),[x,y]=m.point;ctx.save();ctx.strokeStyle='#fff2c6';ctx.lineWidth=2;ctx.globalAlpha=.8;ctx.beginPath();ctx.moveTo(...m.tip);ctx.lineTo(x,y);ctx.stroke();ctx.globalAlpha=1;path(ctx,[m.origin,m.tip],'#191d16',7);path(ctx,[m.origin,m.tip],'#ddc996',2);
+ ctx.translate(x,y);ctx.rotate(m.angle);ctx.shadowColor='#fff3ba';ctx.shadowBlur=12;ctx.fillStyle='#fff6ce33';ctx.beginPath();ctx.ellipse(0,0,37,21,0,0,TAU);ctx.fill();
+ if(im.complete&&im.naturalWidth){const scale=Math.min(76/im.naturalWidth,42/im.naturalHeight),w=im.naturalWidth*scale,h=im.naturalHeight*scale;ctx.drawImage(im,-w/2,-h/2,w,h);}else{ctx.fillStyle='#f3d65c';ctx.strokeStyle='#082f20';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(0,0,22,7,0,0,TAU);ctx.fill();ctx.stroke();ctx.beginPath();ctx.moveTo(12,4);ctx.quadraticCurveTo(13,19,24,11);ctx.stroke();}
+ ctx.restore();return m.stage+' · '+(lureChoices[scene]||lureChoices.eddy)[1]+' example'+(last?.[1]===3?' · Pass '+m.pass:'');
+ }
  function draw(scene,step,phase=0,playing=false){
  last=[scene,step,phase,playing];const cfg=scenes[scene]||scenes.eddy,c=document.querySelector('#lessonCanvas');if(!c)return;
  const dpr=Math.min(2,globalThis.devicePixelRatio||1);if(c.width!==960*dpr||c.height!==540*dpr){c.width=960*dpr;c.height=540*dpr;}const ctx=c.getContext('2d');if(!ctx)return;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,960,540);
@@ -45,12 +63,13 @@ window.KFJRiverMotion=(()=>{
  const target=step===3&&phase>=.5?cfg.alt:cfg.target,origin=mode==='kayak'?[480,434]:mode==='side'?[180,147]:[180,400];
  if(mode==='kayak')bow(ctx);else if(step>=2)kayak(ctx,...origin,mode==='side'?Math.PI/2:-.4);
  if(step>=2){
- const cast=Array.from({length:41},(_,i)=>{const p=i/40;return [origin[0]+(target[0]-origin[0])*p,origin[1]+(target[1]-origin[1])*p-Math.sin(p*Math.PI)*(mode==='side'?130:70)];});
- path(ctx,cast,'#ffe17c',4,[16,10],-t*35);ring(ctx,...target,t,'#ffe17c');
- const retrieve=mode==='side'?[target,[target[0]+60,target[1]+(scene==='pool'?60:25)],[target[0]+120,target[1]+35],[750,scene==='bank'?345:420]]:[target,[target[0]+40,target[1]+65],[target[0]-80,target[1]+100],[origin[0]+20,origin[1]-30]];
- path(ctx,retrieve,'#ff9a77',5,[12,8],t*32);
- const segment=(t/2)% (retrieve.length-1),idx=Math.floor(segment),f=segment-idx,a=retrieve[idx],b=retrieve[idx+1],x=a[0]+(b[0]-a[0])*f,y=a[1]+(b[1]-a[1])*f;
- ctx.save();ctx.translate(x,y);ctx.rotate(Math.atan2(b[1]-a[1],b[0]-a[0]));ctx.fillStyle='#f4e6a0';ctx.strokeStyle='#102f22';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(0,0,16,5,0,0,TAU);ctx.fill();ctx.stroke();ctx.restore();label(ctx,'CAST → WORK THE EDGE',30,486);
+ const m=motion(scene,mode,step,phase);
+ path(ctx,m.cast,'#ffe17c',4,[16,10],-t*35);ring(ctx,...m.target,t,'#ffe17c');
+ if(mode!=='overview')path(ctx,[m.landing,m.target],'#fff2bd',2,[5,8],-t*20);
+ path(ctx,m.retrieve,'#ff9a77',4,[12,8],t*32);
+ const lureStage=drawLure(ctx,scene,m);label(ctx,lureStage,30,486);
+ c.dataset.lureStage=m.stage;c.dataset.lurePass=m.pass;
+
  }
  if(step===3){ring(ctx,...cfg.alt,t,'#c9ffb1');path(ctx,[cfg.target,cfg.alt],'#c9ffb1',3,[8,10],-t*20);label(ctx,'A',cfg.target[0]-12,cfg.target[1]-40);label(ctx,'B',cfg.alt[0]-12,cfg.alt[1]-40,'#c9ffb1');}
  ctx.fillStyle='#02261fec';ctx.fillRect(0,0,960,64);ctx.fillStyle='#ffe184';ctx.font='800 23px system-ui,sans-serif';ctx.fillText((step+1)+' / 4  '+['SEE IT','UNDERSTAND IT','FISH IT','TRY IT'][step],22,40);ctx.fillStyle='#fff';ctx.textAlign='right';ctx.font='700 18px system-ui,sans-serif';ctx.fillText(mode==='side'?'SIDE VIEW · illustrative depth':mode==='kayak'?'KAYAK VIEW · underwater cutaway':'RIVER OVERVIEW',937,39);ctx.textAlign='left';
@@ -60,5 +79,5 @@ window.KFJRiverMotion=(()=>{
  const scrub=document.querySelector('#riverScrub');if(scrub&&!scrub.matches(':active'))scrub.value=String((step+phase)*8);
  const status=document.querySelector('#riverPlaybackStatus');if(status)status.textContent='Step '+(step+1)+' of 4 · '+(playing?'Playing':'Paused');
  }
- return {draw,scenes,setView(v){view=['auto','side','kayak','overview'].includes(v)?v:'auto';if(last)draw(...last);},getView:()=>view};
+ return {draw,scenes,motion,setView(v){view=['auto','side','kayak','overview'].includes(v)?v:'auto';if(last)draw(...last);},getView:()=>view};
 })();
