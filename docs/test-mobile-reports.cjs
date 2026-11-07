@@ -3,7 +3,7 @@ const {window}=parseHTML(fs.readFileSync('index.html','utf8'));const store=new M
 const data=JSON.parse(fs.readFileSync('public-reports-v313.json','utf8'));
 const ctx=vm.createContext({window,document:window.document,console,Intl,Date,Promise,URL,Number,JSON,Math,Array,String,Set,Map,fetch:async()=>({ok:true,json:async()=>data}),location:{hash:'#/community'},navigator:{},localStorage:{getItem:k=>store.get(k)||null,setItem:(k,v)=>store.set(k,v)},scrollTo:()=>{},setInterval:()=>0,clearInterval:()=>{},setTimeout,clearTimeout,requestAnimationFrame:()=>0,cancelAnimationFrame:()=>{},addEventListener:()=>{},alert:()=>{},Image:class{}});
 window.KFJLocations={output:()=>'',takePending:()=>[]};window.KFJScienceData={output:()=>''};
-for(const f of ['anglers-data-v313.js','public-reports-v313.js','app-v313.js'])vm.runInContext(fs.readFileSync(f,'utf8'),ctx);
+for(const f of ['anglers-data-v313.js','public-reports-v314.js','app-v314.js'])vm.runInContext(fs.readFileSync(f,'utf8'),ctx);
 (async()=>{
  const api=window.KFJPublicReports;await api.load();await api.gallery(window.document.querySelector('#communityList'));
  assert.equal(window.document.querySelectorAll('#communityList .migrated-card').length,6);
@@ -15,6 +15,8 @@ for(const f of ['anglers-data-v313.js','public-reports-v313.js','app-v313.js'])v
  assert(!api.card({...john,author:'<script>alert(1)</script>'}).includes('<script>'));
  await api.gallery(window.document.querySelector('#communityList'),{query:'Heath'});assert.equal(window.document.querySelectorAll('#communityList .migrated-card').length,1);
  await api.page('missing');assert(window.document.querySelector('#reportDetail').textContent.includes('not found'));
+ const expectedPhotos=data.reports.reduce((n,r)=>n+r.bestFive.filter((f,i)=>r.photoIndexes.includes(i+1)).length,0);await api.gallery(window.document.querySelector('#communityList'));assert.equal(window.document.querySelectorAll('#communityList .trip-best-five img').length,expectedPhotos);
+ vm.runInContext("state.journal=[{start:1791370800000,end:1791385500000,catches:[{length:17},{length:14}],locations:[]}];renderJournal()",ctx);assert(window.document.querySelector('#journalList .template-trip-card'));const details=window.document.querySelector('#journalList details');window.document.querySelector('#journalList .template-trip-card .button-link').onclick({preventDefault(){}});assert(details.open);assert(window.document.querySelector('#journalList').textContent.includes('4:05'));assert(!window.document.querySelector('#journalList').innerHTML.includes('/directory/undefined'));
  assert.equal(store.size,0,'reading website reports must not write personal journals');
  const html=fs.readFileSync('index.html','utf8'),routes=new Set([...html.matchAll(/data-route="([^"]+)"/g)].map(x=>x[1]));for(const m of html.matchAll(/href="#\/([^"/]+)/g))assert(routes.has(m[1]),m[1]);
  const sw=fs.readFileSync('sw.js','utf8'),core=JSON.parse('['+sw.split('CORE=[')[1].split('];')[0]+']');for(const x of core)assert(fs.existsSync(x),x);

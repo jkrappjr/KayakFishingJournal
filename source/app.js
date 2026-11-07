@@ -441,8 +441,11 @@ function renderJournal(){
  const el=$("#journalList");
  el.innerHTML=state.journal.length?state.journal.map((t,i)=>{
  const where=window.KFJLocations.output(t.locations,'card')+window.KFJScienceData.output(t.locations,'card'),report=window.KFJLocations.output(t.locations,'report')+window.KFJScienceData.output(t.locations,'report');
- return '<article class="card"><b>'+baitEscape(t.location||t.locations?.[0]?.name||"Saved Trip")+'</b><span>'+new Date(t.start).toLocaleDateString()+' • '+(t.catches?.length||0)+' catches</span>'+where+'<details class="journal-report"><summary>Open journal report</summary><h3>Trip report</h3><p>'+new Date(t.start).toLocaleString()+(t.end?' → '+new Date(t.end).toLocaleString():'')+'</p><p>'+(t.catches?.length||0)+' catches</p>'+report+(t.notes?'<p>'+baitEscape(t.notes)+'</p>':'')+'</details></article>';
+ const lengths=(t.catches||[]).map(c=>Number(c.length)).filter(n=>Number.isFinite(n)&&n>0),mins=t.start&&t.end?Math.round((t.end-t.start)/60000):null;
+ const card=window.KFJPublicReports.card({local:true,id:String(i),author:state.profile.name||'Angler',water:t.location||t.locations?.[0]?.name||'Saved Trip',date:new Date(t.start).toLocaleDateString(),cardProfilePhoto:state.profile.photo||'',fishCount:t.catches?.length||0,methods:t.techniques||[],photos:[],bestFive:[],journal:{},localMetrics:{minutes:mins,largest:lengths.length?Math.max(...lengths):null,mpc:mins!==null&&t.catches?.length?Math.round(mins/t.catches.length*10)/10:null}});
+ return '<article class="local-trip-wrapper">'+card+where+'<details class="journal-report" id="local-report-'+i+'"><summary>Open journal report</summary><h3>Trip report</h3><p>'+new Date(t.start).toLocaleString()+(t.end?' → '+new Date(t.end).toLocaleString():'')+'</p><p>'+(t.catches?.length||0)+' catches</p>'+report+(t.notes?'<p>'+baitEscape(t.notes)+'</p>':'')+'</details></article>';
  }).join(''):'<article class="card"><b>No saved trips yet.</b><span>Start a trip and your journal will build here.</span></article>';
+ el.querySelectorAll('.local-trip-wrapper').forEach(wrapper=>{const link=wrapper.querySelector('.template-trip-card .button-link'),details=wrapper.querySelector('.journal-report');if(link&&details)link.onclick=e=>{e.preventDefault();details.open=true;details.scrollIntoView?.({behavior:'smooth',block:'start'});};});
 }
 window.KFJTripLocations={
  active:()=>state.trip?.active?state.trip:null,
